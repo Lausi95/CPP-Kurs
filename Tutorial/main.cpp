@@ -1,9 +1,6 @@
-#include "DiceGames.h"
+#include "TextAdventure.h"
 
-int main () {
-	//guessTheNumber();
-	//threeDices();
-	fiveOfAKind();
-
-	return 0;
+int main (int argc, char** argv) {
+    runTextAdventure();
+    return 0;
 }
