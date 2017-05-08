@@ -2,7 +2,7 @@
 // Created by tom on 05.05.17.
 //
 
-#include "Window.h"
+#include "include/Window.h"
 
 bool sdlInitialized = false;
 

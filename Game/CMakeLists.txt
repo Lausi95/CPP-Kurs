@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.6)
 project(HalloWelt)
 set(CMAKE_CXX_STANDARD 11)
-set(SOURCE_FILES main.cpp logging.h logging.cpp Window.cpp Window.h Texture.cpp Texture.h Tile.cpp Tile.h Entity.cpp Entity.h)
+set(SOURCE_FILES main.cpp include/logging.h logging.cpp Window.cpp include/Window.h Texture.cpp include/Texture.h Tile.cpp include/Tile.h Entity.cpp include/Entity.h)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lSDL")
 add_executable(HalloWelt ${SOURCE_FILES})
 target_link_libraries(HalloWelt SDL2 SDL2_image)

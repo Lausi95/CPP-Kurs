@@ -2,7 +2,7 @@
 // Created by tom on 08.05.17.
 //
 
-#include "Entity.h"
+#include "include/Entity.h"
 
 Entity::Entity(int x, int y, int width, int height) {
     this->rect = SDL_Rect();

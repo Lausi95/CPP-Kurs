@@ -1,9 +1,9 @@
-#include "logging.h"
+#include "include/logging.h"
 
-#include "Texture.h"
-#include "Tile.h"
-#include "Entity.h"
-#include "Window.h"
+#include "include/Texture.h"
+#include "include/Tile.h"
+#include "include/Entity.h"
+#include "include/Window.h"
 
 using namespace std;
 
@@ -29,7 +29,7 @@ int main(int argc, char** argv) {
     Window window("Title", 400, 300);
     window.initialize();
 
-    Texture texture("tiles.png");
+    Texture texture("assets/tiles.png");
     Tile tile(&texture, 0, 0, 32, 32);
 
     Wall wallEntity(0, 0, 32, 32, &tile);
