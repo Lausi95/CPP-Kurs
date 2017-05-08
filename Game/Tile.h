@@ -16,8 +16,6 @@ public:
     SDL_Rect* getRekt();
     Texture* getTexture();
 
-    int getWidth();
-    int getHeight();
 private:
     Texture *texture;
     SDL_Rect rect;

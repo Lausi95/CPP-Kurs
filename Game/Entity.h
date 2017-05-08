@@ -18,6 +18,14 @@ public:
 
     SDL_Rect* getRekt();
 
+    int getWidth();
+    int getHeight();
+    int getX();
+    int getY();
+
+    void setX(int x);
+    void setY(int y);
+
 private:
     SDL_Rect rect;
 };

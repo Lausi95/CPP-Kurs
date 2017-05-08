@@ -12,14 +12,6 @@ Tile::Tile(Texture *texture, int posX, int posY, int width, int height) {
     this->rect.h = height;
 }
 
-int Tile::getWidth() {
-    return this->rect.w;
-}
-
-int Tile::getHeight() {
-    return this->rect.h;
-}
-
 SDL_Rect *Tile::getRekt() {
     return &this->rect;
 }
