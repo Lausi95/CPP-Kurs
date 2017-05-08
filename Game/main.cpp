@@ -1,20 +1,42 @@
 #include "logging.h"
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
+#include "Texture.h"
+#include "Tile.h"
+#include "Entity.h"
+#include "Window.h"
 
-int main(int argc, char** args) {
-    SDL_Init(SDL_INIT_VIDEO);
-    IMG_Init(IMG_INIT_PNG);
+using namespace std;
 
-    SDL_Window *win = SDL_CreateWindow("Hallo Welt", 100, 100, 300, 300, SDL_WINDOW_SHOWN);
-    SDL_Surface *surf = SDL_GetWindowSurface(win);
 
-    SDL_Surface *png = IMG_Load("tiles.png");
+class Wall : public Entity {
+public:
+    Wall(int x, int y, int width, int height, Tile* tile) : Entity(x, y, width, height) {
+        this->tile = tile;
+    }
 
-    SDL_BlitSurface(png, NULL, surf, NULL);
-    SDL_UpdateWindowSurface(win);
+    Tile* getTile();
 
+private:
+    Tile* tile;
+};
+
+Tile *Wall::getTile() {
+    return this->tile;
+}
+
+
+int main(int argc, char** argv) {
+    Window window("Title", 400, 300);
+    window.initialize();
+
+    Texture texture("tiles.png");
+    Tile tile(&texture, 0, 0, 32, 32);
+
+    Wall wallEntity(0, 0, 32, 32, &tile);
+
+    // "gameloop"
+    window.render(&wallEntity);
+    window.update();
     SDL_Delay(2000);
 
     return 0;
