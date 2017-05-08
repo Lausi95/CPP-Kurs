@@ -4,7 +4,15 @@
 #include <ctime>
 
 void printTimeStamp() {
-    std::cout << "xx.xx.xx xx:xx";
+    time_t rawtime;
+    struct tm* timeinfo;
+    char buffer[80];
+
+    time(&rawtime);
+    timeinfo = localtime(&rawtime);
+
+    strftime(buffer, 80, "%d.%m.%y %H:%M:%S", timeinfo);
+    std::cout << buffer;
 }
 
 void log(const char *level, const char *message) {
