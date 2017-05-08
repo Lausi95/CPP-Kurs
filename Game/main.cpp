@@ -5,17 +5,15 @@
 #include "include/Entity.h"
 #include "include/Window.h"
 
-#include <list>
-
 using namespace std;
 
 
-class Wall : public Entity {
+class SimpleEntity : public Entity {
 private:
     Tile* tile;
 
 public:
-    Wall(int x, int y, Tile* tile) : Entity(x, y) {
+    SimpleEntity(int x, int y, Tile* tile) : Entity(x, y) {
         this->tile = tile;
     }
 
@@ -32,29 +30,28 @@ int main(int argc, char** argv) {
     Tile wallTile(&texture, 0, 0, 32, 32);
     Tile floorTile(&texture, 0, 32, 32, 32);
 
-    Entity* entities[100];
+    Entity* background[100];
     for (int i = 0; i < 100; i++) {
         int x = i / 10;
         int y = i % 10;
         if (x == 0 || y == 0 || x == 9 || y == 9) {
-            entities[i] = new Wall(x * 32, y * 32, &wallTile);
+            background[i] = new SimpleEntity(x * 32, y * 32, &wallTile);
         }
         else {
-            entities[i] = new Wall(x * 32, y * 32, &floorTile);
+            background[i] = new SimpleEntity(x * 32, y * 32, &floorTile);
         }
     }
 
-
     // game loop
     for (int i = 0; i < 100; i++) {
-        window.render(entities[i]);
+        window.render(background[i]);
     }
     window.update();
     SDL_Delay(5000);
 
     // clean up resources
     for (int i = 0; i < 100; i++) {
-        delete entities[i];
+        delete background[i];
     }
 
     return 0;

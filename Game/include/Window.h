@@ -17,6 +17,9 @@ public:
     void render(Entity* entity);
     void update();
 
+    int getWidth();
+    int getHeight();
+
 private:
     const char* title;
     int width;

@@ -33,5 +33,10 @@ void Window::render(Entity *entity) {
     SDL_BlitSurface(texture, textureRect, sdlSurface, entityRect);
 }
 
+int Window::getWidth() {
+    return this->width;
+}
 
-
+int Window::getHeight() {
+    return this->height;
+}
