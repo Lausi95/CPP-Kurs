@@ -1,8 +1,5 @@
-//
-// Created by tom on 05.05.17.
-//
-
-#include "include/Window.h"
+#include "Window.h"
+#include "logging.h"
 
 bool sdlInitialized = false;
 
@@ -12,12 +9,16 @@ Window::Window(const char *title, int width, int height) {
     this->height = height;
 
     if (!sdlInitialized) {
+        INFO("Initializing SDL")
         SDL_Init(SDL_INIT_VIDEO);
         IMG_Init(IMG_INIT_PNG);
         sdlInitialized = true;
     }
 
+    INFO("Creating SDL Window")
     this->sdlWindow = SDL_CreateWindow(this->title, 200, 200, this->width, this->height, SDL_WINDOW_SHOWN);
+
+    INFO("Getting Surface from Window")
     this->sdlSurface = SDL_GetWindowSurface(this->sdlWindow);
 }
 

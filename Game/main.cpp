@@ -1,9 +1,9 @@
-#include "include/logging.h"
+#include "logging.h"
 
-#include "include/Texture.h"
-#include "include/Tile.h"
-#include "include/Entity.h"
-#include "include/Window.h"
+#include "Texture.h"
+#include "Tile.h"
+#include "Entity.h"
+#include "Window.h"
 
 using namespace std;
 

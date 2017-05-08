@@ -1,10 +1,11 @@
-//
-// Created by tom on 05.05.17.
-//
-
-#include "include/Texture.h"
+#include "Texture.h"
+#include "logging.h"
 
 Texture::Texture(const char *source) {
+    std::stringstream ss;
+    ss << "Loading Texture \"" << source << "\"";
+    INFO(ss)
+
     this->textureSurface = IMG_Load(source);
 }
 
