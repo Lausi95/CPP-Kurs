@@ -14,7 +14,6 @@ class Window {
 public:
     Window(const char *title, int width, int height);
 
-    void initialize();
     void render(Entity* entity);
     void update();
 

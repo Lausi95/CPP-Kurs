@@ -10,9 +10,7 @@ Window::Window(const char *title, int width, int height) {
     this->title = title;
     this->width = width;
     this->height = height;
-}
 
-void Window::initialize() {
     if (!sdlInitialized) {
         SDL_Init(SDL_INIT_VIDEO);
         IMG_Init(IMG_INIT_PNG);

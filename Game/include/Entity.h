@@ -12,7 +12,7 @@
 
 class Entity {
 public:
-    Entity(int x, int y, int width, int height);
+    Entity(int x, int y);
 
     virtual Tile* getTile() = 0;
 

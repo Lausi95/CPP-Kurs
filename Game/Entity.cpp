@@ -4,12 +4,10 @@
 
 #include "include/Entity.h"
 
-Entity::Entity(int x, int y, int width, int height) {
+Entity::Entity(int x, int y) {
     this->rect = SDL_Rect();
     this->rect.x = x;
     this->rect.y = y;
-    this->rect.w = width;
-    this->rect.h = height;
 }
 
 SDL_Rect *Entity::getRekt() {
@@ -17,11 +15,11 @@ SDL_Rect *Entity::getRekt() {
 }
 
 int Entity::getWidth() {
-    return rect.w;
+    return getTile()->getRekt()->w;
 }
 
 int Entity::getHeight() {
-    return rect.h;
+    return getTile()->getRekt()->h;
 }
 
 int Entity::getX() {
