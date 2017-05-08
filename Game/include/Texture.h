@@ -1,7 +1,3 @@
-//
-// Created by tom on 05.05.17.
-//
-
 #ifndef HALLOWELT_TEXTURE_H
 #define HALLOWELT_TEXTURE_H
 

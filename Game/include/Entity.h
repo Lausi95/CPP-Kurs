@@ -1,7 +1,3 @@
-//
-// Created by tom on 08.05.17.
-//
-
 #ifndef HALLOWELT_ENTITY_H
 #define HALLOWELT_ENTITY_H
 
