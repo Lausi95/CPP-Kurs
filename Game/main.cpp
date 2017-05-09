@@ -43,11 +43,23 @@ int main(int argc, char** argv) {
     }
 
     // game loop
-    for (int i = 0; i < 100; i++) {
-        window.render(background[i]);
+    bool running = true;
+    SDL_Event event;
+
+    while (running) {
+        for (int i = 0; i < 100; i++) {
+            window.render(background[i]);
+        }
+
+        while (SDL_PollEvent(&event)) {
+            if (event.type == SDL_QUIT) {
+                running = false;
+            }
+        }
+
+        window.update();
+        SDL_Delay(16);
     }
-    window.update();
-    SDL_Delay(5000);
 
     // clean up resources
     for (int i = 0; i < 100; i++) {
