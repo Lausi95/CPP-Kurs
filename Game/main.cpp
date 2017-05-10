@@ -31,10 +31,12 @@ int main(int argc, char** argv) {
     Tile floorTile(&texture, 0, 32, 32, 32);
     Tile ghostTile(&texture, 5 * 32, 0, 32, 32);
 
-    Entity* background[100];
+    Entity* background[100]; // space for 10 tiles horizontal and vertical -> 100 tiles total
     for (int i = 0; i < 100; i++) {
-        int x = i / 10;
-        int y = i % 10;
+        int x = i % 10;
+        int y = i / 10;
+
+        // entities at to borders are walls
         if (x == 0 || y == 0 || x == 9 || y == 9) {
             background[i] = new SimpleEntity(x * 32, y * 32, &wallTile);
         }
