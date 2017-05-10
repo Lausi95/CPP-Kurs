@@ -1,4 +1,3 @@
-#include <iostream>
 #include "logging.h"
 
 #include "Texture.h"
