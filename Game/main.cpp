@@ -4,6 +4,7 @@
 #include "Tile.h"
 #include "Entity.h"
 #include "Window.h"
+#include "Input.h"
 
 using namespace std;
 
@@ -49,7 +50,7 @@ int main(int argc, char** argv) {
 
     // game loop
     bool running = true;
-    SDL_Event event;
+    InputHandler inputHandler;
 
     while (running) {
         // render
@@ -58,35 +59,35 @@ int main(int argc, char** argv) {
         }
         window.render(&ghost);
 
-        // update
-        while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_KEYDOWN) {
-                switch (event.key.keysym.sym) {
-                    case SDLK_w:
-                        DEBUG("move up")
-                        if (ghost.getY() > 32) ghost.setY(ghost.getY() - 32);
-                        break;
-                    case SDLK_a:
-                        DEBUG("move left")
-                        if (ghost.getX() > 32) ghost.setX(ghost.getX() - 32);
-                        break;
-                    case SDLK_s:
-                        DEBUG("move down")
-                        if (ghost.getY() < 8 * 32) ghost.setY(ghost.getY() + 32);
-                        break;
-                    case SDLK_d:
-                        DEBUG("move right")
-                        if (ghost.getX() < 8 * 32) ghost.setX(ghost.getX() + 32);
-                        break;
-                    default:break;
-                }
+        // input based update
+        while (inputHandler.pollEvent()) {
+            if (inputHandler.isKeyDown(SDLK_w) && ghost.getY() > 32) {
+                DEBUG("move up")
+                ghost.setY(ghost.getY() - 32);
             }
 
-            if (event.type == SDL_QUIT) {
+            if (inputHandler.isKeyDown(SDLK_a) && ghost.getX() > 32) {
+                DEBUG("move left")
+                ghost.setX(ghost.getX() - 32);
+            }
+
+            if (inputHandler.isKeyDown(SDLK_s) && ghost.getY() < 8 * 32) {
+                DEBUG("move down")
+                ghost.setY(ghost.getY() + 32);
+            }
+
+            if (inputHandler.isKeyDown(SDLK_d) && ghost.getX() < 8 * 32) {
+                DEBUG("move right")
+                ghost.setX(ghost.getX() + 32);
+            }
+
+            if (inputHandler.isQuitEvent()) {
                 INFO("Quit event triggered")
                 running = false;
             }
         }
+
+        // time based update (none yet)
 
         window.update();
         SDL_Delay(16);
