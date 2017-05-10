@@ -48,4 +48,4 @@ void log(const char *level, const char *message);
 void log(const char *level, const std::string &message);
 void log(const char *level, const std::stringstream &message);
 
-#endif //HALLOWELT_LOGGING_H
+#endif

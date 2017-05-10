@@ -66,4 +66,4 @@ private:
 };
 
 
-#endif //HALLOWELT_ENTITY_H
+#endif

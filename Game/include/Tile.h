@@ -23,4 +23,4 @@ private:
 };
 
 
-#endif //HALLOWELT_TILE_H
+#endif

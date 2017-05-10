@@ -34,4 +34,4 @@ private:
 };
 
 
-#endif //HALLOWELT_WINDOW_H
+#endif

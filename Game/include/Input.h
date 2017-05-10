@@ -14,4 +14,4 @@ private:
     SDL_Event event;
 };
 
-#endif //SDL_GAME_INPUT_H
+#endif

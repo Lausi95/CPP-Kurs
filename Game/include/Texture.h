@@ -18,4 +18,4 @@ private:
 };
 
 
-#endif //HALLOWELT_TEXTURE_H
+#endif
