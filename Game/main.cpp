@@ -1,5 +1,4 @@
 #include <time.h>
-#include <iostream>
 
 #include "logging.h"
 
@@ -8,9 +7,6 @@
 #include "Entity.h"
 #include "Window.h"
 #include "Input.h"
-
-using namespace std;
-
 
 class SimpleEntity : public Entity {
 private:
