@@ -11,7 +11,7 @@
 class Entity {
 public:
     // Created a new entity with a position.
-    Entity(int x, int y);
+    Entity(float x, float y);
 
     // Gets the tile to render the entity and determine its width and height.
     virtual Tile* getTile() = 0;
@@ -26,43 +26,46 @@ public:
     int getHeight();
 
     // gets the x-Position of the entity.
-    int getX();
+    float getX();
 
     // gets the y-Position of the entity.
-    int getY();
+    float getY();
 
     // gets the left position of the entity.
-    inline int getLeft() { return getX(); }
+    inline float getLeft() { return getX(); }
 
     // gets the right position of the entity.
-    inline int getRight() { return getX() + getWidth(); }
+    inline float getRight() { return getX() + getWidth(); }
 
     // gets the top position of the entity.
-    inline int getTop() { return getY(); }
+    inline float getTop() { return getY(); }
 
     // gets the bottom position of the entity.
-    inline int getBottom() { return getY() + getHeight(); }
+    inline float getBottom() { return getY() + getHeight(); }
 
     // sets the x-Position of the entity.
-    void setX(int x);
+    void setX(float x);
 
     // sets the y-Position of the entity.
-    void setY(int y);
+    void setY(float y);
 
     // sets the left position of the entity.
-    inline void setLeft(int left) { setX(left); }
+    inline void setLeft(float left) { setX(left); }
 
     // sets the right position of the entity.
-    inline void setRight(int right) { setX(right - getWidth()); }
+    inline void setRight(float right) { setX(right - getWidth()); }
 
     // sets the top position of the entity.
-    inline void setTop(int top) { setY(top); }
+    inline void setTop(float top) { setY(top); }
 
     // sets the bottom position of the entity.
-    inline void setBottom(int bottom) { setY(bottom - getHeight()); }
+    inline void setBottom(float bottom) { setY(bottom - getHeight()); }
 
 private:
     SDL_Rect rect;
+
+    float x;
+    float y;
 };
 
 

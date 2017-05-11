@@ -1,13 +1,15 @@
 #include "Entity.h"
 
-Entity::Entity(int x, int y) {
+Entity::Entity(float x, float y) {
     this->rect = SDL_Rect();
-    this->rect.x = x;
-    this->rect.y = y;
+    this->x = x;
+    this->y = y;
 }
 
 SDL_Rect *Entity::getRekt() {
-    return &this->rect;
+    rect.x = (int)x;
+    rect.y = (int)y;
+    return &rect;
 }
 
 int Entity::getWidth() {
@@ -18,18 +20,18 @@ int Entity::getHeight() {
     return getTile()->getRekt()->h;
 }
 
-int Entity::getX() {
-    return rect.x;
+float Entity::getX() {
+    return x;
 }
 
-int Entity::getY() {
-    return rect.y;
+float Entity::getY() {
+    return y;
 }
 
-void Entity::setX(int x) {
-    this->rect.x = x;
+void Entity::setX(float x) {
+    this->x = x;
 }
 
-void Entity::setY(int y) {
-    this->rect.y = y;
+void Entity::setY(float y) {
+    this->y = y;
 }
