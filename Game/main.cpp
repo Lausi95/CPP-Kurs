@@ -1,3 +1,6 @@
+#include <time.h>
+#include <iostream>
+
 #include "logging.h"
 
 #include "Texture.h"
@@ -52,6 +55,9 @@ int main(int argc, char** argv) {
     bool running = true;
     InputHandler inputHandler;
 
+    struct timespec c1;
+    clock_gettime(CLOCK_MONOTONIC, &c1);
+
     while (running) {
         // render
         for (int i = 0; i < 100; i++) {
@@ -87,7 +93,17 @@ int main(int argc, char** argv) {
             }
         }
 
+        // get the time since last frame (tslf)
+        struct timespec c2;
+        clock_gettime(CLOCK_MONOTONIC, &c2);
+        struct timespec diff;
+        diff.tv_nsec = c2.tv_nsec - c1.tv_nsec;
+        diff.tv_sec = c2.tv_sec - c1.tv_sec;
+        float tslf = (float)diff.tv_sec + (float)diff.tv_nsec / 1000000000.0f;
+        c1 = c2;
+
         // time based update (none yet)
+        ghost.setY(ghost.getY() + 5.0f * tslf);
 
         window.update();
         SDL_Delay(16);
