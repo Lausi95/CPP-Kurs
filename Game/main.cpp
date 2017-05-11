@@ -54,40 +54,15 @@ int main(int argc, char** argv) {
     struct timespec c1;
     clock_gettime(CLOCK_MONOTONIC, &c1);
 
+    float vx = 0.0f;
+    float vy = 0.0f;
+
     while (running) {
         // render
         for (int i = 0; i < 100; i++) {
             window.render(background[i]);
         }
         window.render(&ghost);
-
-        // input based update
-        while (inputHandler.pollEvent()) {
-            if (inputHandler.isKeyDown(SDLK_w) && ghost.getY() > 32) {
-                DEBUG("move up")
-                ghost.setY(ghost.getY() - 32);
-            }
-
-            if (inputHandler.isKeyDown(SDLK_a) && ghost.getX() > 32) {
-                DEBUG("move left")
-                ghost.setX(ghost.getX() - 32);
-            }
-
-            if (inputHandler.isKeyDown(SDLK_s) && ghost.getY() < 8 * 32) {
-                DEBUG("move down")
-                ghost.setY(ghost.getY() + 32);
-            }
-
-            if (inputHandler.isKeyDown(SDLK_d) && ghost.getX() < 8 * 32) {
-                DEBUG("move right")
-                ghost.setX(ghost.getX() + 32);
-            }
-
-            if (inputHandler.isQuitEvent()) {
-                INFO("Quit event triggered")
-                running = false;
-            }
-        }
 
         // get the time since last frame (tslf)
         struct timespec c2;
@@ -98,8 +73,49 @@ int main(int argc, char** argv) {
         float tslf = (float)diff.tv_sec + (float)diff.tv_nsec / 1000000000.0f;
         c1 = c2;
 
+        // input based update
+        while (inputHandler.pollEvent()) {
+            if (inputHandler.isKeyDown(SDLK_w) && ghost.getY() > 32) {
+                vy = -32.0f;
+            }
+
+            if (inputHandler.isKeyDown(SDLK_a) && ghost.getX() > 32) {
+                vx = -32.0f;
+            }
+
+            if (inputHandler.isKeyDown(SDLK_s) && ghost.getY() < 8 * 32) {
+                vy = 32.0f;
+            }
+
+            if (inputHandler.isKeyDown(SDLK_d) && ghost.getX() < 8 * 32) {
+                vx = 32.0f;
+            }
+
+            if (inputHandler.isKeyUp(SDLK_w)) {
+                vy = 0;
+            }
+
+            if (inputHandler.isKeyUp(SDLK_a)) {
+                vx = 0;
+            }
+
+            if (inputHandler.isKeyUp(SDLK_s)) {
+                vy = 0;
+            }
+
+            if (inputHandler.isKeyUp(SDLK_d)) {
+                vx = 0;
+            }
+
+            if (inputHandler.isQuitEvent()) {
+                INFO("Quit event triggered")
+                running = false;
+            }
+        }
+
         // time based update (none yet)
-        ghost.setY(ghost.getY() + 5.0f * tslf);
+        ghost.setX(ghost.getX() + vx * tslf);
+        ghost.setY(ghost.getY() + vy * tslf);
 
         window.update();
         SDL_Delay(16);
