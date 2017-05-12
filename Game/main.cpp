@@ -75,19 +75,19 @@ int main(int argc, char** argv) {
 
         // input based update
         while (inputHandler.pollEvent()) {
-            if (inputHandler.isKeyDown(SDLK_w) && ghost.getY() > 32) {
+            if (inputHandler.isKeyDown(SDLK_w)) {
                 vy = -32.0f;
             }
 
-            if (inputHandler.isKeyDown(SDLK_a) && ghost.getX() > 32) {
+            if (inputHandler.isKeyDown(SDLK_a)) {
                 vx = -32.0f;
             }
 
-            if (inputHandler.isKeyDown(SDLK_s) && ghost.getY() < 8 * 32) {
+            if (inputHandler.isKeyDown(SDLK_s)) {
                 vy = 32.0f;
             }
 
-            if (inputHandler.isKeyDown(SDLK_d) && ghost.getX() < 8 * 32) {
+            if (inputHandler.isKeyDown(SDLK_d)) {
                 vx = 32.0f;
             }
 
