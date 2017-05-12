@@ -1,12 +1,4 @@
-#include <time.h>
-
-#include "logging.h"
-
-#include "Texture.h"
-#include "Tile.h"
-#include "Entity.h"
-#include "Window.h"
-#include "Input.h"
+#include "stdafx.h"
 
 class SimpleEntity : public Entity {
 private:
@@ -51,8 +43,7 @@ int main(int argc, char** argv) {
     bool running = true;
     InputHandler inputHandler;
 
-    struct timespec c1;
-    clock_gettime(CLOCK_MONOTONIC, &c1);
+    Timer timer;
 
     float vx = 0.0f;
     float vy = 0.0f;
@@ -64,14 +55,7 @@ int main(int argc, char** argv) {
         }
         window.render(&ghost);
 
-        // get the time since last frame (tslf)
-        struct timespec c2;
-        clock_gettime(CLOCK_MONOTONIC, &c2);
-        struct timespec diff;
-        diff.tv_nsec = c2.tv_nsec - c1.tv_nsec;
-        diff.tv_sec = c2.tv_sec - c1.tv_sec;
-        float tslf = (float)diff.tv_sec + (float)diff.tv_nsec / 1000000000.0f;
-        c1 = c2;
+        timer.update();
 
         // input based update
         while (inputHandler.pollEvent()) {
@@ -105,12 +89,12 @@ int main(int argc, char** argv) {
             }
         }
 
-        // time based update (none yet)
-        ghost.setX(ghost.getX() + vx * tslf);
-        ghost.setY(ghost.getY() + vy * tslf);
+        // update
+        ghost.setX(ghost.getX() + vx * timer.tslf());
+        ghost.setY(ghost.getY() + vy * timer.tslf());
 
         window.update();
-        SDL_Delay(16);
+        timer.sleep(16);
     }
 
     // clean up resources

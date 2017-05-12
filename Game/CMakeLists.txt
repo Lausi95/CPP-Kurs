@@ -4,8 +4,22 @@ project(SDL_Game)
 set(CMAKE_CXX_STANDARD 14)
 include_directories(include)
 
-AUX_SOURCE_DIRECTORY(. sources)
-
-add_executable(SDL_Game ${sources})
+add_executable(SDL_Game
+        Entity.cpp
+        Input.cpp
+        logging.cpp
+        main.cpp
+        Texture.cpp
+        Tile.cpp
+        Timer.cpp
+        Window.cpp
+        include/Entity.h
+        include/Input.h
+        include/logging.h
+        include/Tile.h
+        include/Texture.h
+        include/Timer.h
+        include/Window.h
+        include/stdafx.h)
 
 target_link_libraries(SDL_Game SDL2 SDL2_image)
