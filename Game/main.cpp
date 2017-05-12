@@ -91,19 +91,11 @@ int main(int argc, char** argv) {
                 vx = 32.0f;
             }
 
-            if (inputHandler.isKeyUp(SDLK_w)) {
+            if (inputHandler.isKeyUp(SDLK_w) || inputHandler.isKeyUp(SDLK_s)) {
                 vy = 0;
             }
 
-            if (inputHandler.isKeyUp(SDLK_a)) {
-                vx = 0;
-            }
-
-            if (inputHandler.isKeyUp(SDLK_s)) {
-                vy = 0;
-            }
-
-            if (inputHandler.isKeyUp(SDLK_d)) {
+            if (inputHandler.isKeyUp(SDLK_a) || inputHandler.isKeyUp(SDLK_d)) {
                 vx = 0;
             }
 
