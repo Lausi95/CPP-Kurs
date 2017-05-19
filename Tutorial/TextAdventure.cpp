@@ -39,7 +39,7 @@ void runTextAdventure() {
                 currentRoom = currentRoom->move(DIR_WEST);
                 break;
             default:
-                cout << "WAT VERSTEHST DU AN N, S, O oder W nicht?" << endl;
+                cout << "Du kannst nur nach (N, S, O, W) gehen!" << endl;
         }
 
         cout << endl;

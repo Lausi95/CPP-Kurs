@@ -11,8 +11,8 @@ Room::Room(std::string description, bool targetRoom) {
     this->targetRoom = targetRoom;
 
     this->southRoom = NULL;
-    this->eastRoom = NULL;
-    this->westRoom = NULL;
+    this->eastRoom  = NULL;
+    this->westRoom  = NULL;
     this->northRoom = NULL;
 }
 
@@ -32,7 +32,7 @@ Room *Room::move(Direction direction) {
             target = this->southRoom;
             break;
         default:
-            std::cout << "dit jet nich vong richtumg her" << std::endl;
+            std::cout << "In diese Richtung kann man nicht gehen" << std::endl;
     }
     if (target == NULL) {
         std::cout << "Da gibt es nichts!" << std::endl;
@@ -60,7 +60,7 @@ void Room::setRoom(Direction direction, Room* room) {
             room->northRoom = this;
             break;
         default:
-        std::cout << "dit jet nich vong richtumg her" << std::endl;
+        std::cerr << "In diese Richtung kann kein Raum eingetragen werden!" << std::endl;
     }
 }
 
