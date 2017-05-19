@@ -1,7 +1,3 @@
-//
-// Created by tom on 05.05.17.
-//
-
 #ifndef TUTORIAL_ROOM_H
 #define TUTORIAL_ROOM_H
 
