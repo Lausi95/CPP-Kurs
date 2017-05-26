@@ -61,6 +61,8 @@ public:
     // sets the bottom position of the entity.
     inline void setBottom(float bottom) { setY(bottom - getHeight()); }
 
+    bool pointInside(int x, int y);
+
 private:
     SDL_Rect rect;
 

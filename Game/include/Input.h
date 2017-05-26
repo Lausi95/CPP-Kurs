@@ -10,6 +10,11 @@ public:
     bool isKeyDown(SDL_Keycode keyCode);
     bool isKeyUp(SDL_Keycode keyCode);
     bool isKeyPressed(SDL_Keycode keyCode);
+    bool isMouseDown();
+
+    int getMouseX();
+    int getMouseY();
+
     bool isQuitEvent();
 private:
     SDL_Event event;

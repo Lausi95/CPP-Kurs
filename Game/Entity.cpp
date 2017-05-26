@@ -35,3 +35,7 @@ void Entity::setX(float x) {
 void Entity::setY(float y) {
     this->y = y;
 }
+
+bool Entity::pointInside(int x, int y) {
+    return x > getLeft() && x < getRight() && y > getTop() && y < getBottom();
+}

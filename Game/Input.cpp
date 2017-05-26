@@ -1,6 +1,5 @@
 #include "Input.h"
 
-
 bool InputHandler::pollEvent() {
     return SDL_PollEvent(&event);
 }
@@ -19,5 +18,17 @@ bool InputHandler::isQuitEvent() {
 
 bool InputHandler::isKeyPressed(SDL_Keycode keyCode) {
     return event.key.state == SDL_PRESSED && event.key.keysym.sym == keyCode;
+}
+
+int InputHandler::getMouseX() {
+    return event.motion.x;
+}
+
+int InputHandler::getMouseY() {
+    return event.motion.y;
+}
+
+bool InputHandler::isMouseDown() {
+    return event.type == SDL_MOUSEBUTTONDOWN;
 }
 
