@@ -13,6 +13,7 @@ add_executable(SDL_Game
         Tile.cpp
         Timer.cpp
         Window.cpp
+        Room.cpp
         include/Entity.h
         include/Input.h
         include/logging.h
@@ -20,6 +21,7 @@ add_executable(SDL_Game
         include/Texture.h
         include/Timer.h
         include/Window.h
-        include/stdafx.h)
+        include/stdafx.h
+        include/Room.h)
 
 target_link_libraries(SDL_Game SDL2 SDL2_image)

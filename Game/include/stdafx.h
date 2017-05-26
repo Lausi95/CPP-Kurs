@@ -9,5 +9,6 @@
 #include "Tile.h"
 #include "Timer.h"
 #include "Window.h"
+#include "Room.h"
 
 #endif //SDL_GAME_STDAFX_H
