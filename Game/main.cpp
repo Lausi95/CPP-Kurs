@@ -3,15 +3,15 @@
 int main(int argc, char** argv) {
     Window window("Das Drachenei", 1000, 700);
 
-    Texture texture_desert_day("assets/cloudsinthedesert.png");
-    Texture texture_desert_night("assets/desertnight.png");
-    Texture texture_mountain("assets/coldmountain.png");
-    Texture texture_fortress("assets/fortress.png");
-    Texture texture_gate("assets/gate.png");
-    Texture texture_guardtower("assets/guardtower.png");
-    Texture texture_shore("assets/shore.png"); // Küste
-    Texture texture_swamp("assets/sunsetintheswamp.png"); // Sumpf
-    Texture texture_wizardtower("assets/wizardtower.png");
+    Texture texture_desert_day("assets/rooms/cloudsinthedesert.png");
+    Texture texture_desert_night("assets/rooms/desertnight.png");
+    Texture texture_mountain("assets/rooms/coldmountain.png");
+    Texture texture_fortress("assets/rooms/fortress.png");
+    Texture texture_gate("assets/rooms/gate.png");
+    Texture texture_guardtower("assets/rooms/guardtower.png");
+    Texture texture_shore("assets/rooms/shore.png"); // Küste
+    Texture texture_swamp("assets/rooms/sunsetintheswamp.png"); // Sumpf
+    Texture texture_wizardtower("assets/rooms/wizardtower.png");
 
     Tile tile_desert_day(&texture_desert_day, 0, 0, 1000, 700);
     Tile tile_desert_night(&texture_desert_night, 0, 0, 1000, 700);
