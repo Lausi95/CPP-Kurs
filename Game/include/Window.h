@@ -6,14 +6,17 @@
 
 #include "Entity.h"
 
-// Wrapps a SDL_Window and gives it the ability to render Entities on its surface.
+// Wrapps a SDL_Window and gives it the ability to renderEntity Entities on its surface.
 class Window {
 public:
     // creates a new Window with a title and a width and a height.
     Window(const char *title, int width, int height);
 
     // renders a entity on the surface of the window.
-    void render(Entity* entity);
+    void renderEntity(Entity *entity);
+
+    //renders text on the surface of the windows
+    void renderText(std::string);
 
     // updates the window to display the rendered surface.
     void update();

@@ -24,4 +24,4 @@ add_executable(SDL_Game
         include/stdafx.h
         include/Room.h)
 
-target_link_libraries(SDL_Game SDL2 SDL2_image)
+target_link_libraries(SDL_Game SDL2 SDL2_image SDL2_ttf)

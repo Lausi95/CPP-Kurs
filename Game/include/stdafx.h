@@ -1,6 +1,10 @@
 #ifndef SDL_GAME_STDAFX_H
 #define SDL_GAME_STDAFX_H
 
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
+
 #include "logging.h"
 
 #include "Entity.h"

@@ -13,10 +13,10 @@ public:
     // Created a new entity with a position.
     Entity(float x, float y);
 
-    // Gets the tile to render the entity and determine its width and height.
+    // Gets the tile to renderEntity the entity and determine its width and height.
     virtual Tile* getTile() = 0;
 
-    // gets the render rectangle of the entity.
+    // gets the renderEntity rectangle of the entity.
     SDL_Rect* getRekt();
 
     // gets the width of the entity.

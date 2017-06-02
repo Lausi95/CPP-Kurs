@@ -13,10 +13,11 @@ enum Direction {
 
 class Room : public Entity {
 public:
-    Room(Tile* tile, bool targetRoom);
+    Room(Tile* tile, bool targetRoom, std::string descritpion);
 
     void setRoom(Direction, Room*);
     Tile* getTile();
+    std::string getDescription();
     bool isTargetRoom();
 
     Room* move(Direction);
@@ -28,6 +29,8 @@ private:
     Room* southRoom;
     Room* westRoom;
     Room* eastRoom;
+
+    std::string description;
 };
 
 

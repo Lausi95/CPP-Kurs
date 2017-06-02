@@ -1,8 +1,6 @@
-#include "Room.h"
+#include "stdafx.h"
 
-#include <iostream>
-
-Room::Room(Tile* tile, bool targetRoom) : Entity(0.0f, 0.0f) {
+Room::Room(Tile* tile, bool targetRoom, std::string description) : Entity(0.0f, 0.0f) {
     this->tile = tile;
     this->targetRoom = targetRoom;
 
@@ -10,6 +8,8 @@ Room::Room(Tile* tile, bool targetRoom) : Entity(0.0f, 0.0f) {
     this->eastRoom  = NULL;
     this->westRoom  = NULL;
     this->northRoom = NULL;
+
+    this->description = description;
 }
 
 Room *Room::move(Direction direction) {
@@ -66,4 +66,9 @@ bool Room::isTargetRoom() {
 
 Tile* Room::getTile() {
     return this->tile;
+}
+
+std::string Room::getDescription() {
+
+    return description;
 }

@@ -83,15 +83,15 @@ int main(int argc, char** argv) {
     Item item_dragonegg(&tile_dragonegg, x, y);
 
     Room rooms[] = {
-            Room(&tile_desert_day, false),
-            Room(&tile_desert_night, false),
-            Room(&tile_mointain, false),
-            Room(&tile_fortress, false),
-            Room(&tile_gate, false),
-            Room(&tile_guardtower, false),
-            Room(&tile_shore, false),
-            Room(&tile_swamp, false),
-            Room(&tile_wizardtower, true), // last room in array has to be the wizard room
+            Room(&tile_desert_day, false, "Wüste bei Tag"),
+            Room(&tile_desert_night, false, "Wüste bei Nacht"),
+            Room(&tile_mointain, false, "Auf dem Berggipfel"),
+            Room(&tile_fortress, false, "In der Festung"),
+            Room(&tile_gate, false, "Am Tor"),
+            Room(&tile_guardtower, false, "Am Turm"),
+            Room(&tile_shore, false, "An der Küste"),
+            Room(&tile_swamp, false, "Im Sumpf"),
+            Room(&tile_wizardtower, true, "Magierturm"), // last room in array has to be the wizard room
     };
 
     rooms[ROOM_GATE].setRoom(DIR_EAST, &rooms[ROOM_FORTRESS]);
@@ -114,19 +114,19 @@ int main(int argc, char** argv) {
     GameState gameState;
 
     while (running) {
-        // render
-        window.render(currentRoom);
+        // renderEntity
+        window.renderEntity(currentRoom);
         if (currentRoom == roomWithChest && !gameState.chestFound) {
-            window.render(&item_chest);
+            window.renderEntity(&item_chest);
         }
         if (currentRoom == &rooms[ROOM_WIZARDTOWER] && !gameState.talkedToMage) {
-            window.render(&item_mage);
+            window.renderEntity(&item_mage);
         }
         if (currentRoom == roomWithDragonEgg && gameState.talkedToMage && gameState.chestFound) {
-            window.render(&item_dragonegg);
+            window.renderEntity(&item_dragonegg);
         }
         if (gameState.chestFound && !gameState.talkedToMage) {
-            window.render(&item_scroll);
+            window.renderEntity(&item_scroll);
         }
 
         // input
@@ -168,6 +168,7 @@ int main(int argc, char** argv) {
         }
         // update
 
+        window.renderText(currentRoom->getDescription());
         window.update();
         timer.sleep(16);
         timer.update();
