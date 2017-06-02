@@ -38,6 +38,7 @@ struct GameState {
 };
 
 int main(int argc, char** argv) {
+
     Window window("Das Drachenei", 1000, 700);
 
     Texture texture_desert_day("assets/rooms/cloudsinthedesert.png");

@@ -44,7 +44,7 @@ void Window::renderText(std::string text) {
 
     SDL_Color color = {255, 255, 255};
 
-    SDL_Surface* surfaceMessage = TTF_RenderText_Solid(font, text.c_str(), color);
+    SDL_Surface* surfaceMessage = TTF_RenderUTF8_Solid(font, text.c_str(), color);
 
     SDL_Rect* message_rect = new SDL_Rect();
     message_rect->x = 0;
