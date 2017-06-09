@@ -33,7 +33,7 @@ int main(int argc, char** argv) {
     Texture texture_stars3("assets/stars3.png");
 
     Tile tile_background(&texture_background, 0, 0, 1024, 800);
-    Tile tile_spaceship(&texture_spaceships, 0, 64, 64, 64);
+    Tile tile_spaceship(&texture_spaceships, 0, 32, 32, 32);
     Tile tile_stars1(&texture_stars1, 0, 0, 800, 600);
     Tile tile_stars2(&texture_stars2, 0, 0, 800, 600);
     Tile tile_stars3(&texture_stars3, 0, 0, 800, 600);
