@@ -1,6 +1,8 @@
 #ifndef SDL_GAME_STDAFX_H
 #define SDL_GAME_STDAFX_H
 
+#include <iostream>
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>

@@ -1,30 +1,56 @@
 #include "stdafx.h"
 
-class Item : public Entity {
+class Background : public Entity {
+public:
+    Background(float x, float y, Tile* tile) : Entity(x, y) {
+        this->tile = tile;
+    }
+    Tile* getTile() {
+        return tile;
+    }
 private:
     Tile* tile;
-
-public:
-    Item(Tile* tile, float x, float y);
-    Tile* getTile();
 };
 
-Item::Item(Tile* tile, float x, float y) : Entity(x, y) {
-    this->tile = tile;
-}
+class BackgroundScroller {
+public:
+    BackgroundScroller(Tile* entity, int vx) {
+        background1 = new Background(0, 0, entity);
+        background2 = new Background(background1->getWidth(), 0, entity);
+        this->vx = vx;
+    }
 
-Tile *Item::getTile() {
-    return tile;
-}
+    ~BackgroundScroller() {
+        delete background1;
+        delete background2;
+    }
 
-struct GameState {
-    bool chestFound = false;
-    bool talkedToMage = false;
+    void update() {
+        background1->setX(background1->getX() - vx);
+        background2->setX(background2->getX() - vx);
+        resetIfOutOfScreen(background1);
+        resetIfOutOfScreen(background2);
+    }
+
+    void render(Window* window) {
+        window->renderEntity(background1);
+        window->renderEntity(background2);
+    }
+
+private:
+    Background* background1;
+    Background* background2;
+    int vx = 1;
+
+    void resetIfOutOfScreen(Background* background) {
+        if (background->getX() <= -background->getWidth()) {
+            background->setX(background->getWidth());
+        }
+    }
 };
 
 int main(int argc, char** argv) {
-
-    Window window("SpaceShipRace", 1024, 800);
+    Window window("SpaceShipRace", 800, 600);
 
     Texture texture_background("assets/background.png");
     Texture texture_spaceships("assets/spaceships.png");
@@ -38,16 +64,25 @@ int main(int argc, char** argv) {
     Tile tile_stars2(&texture_stars2, 0, 0, 800, 600);
     Tile tile_stars3(&texture_stars3, 0, 0, 800, 600);
 
-    srand(time(NULL));
+    Background background(0, 0, &tile_background);
+    BackgroundScroller scroller1(&tile_stars1, 5);
+    BackgroundScroller scroller2(&tile_stars2, 4);
+    BackgroundScroller scroller3(&tile_stars3, 2);
 
     InputHandler inputHandler;
     bool running = true;
     Timer timer;
-    GameState gameState;
 
     while (running) {
         // renderEntity
-        //TODO:
+        window.renderEntity(&background);
+        scroller1.render(&window);
+        scroller2.render(&window);
+        scroller3.render(&window);
+
+        scroller1.update();
+        scroller2.update();
+        scroller3.update();
 
         // input
         while (inputHandler.pollEvent()) {
