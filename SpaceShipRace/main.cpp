@@ -104,11 +104,22 @@ int main(int argc, char** argv) {
 
         // input
         while (inputHandler.pollEvent()) {
-            if (inputHandler.isKeyPressed(SDLK_w) && !ship.getY() <= 0) {
-                ship.setY(ship.getY() - 10);
+
+            int xSpeed = 15;
+            int ySpeed = 10;
+            int framePixelBuffer = std::max(ySpeed, xSpeed);
+
+            if (inputHandler.isKeyPressed(SDLK_w) && ship.getY() >= (0 + framePixelBuffer)) {
+                ship.setY(ship.getY() - ySpeed);
             }
-            if (inputHandler.isKeyPressed(SDLK_s) && ship.getY() + ship.getHeight() <= 600) {
-                ship.setY(ship.getY() + 10);
+            if (inputHandler.isKeyPressed(SDLK_s) && (ship.getY() + ship.getHeight()) <= background.getHeight() - framePixelBuffer) {
+                ship.setY(ship.getY() + ySpeed);
+            }
+            if (inputHandler.isKeyPressed(SDLK_a) && ship.getX() >= (0 + framePixelBuffer)) {
+                ship.setX(ship.getX() - xSpeed);
+            }
+            if (inputHandler.isKeyPressed(SDLK_d) && (ship.getX() + ship.getWidth()) <= background.getWidth() - framePixelBuffer) {
+                ship.setX(ship.getX() + xSpeed);
             }
 
             if (inputHandler.isQuitEvent()) {
