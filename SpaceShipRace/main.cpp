@@ -49,6 +49,20 @@ private:
     }
 };
 
+class SpaceShip : public Entity {
+public:
+    SpaceShip(float x, float y, Tile* tile) : Entity(x, y) {
+        this->tile = tile;
+    }
+
+    Tile* getTile() {
+        return tile;
+    }
+
+private:
+    Tile* tile;
+};
+
 int main(int argc, char** argv) {
     Window window("SpaceShipRace", 800, 600);
 
@@ -69,6 +83,8 @@ int main(int argc, char** argv) {
     BackgroundScroller scroller2(&tile_stars2, 4);
     BackgroundScroller scroller3(&tile_stars3, 2);
 
+    SpaceShip ship(32, 300, &tile_spaceship);
+
     InputHandler inputHandler;
     bool running = true;
     Timer timer;
@@ -80,17 +96,19 @@ int main(int argc, char** argv) {
         scroller2.render(&window);
         scroller3.render(&window);
 
+        window.renderEntity(&ship);
+
         scroller1.update();
         scroller2.update();
         scroller3.update();
 
         // input
         while (inputHandler.pollEvent()) {
-            if (inputHandler.isKeyPressed(SDLK_w)) {
-                //move space ship to top
+            if (inputHandler.isKeyPressed(SDLK_w) && !ship.getY() <= 0) {
+                ship.setY(ship.getY() - 10);
             }
-            if (inputHandler.isKeyPressed(SDLK_s)) {
-                //move space ship to bottom
+            if (inputHandler.isKeyPressed(SDLK_s) && ship.getY() + ship.getHeight() <= 600) {
+                ship.setY(ship.getY() + 10);
             }
 
             if (inputHandler.isQuitEvent()) {
@@ -101,7 +119,7 @@ int main(int argc, char** argv) {
         // update
 
         window.update();
-        timer.sleep(16);
+        timer.sleep(8);
         timer.update();
     }
 
