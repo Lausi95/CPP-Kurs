@@ -1,0 +1,11 @@
+cmake_minimum_required(VERSION 3.7)
+project(BurningKiddies)
+
+set(CMAKE_CXX_STANDARD 14)
+
+set(SOURCE_FILES main.cpp)
+
+include_directories(SpaceShipRace include)
+add_executable(BurningKiddies ${SOURCE_FILES})
+
+target_link_libraries(BurningKiddies SDL2 SDL2_image SDL2_ttf)
