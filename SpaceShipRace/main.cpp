@@ -1,4 +1,5 @@
 #include <vector>
+#include <algorithm>
 #include "stdafx.h"
 
 const int X_SPEED = 15;
@@ -66,12 +67,19 @@ public:
         return tile;
     }
 
-    void update() {
+    void update(std::vector<Entity*> gameObjects, Window window) {
         setX(getX() + movementX);
         setY(getY() + movementY);
+
+        //check bounds
+        if(isOutOfWindow(window)) {
+            INFO("out of window")
+
+            //TODO: remove this shot from gameObjects
+        }
     }
 
-    void checkCollision() {
+    bool checkCollision() {
 
     }
 
@@ -79,6 +87,15 @@ private:
     Tile* tile;
     float movementX;
     float movementY;
+
+    bool isOutOfWindow(Window window) {
+
+        return
+                getX() > window.getWidth()
+                || getX() + getWidth() < 0
+                || getY() > window.getHeight()
+                || getY() + getHeight() < 0;
+    }
 };
 
 class SpaceShip : public Entity {
@@ -237,8 +254,11 @@ int main(int argc, char** argv) {
 
         for(Entity* entity : gameObjects) {
             window.renderEntity(entity);
+
+            //trying to cast to shot
             if(Shot* shot = dynamic_cast<Shot*>(entity)) {
-                shot->update();
+                shot->update(gameObjects, window);
+                shot->checkCollision();
             }
         }
 
