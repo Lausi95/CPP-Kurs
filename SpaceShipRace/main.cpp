@@ -64,7 +64,52 @@ private:
     Tile* tile;
 };
 
+class EnemySpaceShip : public SpaceShip {
+public:
+    EnemySpaceShip(float x, float y, Tile* tile) : SpaceShip(x, y, tile) {
+
+    }
+
+    void moveRandom() {
+
+        bool moveX = (bool) (rand() % 2);
+        bool moveY = (bool) (rand() % 2);
+
+        //values same as players ship
+        int xSpeed = 15;
+        int ySpeed = 10;
+
+        if(moveX) {
+            bool moveLeft = (bool) (rand() % 2);
+
+            if(moveLeft) {
+                this->setX(this->getX() - xSpeed);
+            }
+            else {
+                this->setX(this->getX() + xSpeed);
+            }
+        }
+
+        if(moveY) {
+            bool moveTop = (bool) (rand() % 2);
+
+            if(moveTop) {
+                this->setY(this->getY() - ySpeed);
+            }
+            else {
+                this->setY(this->getY() + ySpeed);
+            }
+        }
+    }
+
+private:
+
+};
+
 int main(int argc, char** argv) {
+
+    srand (time(NULL));
+
     Window window("SpaceShipRace", 800, 600);
 
     Texture texture_background("assets/background.png");
@@ -93,12 +138,12 @@ int main(int argc, char** argv) {
 
     SpaceShip ship(32, 300, &tile_spaceship);
 
-    SpaceShip enemyShip1(736, 150, &tile_enemy_spaceship);
-    SpaceShip enemyShip2(736, 250, &tile_enemy_spaceship);
-    SpaceShip enemyShip3(736, 350, &tile_enemy_spaceship);
-    SpaceShip enemyShip4(736, 450, &tile_enemy_spaceship);
+    EnemySpaceShip enemyShip1(736, 150, &tile_enemy_spaceship);
+    EnemySpaceShip enemyShip2(736, 250, &tile_enemy_spaceship);
+    EnemySpaceShip enemyShip3(736, 350, &tile_enemy_spaceship);
+    EnemySpaceShip enemyShip4(736, 450, &tile_enemy_spaceship);
 
-    std::vector<Entity*> enemies;
+    std::vector<EnemySpaceShip*> enemies;
     enemies.push_back(&enemyShip1);
     enemies.push_back(&enemyShip2);
     enemies.push_back(&enemyShip3);
@@ -109,11 +154,18 @@ int main(int argc, char** argv) {
     bool running = true;
     Timer timer;
 
+    const int MAX_CYCLES = 5;
+    int cyclesToWaitBeforeUpdateMap = MAX_CYCLES;
+
     while (running) {
+
+        if(--cyclesToWaitBeforeUpdateMap == -1) {
+            cyclesToWaitBeforeUpdateMap = MAX_CYCLES;
+        }
 
         // render enteties
         window.renderEntity(&background);
-        
+
         window.renderEntity(&ship);
 
         for(BackgroundScroller* scroller: backgroundScroller) {
@@ -121,8 +173,11 @@ int main(int argc, char** argv) {
             scroller->update();
         }
 
-        for(Entity* value: enemies) {
-            window.renderEntity(value);
+        for(EnemySpaceShip* enemy: enemies) {
+            window.renderEntity(enemy);
+            if(cyclesToWaitBeforeUpdateMap == 0) {
+                enemy->moveRandom();
+            }
         }
 
         // input
