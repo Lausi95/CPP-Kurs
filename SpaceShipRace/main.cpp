@@ -1,6 +1,9 @@
 #include <vector>
 #include "stdafx.h"
 
+const int X_SPEED = 15;
+const int Y_SPEED = 10;
+
 class Background : public Entity {
 public:
     Background(float x, float y, Tile* tile) : Entity(x, y) {
@@ -60,6 +63,31 @@ public:
         return tile;
     }
 
+    void move(int moveX, int moveY, Window window) {
+
+        //check bounds
+        float newPositionX = getX() + moveX;
+        float newPositionY = getY() + moveY;
+
+        std::stringstream ss;
+        ss << "newPositionX = " << newPositionX;
+        std::string s = ss.str();
+        INFO(s)
+
+        if(newPositionX + getWidth() <= window.getWidth() && newPositionX >= 0) {
+            setX(newPositionX);
+
+            std::stringstream ss;
+            ss << newPositionX + getWidth() << " <= " << window.getWidth();
+            std::string s = ss.str();
+            INFO(s)
+        }
+
+        if(newPositionY + getHeight() <= window.getHeight() && newPositionY >= 0) {
+            setY(newPositionY);
+        }
+    }
+
 private:
     Tile* tile;
 };
@@ -70,23 +98,19 @@ public:
 
     }
 
-    void moveRandom() {
+    void moveRandom(Window window) {
 
         bool moveX = (bool) (rand() % 2);
         bool moveY = (bool) (rand() % 2);
-
-        //values same as players ship
-        int xSpeed = 15;
-        int ySpeed = 10;
 
         if(moveX) {
             bool moveLeft = (bool) (rand() % 2);
 
             if(moveLeft) {
-                this->setX(this->getX() - xSpeed);
+                move(-X_SPEED, 0, window);
             }
             else {
-                this->setX(this->getX() + xSpeed);
+                move(X_SPEED, 0, window);
             }
         }
 
@@ -94,10 +118,10 @@ public:
             bool moveTop = (bool) (rand() % 2);
 
             if(moveTop) {
-                this->setY(this->getY() - ySpeed);
+                move(0, -Y_SPEED, window);
             }
             else {
-                this->setY(this->getY() + ySpeed);
+                move(0, Y_SPEED, window);
             }
         }
     }
@@ -163,7 +187,7 @@ int main(int argc, char** argv) {
             cyclesToWaitBeforeUpdateMap = MAX_CYCLES;
         }
 
-        // render enteties
+        // render entities
         window.renderEntity(&background);
 
         window.renderEntity(&ship);
@@ -176,28 +200,24 @@ int main(int argc, char** argv) {
         for(EnemySpaceShip* enemy: enemies) {
             window.renderEntity(enemy);
             if(cyclesToWaitBeforeUpdateMap == 0) {
-                enemy->moveRandom();
+                enemy->moveRandom(window);
             }
         }
 
         // input
         while (inputHandler.pollEvent()) {
 
-            int xSpeed = 15;
-            int ySpeed = 10;
-            int framePixelBuffer = std::max(ySpeed, xSpeed);
-
-            if (inputHandler.isKeyPressed(SDLK_w) && ship.getY() >= (0 + framePixelBuffer)) {
-                ship.setY(ship.getY() - ySpeed);
+            if (inputHandler.isKeyPressed(SDLK_w)) {
+                ship.move(0, -Y_SPEED, window);
             }
-            if (inputHandler.isKeyPressed(SDLK_s) && (ship.getY() + ship.getHeight()) <= background.getHeight() - framePixelBuffer) {
-                ship.setY(ship.getY() + ySpeed);
+            if (inputHandler.isKeyPressed(SDLK_s)) {
+                ship.move(0, Y_SPEED, window);
             }
-            if (inputHandler.isKeyPressed(SDLK_a) && ship.getX() >= (0 + framePixelBuffer)) {
-                ship.setX(ship.getX() - xSpeed);
+            if (inputHandler.isKeyPressed(SDLK_a)) {
+                ship.move(-X_SPEED, 0, window);
             }
-            if (inputHandler.isKeyPressed(SDLK_d) && (ship.getX() + ship.getWidth()) <= background.getWidth() - framePixelBuffer) {
-                ship.setX(ship.getX() + xSpeed);
+            if (inputHandler.isKeyPressed(SDLK_d)) {
+                ship.move(X_SPEED, 0, window);
             }
 
             if (inputHandler.isQuitEvent()) {
