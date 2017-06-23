@@ -79,9 +79,15 @@ public:
         }
     }
 
-    bool checkCollision() {
+    /*bool checkCollision(std::vector<EnemySpaceShip*> spaceShips) {
 
-    }
+        for(EnemySpaceShip* spaceShip : spaceShips) {
+            if(SDL_HasIntersection(getRekt(), spaceShip->getRekt())) {
+                INFO("EXPLOSIOOOOOONNN")
+            }
+        }
+
+    }*/
 
 private:
     Tile* tile;
@@ -258,7 +264,7 @@ int main(int argc, char** argv) {
             //trying to cast to shot
             if(Shot* shot = dynamic_cast<Shot*>(entity)) {
                 shot->update(gameObjects, window);
-                shot->checkCollision();
+                //shot->checkCollision((std::vector<EnemySpaceShip*>)enemies);
             }
         }
 
