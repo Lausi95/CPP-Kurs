@@ -53,6 +53,34 @@ private:
     }
 };
 
+class Shot : public Entity {
+public:
+    Shot(float x, float y, float movementX, float movementY) : Entity(x, y) {
+        Texture* texture_spaceships = new Texture ("assets/spaceships.png");
+        this->tile = new Tile(texture_spaceships, 32, 0, 32, 32);
+        this->movementX = movementX;
+        this->movementY = movementY;
+    }
+
+    Tile* getTile() {
+        return tile;
+    }
+
+    void update() {
+        setX(getX() + movementX);
+        setY(getY() + movementY);
+    }
+
+    void checkCollision() {
+
+    }
+
+private:
+    Tile* tile;
+    float movementX;
+    float movementY;
+};
+
 class SpaceShip : public Entity {
 public:
     SpaceShip(float x, float y, Tile* tile) : Entity(x, y) {
@@ -69,23 +97,18 @@ public:
         float newPositionX = getX() + moveX;
         float newPositionY = getY() + moveY;
 
-        std::stringstream ss;
-        ss << "newPositionX = " << newPositionX;
-        std::string s = ss.str();
-        INFO(s)
-
         if(newPositionX + getWidth() <= window.getWidth() && newPositionX >= 0) {
             setX(newPositionX);
-
-            std::stringstream ss;
-            ss << newPositionX + getWidth() << " <= " << window.getWidth();
-            std::string s = ss.str();
-            INFO(s)
         }
 
         if(newPositionY + getHeight() <= window.getHeight() && newPositionY >= 0) {
             setY(newPositionY);
         }
+    }
+
+    virtual Shot* shoot() {
+        Shot* shot = new Shot(getX(), getY(), X_SPEED, 0);
+        return shot;
     }
 
 private:
@@ -126,6 +149,11 @@ public:
         }
     }
 
+    Shot* shoot() {
+        Shot* shot = new Shot(getX(), getY(), X_SPEED, 0);
+        return shot;
+    }
+
 private:
 
 };
@@ -162,23 +190,26 @@ int main(int argc, char** argv) {
 
     SpaceShip ship(32, 300, &tile_spaceship);
 
-    EnemySpaceShip enemyShip1(736, 150, &tile_enemy_spaceship);
-    EnemySpaceShip enemyShip2(736, 250, &tile_enemy_spaceship);
-    EnemySpaceShip enemyShip3(736, 350, &tile_enemy_spaceship);
-    EnemySpaceShip enemyShip4(736, 450, &tile_enemy_spaceship);
+    EnemySpaceShip enemyShip1(650, 100, &tile_enemy_spaceship);
+    EnemySpaceShip enemyShip2(550, 200, &tile_enemy_spaceship);
+    EnemySpaceShip enemyShip3(450, 300, &tile_enemy_spaceship);
+    EnemySpaceShip enemyShip4(550, 400, &tile_enemy_spaceship);
+    EnemySpaceShip enemyShip5(650, 500, &tile_enemy_spaceship);
 
     std::vector<EnemySpaceShip*> enemies;
     enemies.push_back(&enemyShip1);
     enemies.push_back(&enemyShip2);
     enemies.push_back(&enemyShip3);
     enemies.push_back(&enemyShip4);
+    enemies.push_back(&enemyShip5);
 
+    std::vector<Entity*> gameObjects;
 
     InputHandler inputHandler;
     bool running = true;
     Timer timer;
 
-    const int MAX_CYCLES = 5;
+    const int MAX_CYCLES = 7;
     int cyclesToWaitBeforeUpdateMap = MAX_CYCLES;
 
     while (running) {
@@ -192,15 +223,22 @@ int main(int argc, char** argv) {
 
         window.renderEntity(&ship);
 
-        for(BackgroundScroller* scroller: backgroundScroller) {
+        for(BackgroundScroller* scroller : backgroundScroller) {
             scroller->render(&window);
             scroller->update();
         }
 
-        for(EnemySpaceShip* enemy: enemies) {
+        for(EnemySpaceShip* enemy : enemies) {
             window.renderEntity(enemy);
             if(cyclesToWaitBeforeUpdateMap == 0) {
                 enemy->moveRandom(window);
+            }
+        }
+
+        for(Entity* entity : gameObjects) {
+            window.renderEntity(entity);
+            if(Shot* shot = dynamic_cast<Shot*>(entity)) {
+                shot->update();
             }
         }
 
@@ -218,6 +256,10 @@ int main(int argc, char** argv) {
             }
             if (inputHandler.isKeyPressed(SDLK_d)) {
                 ship.move(X_SPEED, 0, window);
+            }
+            if (inputHandler.isKeyPressed(SDLK_SPACE)) {
+                Shot* shot = ship.shoot();
+                gameObjects.push_back((Entity*)shot);
             }
 
             if (inputHandler.isQuitEvent()) {
