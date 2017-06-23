@@ -81,9 +81,15 @@ int main(int argc, char** argv) {
     Tile tile_stars3(&texture_stars3, 0, 0, 800, 600);
 
     Background background(0, 0, &tile_background);
+
     BackgroundScroller scroller1(&tile_stars1, 5);
     BackgroundScroller scroller2(&tile_stars2, 4);
     BackgroundScroller scroller3(&tile_stars3, 2);
+
+    std::vector<BackgroundScroller*> backgroundScroller;
+    backgroundScroller.push_back(&scroller1);
+    backgroundScroller.push_back(&scroller2);
+    backgroundScroller.push_back(&scroller3);
 
     SpaceShip ship(32, 300, &tile_spaceship);
 
@@ -104,22 +110,20 @@ int main(int argc, char** argv) {
     Timer timer;
 
     while (running) {
-        // renderEntity
-        window.renderEntity(&background);
-        scroller1.render(&window);
-        scroller2.render(&window);
-        scroller3.render(&window);
 
+        // render enteties
+        window.renderEntity(&background);
+        
         window.renderEntity(&ship);
 
-        //render enemies
+        for(BackgroundScroller* scroller: backgroundScroller) {
+            scroller->render(&window);
+            scroller->update();
+        }
+
         for(Entity* value: enemies) {
             window.renderEntity(value);
         }
-
-        scroller1.update();
-        scroller2.update();
-        scroller3.update();
 
         // input
         while (inputHandler.pollEvent()) {
