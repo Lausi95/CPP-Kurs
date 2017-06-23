@@ -1,3 +1,4 @@
+#include <vector>
 #include "stdafx.h"
 
 class Background : public Entity {
@@ -74,6 +75,7 @@ int main(int argc, char** argv) {
 
     Tile tile_background(&texture_background, 0, 0, 1024, 800);
     Tile tile_spaceship(&texture_spaceships, 0, 32, 32, 32);
+    Tile tile_enemy_spaceship(&texture_spaceships, 0, 224, 32, 32);
     Tile tile_stars1(&texture_stars1, 0, 0, 800, 600);
     Tile tile_stars2(&texture_stars2, 0, 0, 800, 600);
     Tile tile_stars3(&texture_stars3, 0, 0, 800, 600);
@@ -84,6 +86,18 @@ int main(int argc, char** argv) {
     BackgroundScroller scroller3(&tile_stars3, 2);
 
     SpaceShip ship(32, 300, &tile_spaceship);
+
+    SpaceShip enemyShip1(736, 150, &tile_enemy_spaceship);
+    SpaceShip enemyShip2(736, 250, &tile_enemy_spaceship);
+    SpaceShip enemyShip3(736, 350, &tile_enemy_spaceship);
+    SpaceShip enemyShip4(736, 450, &tile_enemy_spaceship);
+
+    std::vector<Entity*> enemies;
+    enemies.push_back(&enemyShip1);
+    enemies.push_back(&enemyShip2);
+    enemies.push_back(&enemyShip3);
+    enemies.push_back(&enemyShip4);
+
 
     InputHandler inputHandler;
     bool running = true;
@@ -97,6 +111,11 @@ int main(int argc, char** argv) {
         scroller3.render(&window);
 
         window.renderEntity(&ship);
+
+        //render enemies
+        for(Entity* value: enemies) {
+            window.renderEntity(value);
+        }
 
         scroller1.update();
         scroller2.update();
