@@ -66,8 +66,8 @@ int main(int argc, char** argv) {
 
     srand (time(NULL));
 
-    int levelWidth = 800;
-    int levelHeigth = 600;
+    int levelWidth = info.getColumnCount() * 32;
+    int levelHeigth = info.getRowCount() * 32;
 
     Window window("Punktefresser", levelWidth, levelHeigth);
 

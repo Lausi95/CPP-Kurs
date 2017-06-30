@@ -61,5 +61,5 @@ LevelMap LevelMap::load(const char *path) {
     }
 
     filestream.close();
-    return LevelMap(colCount, rowCount, std::vector<Field>());
+    return LevelMap(rowCount, colCount, std::vector<Field>());
 }
