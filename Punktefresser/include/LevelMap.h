@@ -27,9 +27,9 @@ public:
 private:
     int rowCount;
     int columnCount;
-    std::vector<Field> fields;
+    std::vector<Field>* fields;
 
-    LevelMap(int rowCount, int columnCount, std::vector<Field> fields);
+    LevelMap(int rowCount, int columnCount, std::vector<Field>* fields);
 };
 
 #endif //PUNKTEFRESSER_LEVEL_H
