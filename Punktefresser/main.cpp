@@ -1,18 +1,57 @@
 #include "stdafx.h"
 
-class TestEntity : public Entity {
+enum Direction {
+    DIR_TOP,
+    DIR_BOT,
+    DIR_LEFT,
+    DIR_RIGHT
+};
+
+class Pacman : public Entity {
 
 public:
-    TestEntity(float x, float y, Tile* tile) : Entity(x, y) {
-        this->tile = tile;
+    Pacman(float x, float y, Tile* tileTop, Tile* tileBot, Tile* tileLeft, Tile* tileRight) : Entity(x, y) {
+
+        this->tileTop = tileTop;
+        this->tileBot = tileBot;
+        this->tileLeft = tileLeft;
+        this->tileRight = tileRight;
+
+        this->currentTile = tileRight;
     }
 
     Tile* getTile() {
-        return tile;
+        return currentTile;
+    }
+
+    void move(Direction direction) {
+
+        switch(direction) {
+
+            case DIR_TOP:
+                currentTile = tileTop;
+                break;
+
+            case DIR_BOT:
+                currentTile = tileBot;
+                break;
+
+            case DIR_LEFT:
+                currentTile = tileLeft;
+                break;
+
+            case DIR_RIGHT:
+                currentTile = tileRight;
+                break;
+        }
     }
 
 private:
-    Tile* tile;
+    Tile* tileTop;
+    Tile* tileBot;
+    Tile* tileLeft;
+    Tile* tileRight;
+    Tile* currentTile;
 };
 
 int main(int argc, char** argv) {
@@ -44,8 +83,9 @@ int main(int argc, char** argv) {
     Tile tileWall(&mainTexture, 0, 0, 32, 32);
 
     Tile tilePoint(&mainTexture, 64, 0, 32, 32);
+    Tile tileNormalBackground(&mainTexture, 64, 32, 32, 32);
 
-    TestEntity testEntity(64, 64, &tilePoint);
+    Pacman pacman(400, 300, &tilePlayerLookingTop, &tilePlayerLookingBot, &tilePlayerLookingLeft, &tilePlayerLookingRight);
 
     InputHandler inputHandler;
     bool running = true;
@@ -54,25 +94,22 @@ int main(int argc, char** argv) {
     while (running) {
 
         // render entities
-        window.renderEntity(&testEntity);
+        window.renderEntity(&pacman);
 
         // input
         while (inputHandler.pollEvent()) {
 
             if (inputHandler.isKeyPressed(SDLK_w)) {
-
+                pacman.move(DIR_TOP);
             }
             if (inputHandler.isKeyPressed(SDLK_s)) {
-
+                pacman.move(DIR_BOT);
             }
             if (inputHandler.isKeyPressed(SDLK_a)) {
-
+                pacman.move(DIR_LEFT);
             }
             if (inputHandler.isKeyPressed(SDLK_d)) {
-
-            }
-            if (inputHandler.isKeyPressed(SDLK_SPACE)) {
-
+                pacman.move(DIR_RIGHT);
             }
 
             if (inputHandler.isQuitEvent()) {
