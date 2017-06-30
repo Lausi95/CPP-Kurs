@@ -63,3 +63,7 @@ LevelMap LevelMap::load(const char *path) {
     filestream.close();
     return LevelMap(rowCount, colCount, fields);
 }
+
+LevelMap::~Field() {
+    delete fieldMap;
+}
