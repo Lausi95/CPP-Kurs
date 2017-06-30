@@ -1,7 +1,29 @@
 #include <LevelMap.h>
 #include "stdafx.h"
 
-enum Direction {
+Texture mainTexture("assets/tiles.png");
+
+Tile tilePlayerLookingTop(&mainTexture, 128, 32, 32, 32);
+Tile tilePlayerLookingBot(&mainTexture, 96, 32, 32, 32);
+Tile tilePlayerLookingLeft(&mainTexture, 128, 0, 32, 32);
+Tile tilePlayerLookingRight(&mainTexture, 96, 0, 32, 32);
+
+Tile tileEnemy(&mainTexture, 160, 0, 32, 32);
+
+Tile tileFruitBanana(&mainTexture, 0, 64, 32, 32);
+Tile tileFruitPeach(&mainTexture, 32, 64, 32, 32);
+Tile tileFruitGrapes(&mainTexture, 64, 64, 32, 32);
+Tile tileFruitApple(&mainTexture, 96, 64, 32, 32);
+Tile tileFruitMelon(&mainTexture, 128, 64, 32, 32);
+Tile tileFruitPineapple(&mainTexture, 160, 64, 32, 32);
+Tile fruitTiles[] = {tileFruitBanana, tileFruitPeach, tileFruitGrapes, tileFruitApple, tileFruitMelon, tileFruitPineapple};
+
+Tile tileWall(&mainTexture, 0, 0, 32, 32);
+
+Tile tilePoint(&mainTexture, 64, 0, 32, 32);
+Tile tileNormalBackground(&mainTexture, 64, 32, 32, 32);
+
+enum class Direction {
     DIR_TOP,
     DIR_BOT,
     DIR_LEFT,
@@ -29,19 +51,19 @@ public:
 
         switch(direction) {
 
-            case DIR_TOP:
+            case Direction::DIR_TOP:
                 currentTile = tileTop;
                 break;
 
-            case DIR_BOT:
+            case Direction::DIR_BOT:
                 currentTile = tileBot;
                 break;
 
-            case DIR_LEFT:
+            case Direction::DIR_LEFT:
                 currentTile = tileLeft;
                 break;
 
-            case DIR_RIGHT:
+            case Direction::DIR_RIGHT:
                 currentTile = tileRight;
                 break;
         }
@@ -55,45 +77,136 @@ private:
     Tile* currentTile;
 };
 
+class Wall : public Entity {
+
+public:
+    Wall(float x, float y, Tile* tile) : Entity(x, y) {
+
+        this->tile = tile;
+    }
+
+    Tile* getTile() {
+        return tile;
+    }
+
+private:
+    Tile* tile;
+};
+
+class Background : public Entity {
+
+public:
+    Background(float x, float y, Tile* tile) : Entity(x, y) {
+
+        this->tile = tile;
+    }
+
+    Tile* getTile() {
+        return tile;
+    }
+
+private:
+    Tile* tile;
+};
+
+class Fruit : public Entity {
+
+public:
+    Fruit(float x, float y, Tile* tile) : Entity(x, y) {
+
+        this->tile = tile;
+    }
+
+    Tile* getTile() {
+        return tile;
+    }
+
+private:
+    Tile* tile;
+};
+
+class Enemy : public Entity {
+
+public:
+    Enemy(float x, float y, Tile* tile) : Entity(x, y) {
+
+        this->tile = tile;
+    }
+
+    Tile* getTile() {
+        return tile;
+    }
+
+private:
+    Tile* tile;
+};
+
+Pacman* pacman = NULL;
+
+void renderMap(Window window, LevelMap levelMap) {
+
+    for(int row = 0; row < levelMap.getRowCount(); row++) {
+        for(int column = 0; column < levelMap.getColumnCount(); column++) {
+
+            std::stringstream ss;
+            ss << "row = " << row << "; column = " << column;
+            INFO(ss)
+
+            Entity* entity;
+
+            Field field = levelMap.fieldAt(0, 0);
+            switch(field) {
+
+                case Field::EMPTY:
+                    INFO("EMPTY")
+                    entity = new Background(row * 32, column *32, &tileNormalBackground);
+                    break;
+
+                case Field::WALL:
+                    INFO("WALL")
+                    entity = new Background(row * 32, column *32, &tileWall);
+                    break;
+
+                case Field::PLAYER:
+                    INFO("PLAYER")
+                    if(pacman == NULL) {
+                        pacman = new Pacman(row * 32, column *32, &tilePlayerLookingTop, &tilePlayerLookingBot, &tilePlayerLookingLeft, &tilePlayerLookingRight);
+                        entity = pacman;
+                    }
+                    else {
+                        entity = new Background(row * 32, column *32, &tileNormalBackground);
+                        ERROR("PANIC, second player detected!!! OMG :O")
+                    }
+                    break;
+
+                case Field::FRUIT:
+                    INFO("FRUIT")
+                    entity = new Fruit(row * 32, column *32, &tileFruitMelon);
+                    break;
+
+                case Field::ENEMY:
+                    INFO("ENEMY")
+                    entity = new Enemy(row * 32, column *32, &tileEnemy);
+                    break;
+            }
+
+            if(entity != NULL) {
+                window.renderEntity(entity);
+            }
+        }
+    }
+}
+
 int main(int argc, char** argv) {
-    LevelMap info = LevelMap::load("levels/default.lvl");
-    info.getRowCount();
-    info.getColumnCount();
 
-    std::cout << info.getRowCount() << std::endl;
-    std::cout << info.getColumnCount() << std::endl;
-
+    LevelMap levelMap = LevelMap::load("levels/default.lvl");
 
     srand (time(NULL));
 
-    int levelWidth = info.getColumnCount() * 32;
-    int levelHeigth = info.getRowCount() * 32;
+    int levelWidth = levelMap.getColumnCount() * 32;
+    int levelHeigth = levelMap.getRowCount() * 32;
 
     Window window("Punktefresser", levelWidth, levelHeigth);
-
-    Texture mainTexture("assets/tiles.png");
-
-    Tile tilePlayerLookingTop(&mainTexture, 128, 32, 32, 32);
-    Tile tilePlayerLookingBot(&mainTexture, 96, 32, 32, 32);
-    Tile tilePlayerLookingLeft(&mainTexture, 128, 0, 32, 32);
-    Tile tilePlayerLookingRight(&mainTexture, 96, 0, 32, 32);
-
-    Tile tileEnemy(&mainTexture, 160, 0, 32, 32);
-
-    Tile tileFruitBanana(&mainTexture, 0, 64, 32, 32);
-    Tile tileFruitPeach(&mainTexture, 32, 64, 32, 32);
-    Tile tileFruitGrapes(&mainTexture, 64, 64, 32, 32);
-    Tile tileFruitApple(&mainTexture, 96, 64, 32, 32);
-    Tile tileFruitMelon(&mainTexture, 128, 64, 32, 32);
-    Tile tileFruitPineapple(&mainTexture, 160, 64, 32, 32);
-    Tile fruitTiles[] = {tileFruitBanana, tileFruitPeach, tileFruitGrapes, tileFruitApple, tileFruitMelon, tileFruitPineapple};
-
-    Tile tileWall(&mainTexture, 0, 0, 32, 32);
-
-    Tile tilePoint(&mainTexture, 64, 0, 32, 32);
-    Tile tileNormalBackground(&mainTexture, 64, 32, 32, 32);
-
-    Pacman pacman(400, 300, &tilePlayerLookingTop, &tilePlayerLookingBot, &tilePlayerLookingLeft, &tilePlayerLookingRight);
 
     InputHandler inputHandler;
     bool running = true;
@@ -102,22 +215,24 @@ int main(int argc, char** argv) {
     while (running) {
 
         // render entities
-        window.renderEntity(&pacman);
+        //window.renderEntity(pacman);
+
+        renderMap(window, levelMap);
 
         // input
         while (inputHandler.pollEvent()) {
 
             if (inputHandler.isKeyPressed(SDLK_w)) {
-                pacman.move(DIR_TOP);
+                pacman->move(Direction::DIR_TOP);
             }
             if (inputHandler.isKeyPressed(SDLK_s)) {
-                pacman.move(DIR_BOT);
+                pacman->move(Direction::DIR_BOT);
             }
             if (inputHandler.isKeyPressed(SDLK_a)) {
-                pacman.move(DIR_LEFT);
+                pacman->move(Direction::DIR_LEFT);
             }
             if (inputHandler.isKeyPressed(SDLK_d)) {
-                pacman.move(DIR_RIGHT);
+                pacman->move(Direction::DIR_RIGHT);
             }
 
             if (inputHandler.isQuitEvent()) {

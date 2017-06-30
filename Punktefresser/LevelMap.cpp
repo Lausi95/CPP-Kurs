@@ -9,11 +9,11 @@ struct FieldMap {
 
     FieldMap() {
         for (int i = 0; i < 255; i++)
-            map[i] = Field::Empty;
-        map['#'] = Field::Wall;
-        map['P'] = Field::Player;
-        map['E'] = Field::Enemy;
-        map['F'] = Field::Fruit;
+            map[i] = Field::EMPTY;
+        map['#'] = Field::WALL;
+        map['P'] = Field::PLAYER;
+        map['E'] = Field::ENEMY;
+        map['F'] = Field::FRUIT;
     }
 
     Field operator[](char c) {
@@ -61,5 +61,5 @@ LevelMap LevelMap::load(const char *path) {
     }
 
     filestream.close();
-    return LevelMap(rowCount, colCount, std::vector<Field>());
+    return LevelMap(rowCount, colCount, fields);
 }

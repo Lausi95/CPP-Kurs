@@ -4,11 +4,11 @@
 #include <vector>
 
 enum class Field {
-    Empty,
-    Wall,
-    Player,
-    Fruit,
-    Enemy
+    EMPTY,
+    WALL,
+    PLAYER,
+    FRUIT,
+    ENEMY
 };
 
 class LevelMap {
