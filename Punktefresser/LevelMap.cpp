@@ -21,7 +21,7 @@ struct FieldMap {
     }
 } fieldMap;
 
-LevelMap::LevelMap(int rowCount, int columnCount, std::vector<Field> fields) {
+LevelMap::LevelMap(int rowCount, int columnCount, std::vector<Field>* fields) {
     this->rowCount = rowCount;
     this->columnCount = columnCount;
     this->fields = fields;
@@ -36,13 +36,13 @@ int LevelMap::getColumnCount() {
 }
 
 Field LevelMap::fieldAt(int row, int col) {
-    int index = row * this->columnCount + col;
-    return this->fields[index];
+    int index = col * columnCount + row;
+    return (*fields)[index];
 }
 
-void loadLine(const std::string &line, std::vector<Field> &fields) {
+void loadLine(const std::string &line, std::vector<Field>* fields) {
     for (char c : line)
-        fields.push_back(fieldMap[c]);
+        fields->push_back(fieldMap[c]);
 }
 
 LevelMap LevelMap::load(const char *path) {
@@ -51,7 +51,7 @@ LevelMap LevelMap::load(const char *path) {
 
     int colCount = 0;
     int rowCount = 0;
-    std::vector<Field> fields;
+    std::vector<Field>* fields = new std::vector<Field>();
 
     while (!filestream.eof()) {
         std::getline(filestream, line);
@@ -61,5 +61,5 @@ LevelMap LevelMap::load(const char *path) {
     }
 
     filestream.close();
-    return LevelMap(rowCount, colCount, std::vector<Field>());
+    return LevelMap(rowCount, colCount, fields);
 }
