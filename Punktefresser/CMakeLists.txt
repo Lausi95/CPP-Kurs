@@ -19,7 +19,7 @@ set(SOURCE_FILES
         Tile.cpp
         Timer.cpp
         Window.cpp
-        main.cpp)
+        main.cpp include/LevelMap.h LevelMap.cpp)
 include_directories(Punktefresser include)
 add_executable(Punktefresser ${SOURCE_FILES})
 

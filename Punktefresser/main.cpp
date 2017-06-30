@@ -1,3 +1,4 @@
+#include <LevelMap.h>
 #include "stdafx.h"
 
 enum Direction {
@@ -55,6 +56,13 @@ private:
 };
 
 int main(int argc, char** argv) {
+    LevelMap info = LevelMap::load("levels/default.lvl");
+    info.getRowCount();
+    info.getColumnCount();
+
+    std::cout << info.getRowCount() << std::endl;
+    std::cout << info.getColumnCount() << std::endl;
+
 
     srand (time(NULL));
 
