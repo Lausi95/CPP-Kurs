@@ -3,10 +3,15 @@
 
 Texture mainTexture("assets/tiles.png");
 
-Tile tilePlayerLookingTop(&mainTexture, 128, 32, 32, 32);
-Tile tilePlayerLookingBot(&mainTexture, 96, 32, 32, 32);
-Tile tilePlayerLookingLeft(&mainTexture, 128, 0, 32, 32);
-Tile tilePlayerLookingRight(&mainTexture, 96, 0, 32, 32);
+Tile tilePlayerLookingTopMouthOpen(&mainTexture, 128+1, 32+1, 32-1, 32-1);
+Tile tilePlayerLookingBotMouthOpen(&mainTexture, 96+1, 32+1, 32-1, 32-1);
+Tile tilePlayerLookingLeftMouthOpen(&mainTexture, 128+1, 0+1, 32-1, 32-1);
+Tile tilePlayerLookingRightMouthOpen(&mainTexture, 96+1, 0+1, 32-1, 32-1);
+
+Tile tilePlayerLookingTopMouthClosed(&mainTexture, 192+1, 32+1, 32-1, 32-1);
+Tile tilePlayerLookingBotMouthClosed(&mainTexture, 160+1, 32+1, 32-1, 32-1);
+Tile tilePlayerLookingLeftMouthClosed(&mainTexture, 192+1, 0+1, 32-1, 32-1);
+Tile tilePlayerLookingRightMouthClosed(&mainTexture, 160+1, 0+1, 32-1, 32-1);
 
 Tile tileEnemy(&mainTexture, 160, 0, 32, 32);
 
@@ -33,48 +38,108 @@ enum class Direction {
 class Pacman : public Entity {
 
 public:
-    Pacman(float x, float y, Tile* tileTop, Tile* tileBot, Tile* tileLeft, Tile* tileRight) : Entity(x, y) {
+    Pacman(float x, float y) : Entity(x, y) {
 
-        this->tileTop = tileTop;
-        this->tileBot = tileBot;
-        this->tileLeft = tileLeft;
-        this->tileRight = tileRight;
-
-        this->currentTile = tileRight;
+        this->currentTile = &tilePlayerLookingRightMouthOpen;
+        this->currentDirection = Direction::DIR_RIGHT;
     }
 
     Tile* getTile() {
         return currentTile;
     }
 
-    void move(Direction direction) {
+    void changeDirection(Direction direction) {
 
         switch(direction) {
 
             case Direction::DIR_TOP:
-                currentTile = tileTop;
+                currentTile = &tilePlayerLookingTopMouthOpen;
                 break;
 
             case Direction::DIR_BOT:
-                currentTile = tileBot;
+                currentTile = &tilePlayerLookingBotMouthOpen;
                 break;
 
             case Direction::DIR_LEFT:
-                currentTile = tileLeft;
+                currentTile = &tilePlayerLookingLeftMouthOpen;
                 break;
 
             case Direction::DIR_RIGHT:
-                currentTile = tileRight;
+                currentTile = &tilePlayerLookingRightMouthOpen;
+                break;
+        }
+
+        currentDirection = direction;
+    }
+
+    void move() {
+
+        stepsTaken++;
+        bool needReassignTile = false;
+        if(stepsTaken == 30) {
+            mouthClosed = !mouthClosed;
+            stepsTaken = 0;
+            needReassignTile = true;
+        }
+
+        switch(currentDirection) {
+
+            case Direction::DIR_TOP:
+                setY(getY() - 1);
+                if(needReassignTile) {
+                    if(mouthClosed) {
+                        currentTile = &tilePlayerLookingTopMouthClosed;
+                    }
+                    else {
+                        currentTile = &tilePlayerLookingTopMouthOpen;
+                    }
+                }
+                break;
+
+            case Direction::DIR_BOT:
+                setY(getY() + 1);
+                if(needReassignTile) {
+                    if(mouthClosed) {
+                        currentTile = &tilePlayerLookingBotMouthClosed;
+                    }
+                    else {
+                        currentTile = &tilePlayerLookingBotMouthOpen;
+                    }
+                }
+                break;
+
+            case Direction::DIR_LEFT:
+                setX(getX() - 1);
+                if(needReassignTile) {
+                    if(mouthClosed) {
+                        currentTile = &tilePlayerLookingLeftMouthClosed;
+                    }
+                    else {
+                        currentTile = &tilePlayerLookingLeftMouthOpen;
+                    }
+                }
+                break;
+
+            case Direction::DIR_RIGHT:
+                setX(getX() + 1);
+                if(needReassignTile) {
+                    if(mouthClosed) {
+                        currentTile = &tilePlayerLookingRightMouthClosed;
+                    }
+                    else {
+                        currentTile = &tilePlayerLookingRightMouthOpen;
+                    }
+                }
                 break;
         }
     }
 
 private:
-    Tile* tileTop;
-    Tile* tileBot;
-    Tile* tileLeft;
-    Tile* tileRight;
     Tile* currentTile;
+
+    int stepsTaken = 0;
+    bool mouthClosed = false;
+    Direction currentDirection;
 };
 
 class Wall : public Entity {
@@ -163,12 +228,11 @@ void renderMap(Window window, LevelMap levelMap) {
 
                 case Field::PLAYER:
                     if(pacman == NULL) {
-                        pacman = new Pacman(column * 32, row *32, &tilePlayerLookingTop, &tilePlayerLookingBot, &tilePlayerLookingLeft, &tilePlayerLookingRight);
+                        pacman = new Pacman(column * 32, row *32);
                         entity = pacman;
                     }
                     else {
-                        entity = new Background(column * 32, row *32, &tileNormalBackground);
-                        ERROR("PANIC, second player detected!!! OMG :O")
+                        entity = pacman;
                     }
                     break;
 
@@ -203,6 +267,8 @@ int main(int argc, char** argv) {
     bool running = true;
     Timer timer;
 
+    int MAX_WAITING_TIME_PACMAN = 2;
+    int waitingTimePacman = MAX_WAITING_TIME_PACMAN;
     while (running) {
 
         // render entities
@@ -210,20 +276,22 @@ int main(int argc, char** argv) {
 
         renderMap(window, levelMap);
 
+        window.renderEntity(pacman);
+
         // input
         while (inputHandler.pollEvent()) {
 
             if (inputHandler.isKeyPressed(SDLK_w)) {
-                pacman->move(Direction::DIR_TOP);
+                pacman->changeDirection(Direction::DIR_TOP);
             }
             if (inputHandler.isKeyPressed(SDLK_s)) {
-                pacman->move(Direction::DIR_BOT);
+                pacman->changeDirection(Direction::DIR_BOT);
             }
             if (inputHandler.isKeyPressed(SDLK_a)) {
-                pacman->move(Direction::DIR_LEFT);
+                pacman->changeDirection(Direction::DIR_LEFT);
             }
             if (inputHandler.isKeyPressed(SDLK_d)) {
-                pacman->move(Direction::DIR_RIGHT);
+                pacman->changeDirection(Direction::DIR_RIGHT);
             }
 
             if (inputHandler.isQuitEvent()) {
@@ -232,6 +300,12 @@ int main(int argc, char** argv) {
             }
         }
         // update
+
+        waitingTimePacman--;
+        if(waitingTimePacman == 0) {
+            pacman->move();
+            waitingTimePacman = MAX_WAITING_TIME_PACMAN;
+        }
 
         window.update();
         timer.sleep(8);
