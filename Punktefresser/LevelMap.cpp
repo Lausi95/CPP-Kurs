@@ -35,9 +35,14 @@ int LevelMap::getColumnCount() {
     return this->columnCount;
 }
 
-Field LevelMap::fieldAt(int col, int row) {
+Field LevelMap::getFieldAt(int col, int row) {
     int index = row * columnCount + col;
     return (*fields)[index];
+}
+
+void LevelMap::setFieldAt(int col, int row, Field field) {
+    int index = row * columnCount + col;
+    (*fields)[index] = field;
 }
 
 void loadLine(const std::string &line, std::vector<Field>* fields) {

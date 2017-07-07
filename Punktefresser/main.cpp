@@ -237,7 +237,11 @@ void renderMap(Window window, LevelMap levelMap) {
 
             Entity* entity;
 
-            Field field = levelMap.fieldAt(column, row);
+            //drawing background in every case (transperant fruits etc...)
+            entity = new Background(column * 32, row *32, &tileNormalBackground);
+            window.renderEntity(entity);
+
+            Field field = levelMap.getFieldAt(column, row);
             switch(field) {
 
                 case Field::EMPTY:
@@ -248,23 +252,20 @@ void renderMap(Window window, LevelMap levelMap) {
                     entity = new Wall(column * 32, row *32, &tileWall);
                     break;
 
-                case Field::PLAYER:
-                    if(pacman == NULL) {
-                        pacman = new Pacman(column * 32, row *32);
-                        window.renderEntity(pacman);
-                        entity = new Background(column * 32, row *32, &tileNormalBackground);
-                    }
-                    else {
-                        entity = new Background(column * 32, row *32, &tileNormalBackground);
-                    }
-                    break;
-
                 case Field::FRUIT:
                     entity = new Fruit(column * 32, row *32, &tileFruitMelon);
                     break;
 
+                case Field::PLAYER:
+                    if(pacman == NULL) {
+                        pacman = new Pacman(column * 32, row *32);
+                    }
+                    levelMap.setFieldAt(column, row, Field::EMPTY);
+                    break;
+
                 case Field::ENEMY:
                     entity = new Enemy(column * 32, row *32, &tileEnemy);
+                    levelMap.setFieldAt(column, row, Field::EMPTY);
                     break;
             }
 

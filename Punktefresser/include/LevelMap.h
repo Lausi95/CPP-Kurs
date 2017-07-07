@@ -18,10 +18,11 @@ public:
     int getRowCount();
     int getColumnCount();
 
-    Field fieldAt(int row, int col);
+    Field getFieldAt(int row, int col);
+    void setFieldAt(int row, int col, Field field);
 
     Field operator()(int row, int col) {
-        return fieldAt(row, col);
+        return getFieldAt(row, col);
     }
 
 private:
