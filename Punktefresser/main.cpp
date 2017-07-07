@@ -35,10 +35,24 @@ enum class Direction {
     Right
 };
 
-class Pacman : public Entity {
+class MovableEntity : public Entity {
 
 public:
-    Pacman(float x, float y) : Entity(x, y) {
+    MovableEntity(float x, float y) : Entity(x, y) {
+
+    }
+
+    virtual void changeDirection(Direction direction) = 0;
+    virtual void move() = 0;
+
+private:
+
+};
+
+class Pacman : public MovableEntity {
+
+public:
+    Pacman(float x, float y) : MovableEntity(x, y) {
         this->currentTile = &tilePlayerLookingRightMouthOpen;
         this->currentDirection = Direction::Right;
         this->directionBuffer = Direction::Right;
@@ -119,49 +133,6 @@ public:
         return false;
     }
 
-    void changeDirection(Direction direction) {
-
-        switch(direction) {
-            case Direction::Up:
-                if(mouthClosed) {
-                    currentTile = &tilePlayerLookingTopMouthClosed;
-                }
-                else {
-                    currentTile = &tilePlayerLookingTopMouthOpen;
-                }
-                break;
-
-            case Direction::Down:
-                if(mouthClosed) {
-                    currentTile = &tilePlayerLookingBotMouthClosed;
-                }
-                else {
-                    currentTile = &tilePlayerLookingBotMouthOpen;
-                }
-                break;
-
-            case Direction::Left:
-                if(mouthClosed) {
-                    currentTile = &tilePlayerLookingLeftMouthClosed;
-                }
-                else {
-                    currentTile = &tilePlayerLookingLeftMouthOpen;
-                }
-                break;
-
-            case Direction::Right:
-                if(mouthClosed) {
-                    currentTile = &tilePlayerLookingRightMouthClosed;
-                }
-                else {
-                    currentTile = &tilePlayerLookingRightMouthOpen;
-                }
-                break;
-        }
-
-        currentDirection = direction;
-    }
-
     void move() {
 
         stepsTaken++;
@@ -234,6 +205,73 @@ private:
 
     Direction directionBuffer;
     Direction currentDirection;
+
+    void changeDirection(Direction direction) {
+
+        switch(direction) {
+            case Direction::Up:
+                if(mouthClosed) {
+                    currentTile = &tilePlayerLookingTopMouthClosed;
+                }
+                else {
+                    currentTile = &tilePlayerLookingTopMouthOpen;
+                }
+                break;
+
+            case Direction::Down:
+                if(mouthClosed) {
+                    currentTile = &tilePlayerLookingBotMouthClosed;
+                }
+                else {
+                    currentTile = &tilePlayerLookingBotMouthOpen;
+                }
+                break;
+
+            case Direction::Left:
+                if(mouthClosed) {
+                    currentTile = &tilePlayerLookingLeftMouthClosed;
+                }
+                else {
+                    currentTile = &tilePlayerLookingLeftMouthOpen;
+                }
+                break;
+
+            case Direction::Right:
+                if(mouthClosed) {
+                    currentTile = &tilePlayerLookingRightMouthClosed;
+                }
+                else {
+                    currentTile = &tilePlayerLookingRightMouthOpen;
+                }
+                break;
+        }
+
+        currentDirection = direction;
+    }
+};
+
+class Enemy : public MovableEntity {
+
+public:
+    Enemy(float x, float y, Tile* tile) : MovableEntity(x, y) {
+
+        this->tile = tile;
+    }
+
+    Tile* getTile() {
+        return tile;
+    }
+
+    void changeDirection(Direction direction) {
+
+    }
+
+    void move() {
+
+    }
+
+private:
+    Tile* tile;
 };
 
 class Wall : public Entity {
@@ -284,22 +322,6 @@ private:
     Tile* tile;
 };
 
-class Enemy : public Entity {
-
-public:
-    Enemy(float x, float y, Tile* tile) : Entity(x, y) {
-
-        this->tile = tile;
-    }
-
-    Tile* getTile() {
-        return tile;
-    }
-
-private:
-    Tile* tile;
-};
-
 Pacman* pacman = NULL;
 std::vector <Enemy*> enemies;
 
@@ -337,7 +359,8 @@ void renderMap(Window window, LevelMap levelMap) {
                     break;
 
                 case Field::ENEMY:
-                    enemies.push_back(new Enemy(column * 32, row *32, &tileEnemy));
+                    Enemy* enemy = new Enemy(column * 32, row *32, &tileEnemy);
+                    enemies.push_back(enemy);
                     levelMap.setFieldAt(column, row, Field::EMPTY);
                     break;
             }
