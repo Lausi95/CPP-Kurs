@@ -122,9 +122,7 @@ public:
     void changeDirection(Direction direction) {
 
         switch(direction) {
-
-<<<<<<< Updated upstream
-            case Direction::DIR_TOP:
+            case Direction::Up:
                 if(mouthClosed) {
                     currentTile = &tilePlayerLookingTopMouthClosed;
                 }
@@ -133,7 +131,7 @@ public:
                 }
                 break;
 
-            case Direction::DIR_BOT:
+            case Direction::Down:
                 if(mouthClosed) {
                     currentTile = &tilePlayerLookingBotMouthClosed;
                 }
@@ -142,7 +140,7 @@ public:
                 }
                 break;
 
-            case Direction::DIR_LEFT:
+            case Direction::Left:
                 if(mouthClosed) {
                     currentTile = &tilePlayerLookingLeftMouthClosed;
                 }
@@ -151,29 +149,13 @@ public:
                 }
                 break;
 
-            case Direction::DIR_RIGHT:
+            case Direction::Right:
                 if(mouthClosed) {
                     currentTile = &tilePlayerLookingRightMouthClosed;
                 }
                 else {
                     currentTile = &tilePlayerLookingRightMouthOpen;
                 }
-=======
-            case Direction::Up:
-                currentTile = &tilePlayerLookingTopMouthOpen;
-                break;
-
-            case Direction::Down:
-                currentTile = &tilePlayerLookingBotMouthOpen;
-                break;
-
-            case Direction::Left:
-                currentTile = &tilePlayerLookingLeftMouthOpen;
-                break;
-
-            case Direction::Right:
-                currentTile = &tilePlayerLookingRightMouthOpen;
->>>>>>> Stashed changes
                 break;
         }
 
@@ -192,13 +174,8 @@ public:
 
         switch(currentDirection) {
 
-<<<<<<< Updated upstream
-            case Direction::DIR_TOP:
-                setY(getY() - velocity);
-=======
             case Direction::Up:
-                setY(getY() - 1);
->>>>>>> Stashed changes
+                setY(getY() - velocity);
                 if(needReassignTile) {
                     if(mouthClosed) {
                         currentTile = &tilePlayerLookingTopMouthClosed;
@@ -209,13 +186,8 @@ public:
                 }
                 break;
 
-<<<<<<< Updated upstream
-            case Direction::DIR_BOT:
-                setY(getY() + velocity);
-=======
             case Direction::Down:
-                setY(getY() + 1);
->>>>>>> Stashed changes
+                setY(getY() + velocity);
                 if(needReassignTile) {
                     if(mouthClosed) {
                         currentTile = &tilePlayerLookingBotMouthClosed;
@@ -226,13 +198,8 @@ public:
                 }
                 break;
 
-<<<<<<< Updated upstream
-            case Direction::DIR_LEFT:
-                setX(getX() - velocity);
-=======
             case Direction::Left:
-                setX(getX() - 1);
->>>>>>> Stashed changes
+                setX(getX() - velocity);
                 if(needReassignTile) {
                     if(mouthClosed) {
                         currentTile = &tilePlayerLookingLeftMouthClosed;
@@ -243,13 +210,8 @@ public:
                 }
                 break;
 
-<<<<<<< Updated upstream
-            case Direction::DIR_RIGHT:
-                setX(getX() + velocity);
-=======
             case Direction::Right:
-                setX(getX() + 1);
->>>>>>> Stashed changes
+                setX(getX() + velocity);
                 if(needReassignTile) {
                     if(mouthClosed) {
                         currentTile = &tilePlayerLookingRightMouthClosed;
@@ -266,7 +228,7 @@ private:
     Tile* currentTile;
 
     int stepsTaken = 0;
-    int velocity = 3;
+    int velocity = 4;
 
     bool mouthClosed = false;
 
@@ -438,16 +400,8 @@ int main(int argc, char** argv) {
         }
         // update
 
-<<<<<<< Updated upstream
-        pacman->move();
-=======
         pacman->tryApplyDirection(levelMap);
-        waitingTimePacman--;
-        if(waitingTimePacman == 0) {
-            pacman->move();
-            waitingTimePacman = MAX_WAITING_TIME_PACMAN;
-        }
->>>>>>> Stashed changes
+        pacman->move();
 
         window.update();
         timer.sleep(8);
