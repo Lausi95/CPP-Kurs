@@ -53,19 +53,39 @@ public:
         switch(direction) {
 
             case Direction::DIR_TOP:
-                currentTile = &tilePlayerLookingTopMouthOpen;
+                if(mouthClosed) {
+                    currentTile = &tilePlayerLookingTopMouthClosed;
+                }
+                else {
+                    currentTile = &tilePlayerLookingTopMouthOpen;
+                }
                 break;
 
             case Direction::DIR_BOT:
-                currentTile = &tilePlayerLookingBotMouthOpen;
+                if(mouthClosed) {
+                    currentTile = &tilePlayerLookingBotMouthClosed;
+                }
+                else {
+                    currentTile = &tilePlayerLookingBotMouthOpen;
+                }
                 break;
 
             case Direction::DIR_LEFT:
-                currentTile = &tilePlayerLookingLeftMouthOpen;
+                if(mouthClosed) {
+                    currentTile = &tilePlayerLookingLeftMouthClosed;
+                }
+                else {
+                    currentTile = &tilePlayerLookingLeftMouthOpen;
+                }
                 break;
 
             case Direction::DIR_RIGHT:
-                currentTile = &tilePlayerLookingRightMouthOpen;
+                if(mouthClosed) {
+                    currentTile = &tilePlayerLookingRightMouthClosed;
+                }
+                else {
+                    currentTile = &tilePlayerLookingRightMouthOpen;
+                }
                 break;
         }
 
@@ -76,7 +96,7 @@ public:
 
         stepsTaken++;
         bool needReassignTile = false;
-        if(stepsTaken == 30) {
+        if(stepsTaken == 20) {
             mouthClosed = !mouthClosed;
             stepsTaken = 0;
             needReassignTile = true;
@@ -85,7 +105,7 @@ public:
         switch(currentDirection) {
 
             case Direction::DIR_TOP:
-                setY(getY() - 1);
+                setY(getY() - velocity);
                 if(needReassignTile) {
                     if(mouthClosed) {
                         currentTile = &tilePlayerLookingTopMouthClosed;
@@ -97,7 +117,7 @@ public:
                 break;
 
             case Direction::DIR_BOT:
-                setY(getY() + 1);
+                setY(getY() + velocity);
                 if(needReassignTile) {
                     if(mouthClosed) {
                         currentTile = &tilePlayerLookingBotMouthClosed;
@@ -109,7 +129,7 @@ public:
                 break;
 
             case Direction::DIR_LEFT:
-                setX(getX() - 1);
+                setX(getX() - velocity);
                 if(needReassignTile) {
                     if(mouthClosed) {
                         currentTile = &tilePlayerLookingLeftMouthClosed;
@@ -121,7 +141,7 @@ public:
                 break;
 
             case Direction::DIR_RIGHT:
-                setX(getX() + 1);
+                setX(getX() + velocity);
                 if(needReassignTile) {
                     if(mouthClosed) {
                         currentTile = &tilePlayerLookingRightMouthClosed;
@@ -138,6 +158,8 @@ private:
     Tile* currentTile;
 
     int stepsTaken = 0;
+    int velocity = 3;
+
     bool mouthClosed = false;
     Direction currentDirection;
 };
@@ -229,10 +251,11 @@ void renderMap(Window window, LevelMap levelMap) {
                 case Field::PLAYER:
                     if(pacman == NULL) {
                         pacman = new Pacman(column * 32, row *32);
-                        entity = pacman;
+                        window.renderEntity(pacman);
+                        entity = new Background(column * 32, row *32, &tileNormalBackground);
                     }
                     else {
-                        entity = pacman;
+                        entity = new Background(column * 32, row *32, &tileNormalBackground);
                     }
                     break;
 
@@ -267,8 +290,8 @@ int main(int argc, char** argv) {
     bool running = true;
     Timer timer;
 
-    int MAX_WAITING_TIME_PACMAN = 2;
-    int waitingTimePacman = MAX_WAITING_TIME_PACMAN;
+    float MAX_WAITING_TIME_PACMAN = 100.0;
+    float waitingTimePacman = MAX_WAITING_TIME_PACMAN;
     while (running) {
 
         // render entities
@@ -301,11 +324,7 @@ int main(int argc, char** argv) {
         }
         // update
 
-        waitingTimePacman--;
-        if(waitingTimePacman == 0) {
-            pacman->move();
-            waitingTimePacman = MAX_WAITING_TIME_PACMAN;
-        }
+        pacman->move();
 
         window.update();
         timer.sleep(8);
