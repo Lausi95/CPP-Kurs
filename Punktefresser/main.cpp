@@ -229,6 +229,7 @@ private:
 };
 
 Pacman* pacman = NULL;
+std::vector <Enemy*> enemies;
 
 void renderMap(Window window, LevelMap levelMap) {
 
@@ -264,7 +265,7 @@ void renderMap(Window window, LevelMap levelMap) {
                     break;
 
                 case Field::ENEMY:
-                    entity = new Enemy(column * 32, row *32, &tileEnemy);
+                    enemies.push_back(new Enemy(column * 32, row *32, &tileEnemy));
                     levelMap.setFieldAt(column, row, Field::EMPTY);
                     break;
             }
@@ -291,8 +292,6 @@ int main(int argc, char** argv) {
     bool running = true;
     Timer timer;
 
-    float MAX_WAITING_TIME_PACMAN = 100.0;
-    float waitingTimePacman = MAX_WAITING_TIME_PACMAN;
     while (running) {
 
         // render entities
@@ -301,6 +300,10 @@ int main(int argc, char** argv) {
         renderMap(window, levelMap);
 
         window.renderEntity(pacman);
+
+        for(Enemy* enemy : enemies) {
+            window.renderEntity(enemy);
+        }
 
         // input
         while (inputHandler.pollEvent()) {
