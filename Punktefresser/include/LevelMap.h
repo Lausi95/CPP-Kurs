@@ -24,6 +24,8 @@ public:
         return fieldAt(row, col);
     }
 
+    ~Field();
+
 private:
     int rowCount;
     int columnCount;
