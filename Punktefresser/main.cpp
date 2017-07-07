@@ -148,45 +148,36 @@ void renderMap(Window window, LevelMap levelMap) {
     for(int row = 0; row < levelMap.getRowCount(); row++) {
         for(int column = 0; column < levelMap.getColumnCount(); column++) {
 
-            std::stringstream ss;
-            ss << "row = " << row << "; column = " << column;
-            INFO(ss)
-
             Entity* entity;
 
-            Field field = levelMap.fieldAt(0, 0);
+            Field field = levelMap.fieldAt(column, row);
             switch(field) {
 
                 case Field::EMPTY:
-                    INFO("EMPTY")
-                    entity = new Background(row * 32, column *32, &tileNormalBackground);
+                    entity = new Background(column * 32, row *32, &tileNormalBackground);
                     break;
 
                 case Field::WALL:
-                    INFO("WALL")
-                    entity = new Background(row * 32, column *32, &tileWall);
+                    entity = new Wall(column * 32, row *32, &tileWall);
                     break;
 
                 case Field::PLAYER:
-                    INFO("PLAYER")
                     if(pacman == NULL) {
-                        pacman = new Pacman(row * 32, column *32, &tilePlayerLookingTop, &tilePlayerLookingBot, &tilePlayerLookingLeft, &tilePlayerLookingRight);
+                        pacman = new Pacman(column * 32, row *32, &tilePlayerLookingTop, &tilePlayerLookingBot, &tilePlayerLookingLeft, &tilePlayerLookingRight);
                         entity = pacman;
                     }
                     else {
-                        entity = new Background(row * 32, column *32, &tileNormalBackground);
+                        entity = new Background(column * 32, row *32, &tileNormalBackground);
                         ERROR("PANIC, second player detected!!! OMG :O")
                     }
                     break;
 
                 case Field::FRUIT:
-                    INFO("FRUIT")
-                    entity = new Fruit(row * 32, column *32, &tileFruitMelon);
+                    entity = new Fruit(column * 32, row *32, &tileFruitMelon);
                     break;
 
                 case Field::ENEMY:
-                    INFO("ENEMY")
-                    entity = new Enemy(row * 32, column *32, &tileEnemy);
+                    entity = new Enemy(column * 32, row *32, &tileEnemy);
                     break;
             }
 

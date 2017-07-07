@@ -35,8 +35,8 @@ int LevelMap::getColumnCount() {
     return this->columnCount;
 }
 
-Field LevelMap::fieldAt(int row, int col) {
-    int index = col * columnCount + row;
+Field LevelMap::fieldAt(int col, int row) {
+    int index = row * columnCount + col;
     return (*fields)[index];
 }
 
