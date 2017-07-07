@@ -8,10 +8,10 @@ Tile tilePlayerLookingBotMouthOpen(&mainTexture, 96+1, 32+1, 32-1, 32-1);
 Tile tilePlayerLookingLeftMouthOpen(&mainTexture, 128+1, 0+1, 32-1, 32-1);
 Tile tilePlayerLookingRightMouthOpen(&mainTexture, 96+1, 0+1, 32-1, 32-1);
 
-Tile tilePlayerLookingTopMouthClosed(&mainTexture, 192+1, 32+1, 32-1, 32-1);
-Tile tilePlayerLookingBotMouthClosed(&mainTexture, 160+1, 32+1, 32-1, 32-1);
-Tile tilePlayerLookingLeftMouthClosed(&mainTexture, 192+1, 0+1, 32-1, 32-1);
-Tile tilePlayerLookingRightMouthClosed(&mainTexture, 160+1, 0+1, 32-1, 32-1);
+Tile tilePlayerLookingTopMouthClosed(&mainTexture, 224+1, 32+1, 32-1, 32-1);
+Tile tilePlayerLookingBotMouthClosed(&mainTexture, 192+1, 32+1, 32-1, 32-1);
+Tile tilePlayerLookingLeftMouthClosed(&mainTexture, 224+1, 0+1, 32-1, 32-1);
+Tile tilePlayerLookingRightMouthClosed(&mainTexture, 192+1, 0+1, 32-1, 32-1);
 
 Tile tileEnemy(&mainTexture, 160, 0, 32, 32);
 
