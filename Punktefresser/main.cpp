@@ -29,29 +29,101 @@ Tile tilePoint(&mainTexture, 64, 0, 32, 32);
 Tile tileNormalBackground(&mainTexture, 64, 32, 32, 32);
 
 enum class Direction {
-    DIR_TOP,
-    DIR_BOT,
-    DIR_LEFT,
-    DIR_RIGHT
+    Up,
+    Down,
+    Left,
+    Right
 };
 
 class Pacman : public Entity {
 
 public:
     Pacman(float x, float y) : Entity(x, y) {
-
         this->currentTile = &tilePlayerLookingRightMouthOpen;
-        this->currentDirection = Direction::DIR_RIGHT;
+        this->currentDirection = Direction::Right;
+        this->directionBuffer = Direction::Right;
     }
 
     Tile* getTile() {
         return currentTile;
     }
 
+    void setNextDirection(Direction direction) {
+        this->directionBuffer = direction;
+    }
+
+    void tryApplyDirection(LevelMap& levelMap) {
+        if (directionBuffer != currentDirection) {
+            if (canMoveToOppositeDirection())
+                changeDirection(directionBuffer);
+            else if (directionBuffer == Direction::Up && canMoveUp(levelMap))
+                changeDirection(directionBuffer);
+            else if (directionBuffer == Direction::Down && canMoveDown(levelMap))
+                changeDirection(directionBuffer);
+            else if (directionBuffer == Direction::Left && canMoveLeft(levelMap))
+                changeDirection(directionBuffer);
+            else if (directionBuffer == Direction::Right && canMoveRight(levelMap))
+                changeDirection(directionBuffer);
+        }
+    }
+
+    bool canMoveToOppositeDirection() {
+        return
+            currentDirection == Direction::Up && directionBuffer == Direction::Down ||
+            currentDirection == Direction::Down && directionBuffer == Direction::Up ||
+            currentDirection == Direction::Left && directionBuffer == Direction::Right ||
+            currentDirection == Direction::Right && directionBuffer == Direction::Left;
+    }
+
+    bool canMoveUp(LevelMap& map) {
+        int x = (int)getX();
+        int y = (int)getY();
+        if (x % 32 == 0 && y % 32 == 0) {
+            int nx = x / 32;
+            int ny = y / 32 - 1;
+            return map(nx, ny) != Field::WALL;
+        }
+        return false;
+    }
+
+    bool canMoveDown(LevelMap& map) {
+        int x = (int)getX();
+        int y = (int)getY();
+        if (x % 32 == 0 && y % 32 == 0) {
+            int nx = x / 32;
+            int ny = y / 32 + 1;
+            return map(nx, ny) != Field::WALL;
+        }
+        return false;
+    }
+
+    bool canMoveLeft(LevelMap& map) {
+        int x = (int)getX();
+        int y = (int)getY();
+        if (x % 32 == 0 && y % 32 == 0) {
+            int nx = x / 32 - 1;
+            int ny = y / 32;
+            return map(nx, ny) != Field::WALL;
+        }
+        return false;
+    }
+
+    bool canMoveRight(LevelMap& map) {
+        int x = (int)getX();
+        int y = (int)getY();
+        if (x % 32 == 0 && y % 32 == 0) {
+            int nx = x / 32 + 1;
+            int ny = y / 32;
+            return map(nx, ny) != Field::WALL;
+        }
+        return false;
+    }
+
     void changeDirection(Direction direction) {
 
         switch(direction) {
 
+<<<<<<< Updated upstream
             case Direction::DIR_TOP:
                 if(mouthClosed) {
                     currentTile = &tilePlayerLookingTopMouthClosed;
@@ -86,6 +158,22 @@ public:
                 else {
                     currentTile = &tilePlayerLookingRightMouthOpen;
                 }
+=======
+            case Direction::Up:
+                currentTile = &tilePlayerLookingTopMouthOpen;
+                break;
+
+            case Direction::Down:
+                currentTile = &tilePlayerLookingBotMouthOpen;
+                break;
+
+            case Direction::Left:
+                currentTile = &tilePlayerLookingLeftMouthOpen;
+                break;
+
+            case Direction::Right:
+                currentTile = &tilePlayerLookingRightMouthOpen;
+>>>>>>> Stashed changes
                 break;
         }
 
@@ -104,8 +192,13 @@ public:
 
         switch(currentDirection) {
 
+<<<<<<< Updated upstream
             case Direction::DIR_TOP:
                 setY(getY() - velocity);
+=======
+            case Direction::Up:
+                setY(getY() - 1);
+>>>>>>> Stashed changes
                 if(needReassignTile) {
                     if(mouthClosed) {
                         currentTile = &tilePlayerLookingTopMouthClosed;
@@ -116,8 +209,13 @@ public:
                 }
                 break;
 
+<<<<<<< Updated upstream
             case Direction::DIR_BOT:
                 setY(getY() + velocity);
+=======
+            case Direction::Down:
+                setY(getY() + 1);
+>>>>>>> Stashed changes
                 if(needReassignTile) {
                     if(mouthClosed) {
                         currentTile = &tilePlayerLookingBotMouthClosed;
@@ -128,8 +226,13 @@ public:
                 }
                 break;
 
+<<<<<<< Updated upstream
             case Direction::DIR_LEFT:
                 setX(getX() - velocity);
+=======
+            case Direction::Left:
+                setX(getX() - 1);
+>>>>>>> Stashed changes
                 if(needReassignTile) {
                     if(mouthClosed) {
                         currentTile = &tilePlayerLookingLeftMouthClosed;
@@ -140,8 +243,13 @@ public:
                 }
                 break;
 
+<<<<<<< Updated upstream
             case Direction::DIR_RIGHT:
                 setX(getX() + velocity);
+=======
+            case Direction::Right:
+                setX(getX() + 1);
+>>>>>>> Stashed changes
                 if(needReassignTile) {
                     if(mouthClosed) {
                         currentTile = &tilePlayerLookingRightMouthClosed;
@@ -161,6 +269,8 @@ private:
     int velocity = 3;
 
     bool mouthClosed = false;
+
+    Direction directionBuffer;
     Direction currentDirection;
 };
 
@@ -246,7 +356,7 @@ void renderMap(Window window, LevelMap levelMap) {
             switch(field) {
 
                 case Field::EMPTY:
-                    entity = new Background(column * 32, row *32, &tileNormalBackground);
+                    entity = new Background(column * 32, row *32, &tilePoint);
                     break;
 
                 case Field::WALL:
@@ -309,16 +419,16 @@ int main(int argc, char** argv) {
         while (inputHandler.pollEvent()) {
 
             if (inputHandler.isKeyPressed(SDLK_w)) {
-                pacman->changeDirection(Direction::DIR_TOP);
+                pacman->setNextDirection(Direction::Up);
             }
             if (inputHandler.isKeyPressed(SDLK_s)) {
-                pacman->changeDirection(Direction::DIR_BOT);
+                pacman->setNextDirection(Direction::Down);
             }
             if (inputHandler.isKeyPressed(SDLK_a)) {
-                pacman->changeDirection(Direction::DIR_LEFT);
+                pacman->setNextDirection(Direction::Left);
             }
             if (inputHandler.isKeyPressed(SDLK_d)) {
-                pacman->changeDirection(Direction::DIR_RIGHT);
+                pacman->setNextDirection(Direction::Right);
             }
 
             if (inputHandler.isQuitEvent()) {
@@ -328,7 +438,16 @@ int main(int argc, char** argv) {
         }
         // update
 
+<<<<<<< Updated upstream
         pacman->move();
+=======
+        pacman->tryApplyDirection(levelMap);
+        waitingTimePacman--;
+        if(waitingTimePacman == 0) {
+            pacman->move();
+            waitingTimePacman = MAX_WAITING_TIME_PACMAN;
+        }
+>>>>>>> Stashed changes
 
         window.update();
         timer.sleep(8);
