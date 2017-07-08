@@ -43,11 +43,32 @@ public:
     }
 
     virtual void changeDirection(Direction direction) = 0;
-    virtual void move() = 0;
+    //virtual void move() = 0;
 
 private:
 
 };
+
+Field nextField(LevelMap& map, int x, int y, Direction direction) {
+    if (direction == Direction::Left)
+        x--;
+    if (direction == Direction::Right)
+        x++;
+    if (direction == Direction::Up)
+        y--;
+    if (direction == Direction::Down)
+        y++;
+    return map(x, y);
+}
+
+Direction oppositeDirection(Direction direction) {
+    switch (direction) {
+        case Direction::Up: return Direction::Down;
+        case Direction::Down: return Direction::Up;
+        case Direction::Left: return Direction::Right;
+        case Direction::Right: return Direction::Left;
+    }
+}
 
 class Pacman : public MovableEntity {
 
@@ -133,7 +154,19 @@ public:
         return false;
     }
 
-    void move() {
+    void move(LevelMap& map) {
+
+        int ix = (int) getX();
+        int iy = (int) getY();
+        if (ix % 32 == 0 && iy % 32 == 0) {
+            int nx = ix / 32;
+            int ny = iy / 32;
+
+            if (nextField(map, nx, ny, currentDirection) == Field::WALL) {
+                changeDirection(oppositeDirection(currentDirection));
+                directionBuffer = currentDirection;
+            }
+        }
 
         stepsTaken++;
         bool needReassignTile = false;
@@ -424,7 +457,7 @@ int main(int argc, char** argv) {
         // update
 
         pacman->tryApplyDirection(levelMap);
-        pacman->move();
+        pacman->move(levelMap);
 
         window.update();
         timer.sleep(8);
