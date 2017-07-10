@@ -41,9 +41,9 @@ PacmanTiles pacmanTiles = {
 
 Pacman pacman(0, 0, &pacmanTiles);
 
-std::list<Enemy> enemies;
-std::list<StaticEntity> fruits;
-std::list<StaticEntity> environment;
+std::vector<Enemy> enemies;
+std::vector<StaticEntity> fruits;
+std::vector<StaticEntity> environment;
 
 void initializeEntities(LevelMap levelMap) {
     for(int row = 0; row < levelMap.getRowCount(); row++) {
