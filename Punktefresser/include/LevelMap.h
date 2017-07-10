@@ -20,7 +20,7 @@ public:
     int getColumnCount();
 
     Field getFieldAt(int row, int col);
-    void setFieldAt(int row, int col, Field field);
+    void setField(int row, int col, Field field);
 
     Field operator()(int row, int col) {
         return getFieldAt(row, col);

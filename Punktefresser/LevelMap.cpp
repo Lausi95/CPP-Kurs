@@ -40,7 +40,7 @@ Field LevelMap::getFieldAt(int col, int row) {
     return (*fields)[index];
 }
 
-void LevelMap::setFieldAt(int col, int row, Field field) {
+void LevelMap::setField(int col, int row, Field field) {
     int index = row * columnCount + col;
     (*fields)[index] = field;
 }

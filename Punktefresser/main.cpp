@@ -392,12 +392,12 @@ void renderMap(Window window, LevelMap levelMap) {
                     if(pacman == NULL) {
                         pacman = new Pacman(column * 32, row *32);
                     }
-                    levelMap.setFieldAt(column, row, Field::FloorWithPoint);
+                    levelMap.setField(column, row, Field::FloorWithPoint);
                     break;
 
                 case Field::Enemy:
                     enemies.push_back(new Enemy(column * 32, row *32, &tileEnemy));
-                    levelMap.setFieldAt(column, row, Field::FloorWithPoint);
+                    levelMap.setField(column, row, Field::FloorWithPoint);
                     break;
             }
 
