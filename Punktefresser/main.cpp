@@ -66,7 +66,7 @@ void initializeEntities(LevelMap levelMap) {
                     environment.push_back(StaticEntity(x, y, &tileWall));
                     break;
                 case Field::Fruit:
-                    fruits.push_back(StaticEntity(x, y, &fruitTiles[rand() & 6]));
+                    fruits.push_back(StaticEntity(x, y, &fruitTiles[rand() % 6]));
                     environment.push_back(StaticEntity(x, y, &tileNormalBackground));
                     break;
                 case Field::Player:
