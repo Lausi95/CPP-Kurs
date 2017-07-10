@@ -9,9 +9,13 @@ public:
 
     Direction getDirection();
 
+    // changes the Direction
     void changeDirection(Direction newDirection);
 
+    // event function, gets called, if the direction is changed
     virtual void directionChanged(Direction direction) = 0;
+
+    // lets the entity move in a defined way
     virtual void move(LevelMap &levelMap) = 0;
 };
 
