@@ -8,4 +8,6 @@ enum class Direction {
     Right
 };
 
-#endif //PUNKTEFRESSER_DIRECTION_H
+Direction oppositeDirection(Direction direction);
+
+#endif

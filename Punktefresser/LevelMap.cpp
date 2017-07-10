@@ -68,3 +68,19 @@ LevelMap LevelMap::load(const char *path) {
     filestream.close();
     return LevelMap(rowCount, colCount, fields);
 }
+
+Field LevelMap::operator()(int row, int col) {
+    return getFieldAt(row, col);
+}
+
+Field LevelMap::nextField(int col, int row, Direction direction) {
+    if (direction == Direction::Left)
+        col--;
+    if (direction == Direction::Right)
+        col++;
+    if (direction == Direction::Up)
+        row--;
+    if (direction == Direction::Down)
+        row++;
+    return getFieldAt(col, row);
+}

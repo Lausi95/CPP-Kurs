@@ -2,6 +2,7 @@
 #define PUNKTEFRESSER_LEVEL_H
 
 #include <vector>
+#include "Direction.h"
 
 enum class Field {
     FloorWithPoint,
@@ -20,11 +21,10 @@ public:
     int getColumnCount();
 
     Field getFieldAt(int row, int col);
-    void setField(int row, int col, Field field);
+    Field operator()(int row, int col);
+    Field nextField(int col, int row, Direction direction);
 
-    Field operator()(int row, int col) {
-        return getFieldAt(row, col);
-    }
+    void setField(int row, int col, Field field);
 
 private:
     int rowCount;
@@ -33,5 +33,7 @@ private:
 
     LevelMap(int rowCount, int columnCount, std::vector<Field>* fields);
 };
+
+Field nextField(LevelMap& map, int x, int y, Direction direction);
 
 #endif //PUNKTEFRESSER_LEVEL_H

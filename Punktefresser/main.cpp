@@ -28,27 +28,6 @@ Tile tileWall(&mainTexture, 0, 0, 32, 32);
 Tile tilePoint(&mainTexture, 64, 0, 32, 32);
 Tile tileNormalBackground(&mainTexture, 64, 32, 32, 32);
 
-Field nextField(LevelMap& map, int x, int y, Direction direction) {
-    if (direction == Direction::Left)
-        x--;
-    if (direction == Direction::Right)
-        x++;
-    if (direction == Direction::Up)
-        y--;
-    if (direction == Direction::Down)
-        y++;
-    return map(x, y);
-}
-
-Direction oppositeDirection(Direction direction) {
-    switch (direction) {
-        case Direction::Up: return Direction::Down;
-        case Direction::Down: return Direction::Up;
-        case Direction::Left: return Direction::Right;
-        case Direction::Right: return Direction::Left;
-    }
-}
-
 class Pacman : public MovableEntity {
 
 public:
@@ -76,13 +55,13 @@ public:
 
                 if (canMoveToOppositeDirection())
                     changeDirection(directionBuffer);
-                else if (directionBuffer == Direction::Up && nextField(levelMap, nx, ny, Direction::Up) != Field::Wall)
+                else if (directionBuffer == Direction::Up && levelMap.nextField(nx, ny, Direction::Up) != Field::Wall)
                     changeDirection(directionBuffer);
-                else if (directionBuffer == Direction::Down && nextField(levelMap, nx, ny, Direction::Down) != Field::Wall)
+                else if (directionBuffer == Direction::Down && levelMap.nextField(nx, ny, Direction::Down) != Field::Wall)
                     changeDirection(directionBuffer);
-                else if (directionBuffer == Direction::Left && nextField(levelMap, nx, ny, Direction::Left) != Field::Wall)
+                else if (directionBuffer == Direction::Left && levelMap.nextField(nx, ny, Direction::Left) != Field::Wall)
                     changeDirection(directionBuffer);
-                else if (directionBuffer == Direction::Right && nextField(levelMap, nx, ny, Direction::Right) != Field::Wall)
+                else if (directionBuffer == Direction::Right && levelMap.nextField(nx, ny, Direction::Right) != Field::Wall)
                     changeDirection(directionBuffer);
             }
         }
@@ -115,7 +94,7 @@ public:
                 // TODO: add fruit "buff"? or additional Points?
             }
 
-            if (nextField(map, nx, ny, currentDirection) == Field::Wall) {
+            if (map.nextField(nx, ny, currentDirection) == Field::Wall) {
                 changeDirection(oppositeDirection(currentDirection));
                 directionBuffer = currentDirection;
             }

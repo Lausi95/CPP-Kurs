@@ -6,11 +6,14 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
+#include <vector>
+
+#include "Direction.h"
 
 #include "logging.h"
 
 #include "Texture.h"
-#include "Direction.h"
+#include "LevelMap.h"
 
 #include "Entity.h"
 #include "entities/MovableEntity.h"
