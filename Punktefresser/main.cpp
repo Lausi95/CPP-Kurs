@@ -88,7 +88,9 @@ public:
     }
 
     void tryApplyDirection(LevelMap& levelMap) {
+
         if (directionBuffer != currentDirection) {
+
             if (canMoveToOppositeDirection())
                 changeDirection(directionBuffer);
             else if (directionBuffer == Direction::Up && canMoveUp(levelMap))
@@ -103,6 +105,7 @@ public:
     }
 
     bool canMoveToOppositeDirection() {
+
         return
             currentDirection == Direction::Up && directionBuffer == Direction::Down ||
             currentDirection == Direction::Down && directionBuffer == Direction::Up ||
