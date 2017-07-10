@@ -16,6 +16,12 @@ public:
     Tile* getTile() {
         return tile;
     }
+
+    bool operator ==(const StaticEntity &b) const {
+        bool xSame = getX() == b.getX();
+        bool ySame = getY() == b.getY();
+        return xSame && ySame;
+    }
 };
 
 #endif //PUNKTEFRESSER_STATICENTITY_H

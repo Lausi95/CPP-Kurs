@@ -11,7 +11,7 @@
 class Entity {
 public:
     // Created a new entity with a position.
-    Entity(float x, float y);
+    Entity(int x, int y);
 
     // Gets the tile to renderEntity the entity and determine its width and height.
     virtual Tile* getTile() = 0;
@@ -26,48 +26,48 @@ public:
     int getHeight();
 
     // gets the x-Position of the entity.
-    float getX();
+    const int getX() const;
 
     // gets the y-Position of the entity.
-    float getY();
+    const int getY() const;
 
     // gets the left position of the entity.
-    inline float getLeft() { return getX(); }
+    inline int getLeft() { return getX(); }
 
     // gets the right position of the entity.
-    inline float getRight() { return getX() + getWidth(); }
+    inline int getRight() { return getX() + getWidth(); }
 
     // gets the top position of the entity.
-    inline float getTop() { return getY(); }
+    inline int getTop() { return getY(); }
 
     // gets the bottom position of the entity.
-    inline float getBottom() { return getY() + getHeight(); }
+    inline int getBottom() { return getY() + getHeight(); }
 
     // sets the x-Position of the entity.
-    void setX(float x);
+    void setX(int x);
 
     // sets the y-Position of the entity.
-    void setY(float y);
+    void setY(int y);
 
     // sets the left position of the entity.
-    inline void setLeft(float left) { setX(left); }
+    inline void setLeft(int left) { setX(left); }
 
     // sets the right position of the entity.
-    inline void setRight(float right) { setX(right - getWidth()); }
+    inline void setRight(int right) { setX(right - getWidth()); }
 
     // sets the top position of the entity.
-    inline void setTop(float top) { setY(top); }
+    inline void setTop(int top) { setY(top); }
 
     // sets the bottom position of the entity.
-    inline void setBottom(float bottom) { setY(bottom - getHeight()); }
+    inline void setBottom(int bottom) { setY(bottom - getHeight()); }
 
     bool pointInside(int x, int y);
 
 private:
     SDL_Rect rect;
 
-    float x;
-    float y;
+    int x;
+    int y;
 };
 
 

@@ -1,6 +1,6 @@
 #include "Entity.h"
 
-Entity::Entity(float x, float y) {
+Entity::Entity(int x, int y) {
     this->rect = SDL_Rect();
     this->x = x;
     this->y = y;
@@ -20,19 +20,19 @@ int Entity::getHeight() {
     return getTile()->getRekt()->h;
 }
 
-float Entity::getX() {
+const int Entity::getX() const {
     return x;
 }
 
-float Entity::getY() {
+const int Entity::getY() const {
     return y;
 }
 
-void Entity::setX(float x) {
+void Entity::setX(int x) {
     this->x = x;
 }
 
-void Entity::setY(float y) {
+void Entity::setY(int y) {
     this->y = y;
 }
 

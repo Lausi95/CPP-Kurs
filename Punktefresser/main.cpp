@@ -1,6 +1,10 @@
 #include <list>
 #include <stdafx.h>
 
+#define TILE_WIDTH 32
+#define TILE_HEIGHT 32
+#define FRAME_SLEEP_TIME 5
+
 Texture mainTexture("assets/tiles.png");
 
 Tile tilePlayerLookingTopMouthOpen(&mainTexture, 128+1, 32+1, 32-1, 32-1);
@@ -41,36 +45,39 @@ PacmanTiles pacmanTiles = {
 
 Pacman pacman(0, 0, &pacmanTiles);
 
-std::vector<Enemy> enemies;
-std::vector<StaticEntity> fruits;
-std::vector<StaticEntity> environment;
+std::list<Enemy> enemies;
+std::list<StaticEntity> fruits;
+std::list<StaticEntity> environment;
 
 void initializeEntities(LevelMap levelMap) {
     for(int row = 0; row < levelMap.getRowCount(); row++) {
         for(int column = 0; column < levelMap.getColumnCount(); column++) {
+            int x = TILE_WIDTH * column;
+            int y = TILE_HEIGHT * row;
+
             switch(levelMap(column, row)) {
                 case Field::FloorWithPoint:
-                    environment.push_back(StaticEntity(column * 32, row *32, &tilePoint));
+                    environment.push_back(StaticEntity(x, y, &tilePoint));
                     break;
                 case Field::Floor:
-                    environment.push_back(StaticEntity(column * 32, row * 32, &tileNormalBackground));
+                    environment.push_back(StaticEntity(x, y, &tileNormalBackground));
                     break;
                 case Field::Wall:
-                    environment.push_back(StaticEntity(column * 32, row *32, &tileWall));
+                    environment.push_back(StaticEntity(x, y, &tileWall));
                     break;
                 case Field::Fruit:
-                    fruits.push_back(StaticEntity(column * 32, row *32, &fruitTiles[rand() & 6]));
-                    environment.push_back(StaticEntity(column * 32, row * 32, &tileNormalBackground));
+                    fruits.push_back(StaticEntity(x, y, &fruitTiles[rand() & 6]));
+                    environment.push_back(StaticEntity(x, y, &tileNormalBackground));
                     break;
                 case Field::Player:
-                    pacman.setX(column * 32);
-                    pacman.setY(row * 32);
-                    environment.push_back(StaticEntity(column * 32, row * 32, &tileNormalBackground));
+                    pacman.setX(x);
+                    pacman.setY(y);
+                    environment.push_back(StaticEntity(x, y, &tileNormalBackground));
                     levelMap.setField(column, row, Field::FloorWithPoint);
                     break;
                 case Field::Enemy:
-                    environment.push_back(StaticEntity(column * 32, row * 32, &tileNormalBackground));
-                    enemies.push_back(Enemy(column * 32, row *32, &tileEnemy));
+                    environment.push_back(StaticEntity(x, y, &tileNormalBackground));
+                    enemies.push_back(Enemy(x, y, &tileEnemy));
                     levelMap.setField(column, row, Field::FloorWithPoint);
                     break;
             }
@@ -88,8 +95,8 @@ int main(int argc, char** argv) {
     initializeEntities(levelMap);
 
     // initialize window
-    int levelWidth = levelMap.getColumnCount() * 32;
-    int levelHeigth = levelMap.getRowCount() * 32;
+    int levelWidth = levelMap.getColumnCount() * TILE_WIDTH;
+    int levelHeigth = levelMap.getRowCount() * TILE_HEIGHT;
     Window window("Punktefresser", levelWidth, levelHeigth);
 
     // initialize input handler
@@ -133,8 +140,17 @@ int main(int argc, char** argv) {
         pacman.tryApplyDirection(levelMap);
         pacman.move(levelMap);
 
+        if (pacman.getX() % 32 == 0 && pacman.getY() % 32 == 0) {
+            for (StaticEntity entity : environment) {
+                if (entity.getX() == pacman.getX() && entity.getY() == pacman.getY()) {
+                    environment.remove(entity);
+                    environment.push_back(StaticEntity(pacman.getX(), pacman.getY(), &tileNormalBackground));
+                }
+            }
+        }
+
         window.update();
-        timer.sleep(8);
+        timer.sleep(FRAME_SLEEP_TIME);
         timer.update();
     }
 
