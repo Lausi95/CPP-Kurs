@@ -8,9 +8,11 @@
 #include <SDL2/SDL_ttf.h>
 
 #include "logging.h"
+#include "Input.h"
 
 #include "Entity.h"
-#include "Input.h"
+#include "entities/MovableEntity.h"
+
 #include "Texture.h"
 #include "Tile.h"
 #include "Timer.h"

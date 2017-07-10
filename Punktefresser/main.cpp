@@ -28,27 +28,6 @@ Tile tileWall(&mainTexture, 0, 0, 32, 32);
 Tile tilePoint(&mainTexture, 64, 0, 32, 32);
 Tile tileNormalBackground(&mainTexture, 64, 32, 32, 32);
 
-enum class Direction {
-    Up,
-    Down,
-    Left,
-    Right
-};
-
-class MovableEntity : public Entity {
-
-public:
-    MovableEntity(float x, float y) : Entity(x, y) {
-
-    }
-
-    virtual void changeDirection(Direction direction) = 0;
-    //virtual void move() = 0;
-
-private:
-
-};
-
 Field nextField(LevelMap& map, int x, int y, Direction direction) {
     if (direction == Direction::Left)
         x--;
