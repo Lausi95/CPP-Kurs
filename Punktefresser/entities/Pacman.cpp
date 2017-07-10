@@ -30,7 +30,7 @@ bool Pacman::shouldChangeDirection(LevelMap &levelMap) {
 
 bool Pacman::isInDirectionChangableState() {
     bool actualDirectionIsNotBufferedDirection = directionBuffer != getDirection();
-    bool standsAtAChangablePoint = getX() % 32 == 0 && getY() % 32 == 0;
+    bool standsAtAChangablePoint = isOnTilePoint();
 
     return actualDirectionIsNotBufferedDirection && standsAtAChangablePoint;
 }
@@ -44,33 +44,28 @@ bool Pacman::canChangeDirection(LevelMap &levelMap) {
 
 void Pacman::move(LevelMap &map) {
 
-    if (getX() % 32 == 0 && getY() % 32 == 0) {
-        int nx = getX() / 32;
-        int ny = getY() / 32;
+    if (isOnTilePoint()) {
+        int xw = getX(TILE_WIDTH);
+        int yw = getY(TILE_HEIGHT);
 
-        if (map(nx, ny) == Field::FloorWithPoint) {
-            map.setField(nx, ny, Field::Floor);
+        if (map(xw, yw) == Field::FloorWithPoint) {
+            map.setField(xw, yw, Field::Floor);
             INFO("Collected Point")
             // TODO: add point to scoreboard
         }
-        if (map(nx, ny) == Field::Fruit) {
-            map.setField(nx, ny, Field::Floor);
+        if (map(xw, yw) == Field::Fruit) {
+            map.setField(xw, yw, Field::Floor);
             INFO("Collected Fruit")
             // TODO: add fruit "buff"? or additional Points?
         }
 
-        if (map.nextField(nx, ny, getDirection()) == Field::Wall) {
+        if (map.nextField(xw, yw, getDirection()) == Field::Wall) {
             changeDirection(oppositeDirection(getDirection()));
             directionBuffer = getDirection();
         }
     }
 
-    stepsTaken++;
-    if(stepsTaken == 20) {
-        mouthClosed = !mouthClosed;
-        stepsTaken = 0;
-        setCurrentMouthStateTile();
-    }
+    updateMouthOpenClosedState();
 
     switch(getDirection()) {
         case Direction::Up:
@@ -85,6 +80,14 @@ void Pacman::move(LevelMap &map) {
         case Direction::Right:
             setX(getX() + velocity);
             break;
+    }
+}
+
+void Pacman::updateMouthOpenClosedState() {
+    if(++stepsTaken == 20) {
+        mouthClosed = !mouthClosed;
+        stepsTaken = 0;
+        setCurrentMouthStateTile();
     }
 }
 

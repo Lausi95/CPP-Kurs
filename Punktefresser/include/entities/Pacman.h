@@ -1,9 +1,6 @@
 #ifndef PUNKTEFRESSER_PACMAN_H
 #define PUNKTEFRESSER_PACMAN_H
 
-#include "Tile.h"
-#include "entities/MovableEntity.h"
-
 struct PacmanTiles {
     Tile* lookingUpMouthOpen;
     Tile* lookingUpMouthClosed;
@@ -49,6 +46,8 @@ private:
     void setCurrentMouthStateTile();
 
     void updateMouthStateTilesAccordingToDirection(const Direction &direction);
+
+    void updateMouthOpenClosedState();
 };
 
 #endif //PUNKTEFRESSER_PACMAN_H

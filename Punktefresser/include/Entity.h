@@ -1,10 +1,10 @@
 #ifndef HALLOWELT_ENTITY_H
 #define HALLOWELT_ENTITY_H
 
-#include "Tile.h"
+#define TILE_WIDTH 32
+#define TILE_HEIGHT 32
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
+#include "Tile.h"
 
 // A Entity is a renderable Objekt. It has a Position and dimension.
 // The dimension is equal to the tile that is renderd with the Entity.
@@ -64,6 +64,8 @@ public:
     inline void setBottom(int bottom) { setY(bottom - getHeight()); }
 
     bool pointInside(int x, int y);
+
+    bool isOnTilePoint() const;
 
 private:
     SDL_Rect rect;

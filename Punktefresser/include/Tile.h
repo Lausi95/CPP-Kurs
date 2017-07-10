@@ -1,8 +1,6 @@
 #ifndef HALLOWELT_TILE_H
 #define HALLOWELT_TILE_H
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
 #include "Texture.h"
 
 // A Tile is a rectangle shaped Part of a Texture.

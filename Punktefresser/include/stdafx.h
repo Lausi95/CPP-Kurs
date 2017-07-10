@@ -15,6 +15,8 @@
 #include "Texture.h"
 #include "LevelMap.h"
 
+#include "Tile.h"
+
 #include "Entity.h"
 #include "entities/MovableEntity.h"
 #include "entities/Pacman.h"
@@ -22,7 +24,6 @@
 #include "entities/StaticEntity.h"
 
 #include "Input.h"
-#include "Tile.h"
 #include "Timer.h"
 #include "Window.h"
 

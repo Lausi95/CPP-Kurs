@@ -47,3 +47,7 @@ int Entity::getX(int divisor) const {
 int Entity::getY(int divisor) const {
     return getY() / divisor;
 }
+
+bool Entity::isOnTilePoint() const {
+    return getX() % TILE_WIDTH == 0 && getY() % TILE_HEIGHT == 0;
+}

@@ -1,9 +1,7 @@
 #include <list>
 #include <stdafx.h>
 
-#define TILE_WIDTH 32
-#define TILE_HEIGHT 32
-#define FRAME_SLEEP_TIME 5
+#define FRAME_SLEEP_TIME 8
 
 Texture mainTexture("assets/tiles.png");
 
