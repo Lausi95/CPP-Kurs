@@ -2,8 +2,12 @@
 
 Pacman::Pacman(float x, float y, PacmanTiles *tiles) : MovableEntity(x, y, Direction::Right) {
     this->tiles = tiles;
-    this->currentTile = tiles->lookingRightMountOpen;
     this->directionBuffer = Direction::Right;
+
+    this->mouthClosed = false;
+    this->currentTile = tiles->lookingRightMouthOpen;
+    this->currentMouthClosedTile = tiles->lookingRightMouthClosed;
+    this->currentMouthOpenedTile = tiles->lookingRightMouthOpen;
 }
 
 Tile *Pacman::getTile() {
@@ -62,101 +66,55 @@ void Pacman::move(LevelMap &map) {
     }
 
     stepsTaken++;
-    bool needReassignTile = false;
     if(stepsTaken == 20) {
         mouthClosed = !mouthClosed;
         stepsTaken = 0;
-        needReassignTile = true;
+        setCurrentMouthStateTile();
     }
 
     switch(getDirection()) {
-
         case Direction::Up:
             setY(getY() - velocity);
-            if(needReassignTile) {
-                if(mouthClosed) {
-                    currentTile = tiles->lookingUpMountClosed;
-                }
-                else {
-                    currentTile = tiles->lookingUpMountOpen;
-                }
-            }
             break;
-
         case Direction::Down:
             setY(getY() + velocity);
-            if(needReassignTile) {
-                if(mouthClosed) {
-                    currentTile = tiles->lookingDownMountClosed;
-                }
-                else {
-                    currentTile = tiles->lookingDownMountOpen;
-                }
-            }
             break;
-
         case Direction::Left:
             setX(getX() - velocity);
-            if(needReassignTile) {
-                if(mouthClosed) {
-                    currentTile = tiles->lookingLeftMountClosed;
-                }
-                else {
-                    currentTile = tiles->lookingLeftMountOpen;
-                }
-            }
             break;
-
         case Direction::Right:
             setX(getX() + velocity);
-            if(needReassignTile) {
-                if(mouthClosed) {
-                    currentTile = tiles->lookingRightMountClosed;
-                }
-                else {
-                    currentTile = tiles->lookingRightMountOpen;
-                }
-            }
             break;
     }
 }
 
 void Pacman::directionChanged(Direction direction) {
-    switch(direction) {
-        case Direction::Up:
-            if(mouthClosed) {
-                currentTile = tiles->lookingUpMountClosed;
-            }
-            else {
-                currentTile = tiles->lookingUpMountOpen;
-            }
-            break;
+    updateMouthStateTilesAccordingToDirection(direction);
+    setCurrentMouthStateTile();
+}
 
-        case Direction::Down:
-            if(mouthClosed) {
-                currentTile = tiles->lookingDownMountClosed;
-            }
-            else {
-                currentTile = tiles->lookingDownMountOpen;
-            }
-            break;
-
-        case Direction::Left:
-            if(mouthClosed) {
-                currentTile = tiles->lookingLeftMountClosed;
-            }
-            else {
-                currentTile = tiles->lookingLeftMountOpen;
-            }
-            break;
-
-        case Direction::Right:
-            if(mouthClosed) {
-                currentTile = tiles->lookingRightMountClosed;
-            }
-            else {
-                currentTile = tiles->lookingRightMountOpen;
-            }
-            break;
+void Pacman::updateMouthStateTilesAccordingToDirection(const Direction &direction) {
+    if (direction == Direction::Up) {
+        currentMouthClosedTile = tiles->lookingUpMouthClosed;
+        currentMouthOpenedTile = tiles->lookingUpMouthOpen;
     }
+    if (direction == Direction::Down) {
+        currentMouthClosedTile = tiles->lookingDownMouthClosed;
+        currentMouthOpenedTile = tiles->lookingDownMouthOpen;
+    }
+    if (direction == Direction::Left) {
+        currentMouthClosedTile = tiles->lookingLeftMouthClosed;
+        currentMouthOpenedTile = tiles->lookingLeftMouthOpen;
+    }
+    if (direction == Direction::Right) {
+        currentMouthClosedTile = tiles->lookingRightMouthClosed;
+        currentMouthOpenedTile = tiles->lookingRightMouthOpen;
+    }
+}
+
+void Pacman::setCurrentMouthStateTile() {
+    if (mouthClosed)
+        currentTile = currentMouthClosedTile;
+    else
+        currentTile = currentMouthOpenedTile;
 }

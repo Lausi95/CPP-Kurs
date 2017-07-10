@@ -5,17 +5,17 @@
 #include "entities/MovableEntity.h"
 
 struct PacmanTiles {
-    Tile* lookingUpMountOpen;
-    Tile* lookingUpMountClosed;
+    Tile* lookingUpMouthOpen;
+    Tile* lookingUpMouthClosed;
 
-    Tile* lookingDownMountOpen;
-    Tile* lookingDownMountClosed;
+    Tile* lookingDownMouthOpen;
+    Tile* lookingDownMouthClosed;
 
-    Tile* lookingLeftMountOpen;
-    Tile* lookingLeftMountClosed;
+    Tile* lookingLeftMouthOpen;
+    Tile* lookingLeftMouthClosed;
 
-    Tile* lookingRightMountOpen;
-    Tile* lookingRightMountClosed;
+    Tile* lookingRightMouthOpen;
+    Tile* lookingRightMouthClosed;
 };
 
 class Pacman : public MovableEntity {
@@ -30,13 +30,14 @@ public:
 
 private:
     PacmanTiles* tiles;
+
+    bool mouthClosed;
     Tile* currentTile;
+    Tile* currentMouthOpenedTile;
+    Tile* currentMouthClosedTile;
 
     int stepsTaken = 0;
     const int velocity = 4;
-
-    bool mouthClosed = false;
-
     Direction directionBuffer;
 
     void directionChanged(Direction direction);
@@ -44,6 +45,10 @@ private:
     bool isInDirectionChangableState();
     bool canChangeDirection(LevelMap &levelMap);
     bool shouldChangeDirection(LevelMap &levelMap);
+
+    void setCurrentMouthStateTile();
+
+    void updateMouthStateTilesAccordingToDirection(const Direction &direction);
 };
 
 #endif //PUNKTEFRESSER_PACMAN_H
