@@ -89,16 +89,23 @@ public:
 
     void tryApplyDirection(LevelMap& levelMap) {
         if (directionBuffer != currentDirection) {
-            if (canMoveToOppositeDirection())
-                changeDirection(directionBuffer);
-            else if (directionBuffer == Direction::Up && canMoveUp(levelMap))
-                changeDirection(directionBuffer);
-            else if (directionBuffer == Direction::Down && canMoveDown(levelMap))
-                changeDirection(directionBuffer);
-            else if (directionBuffer == Direction::Left && canMoveLeft(levelMap))
-                changeDirection(directionBuffer);
-            else if (directionBuffer == Direction::Right && canMoveRight(levelMap))
-                changeDirection(directionBuffer);
+            int x = (int) getX();
+            int y = (int) getY();
+            if (x % 32 == 0 && y % 32 == 0) {
+                int nx = x / 32;
+                int ny = y / 32;
+
+                if (canMoveToOppositeDirection())
+                    changeDirection(directionBuffer);
+                else if (directionBuffer == Direction::Up && nextField(levelMap, nx, ny, Direction::Up) != Field::Wall)
+                    changeDirection(directionBuffer);
+                else if (directionBuffer == Direction::Down && nextField(levelMap, nx, ny, Direction::Down) != Field::Wall)
+                    changeDirection(directionBuffer);
+                else if (directionBuffer == Direction::Left && nextField(levelMap, nx, ny, Direction::Left) != Field::Wall)
+                    changeDirection(directionBuffer);
+                else if (directionBuffer == Direction::Right && nextField(levelMap, nx, ny, Direction::Right) != Field::Wall)
+                    changeDirection(directionBuffer);
+            }
         }
     }
 
@@ -108,50 +115,6 @@ public:
             currentDirection == Direction::Down && directionBuffer == Direction::Up ||
             currentDirection == Direction::Left && directionBuffer == Direction::Right ||
             currentDirection == Direction::Right && directionBuffer == Direction::Left;
-    }
-
-    bool canMoveUp(LevelMap& map) {
-        int x = (int)getX();
-        int y = (int)getY();
-        if (x % 32 == 0 && y % 32 == 0) {
-            int nx = x / 32;
-            int ny = y / 32 - 1;
-            return map(nx, ny) != Field::Wall;
-        }
-        return false;
-    }
-
-    bool canMoveDown(LevelMap& map) {
-        int x = (int)getX();
-        int y = (int)getY();
-        if (x % 32 == 0 && y % 32 == 0) {
-            int nx = x / 32;
-            int ny = y / 32 + 1;
-            return map(nx, ny) != Field::Wall;
-        }
-        return false;
-    }
-
-    bool canMoveLeft(LevelMap& map) {
-        int x = (int)getX();
-        int y = (int)getY();
-        if (x % 32 == 0 && y % 32 == 0) {
-            int nx = x / 32 - 1;
-            int ny = y / 32;
-            return map(nx, ny) != Field::Wall;
-        }
-        return false;
-    }
-
-    bool canMoveRight(LevelMap& map) {
-        int x = (int)getX();
-        int y = (int)getY();
-        if (x % 32 == 0 && y % 32 == 0) {
-            int nx = x / 32 + 1;
-            int ny = y / 32;
-            return map(nx, ny) != Field::Wall;
-        }
-        return false;
     }
 
     void move(LevelMap& map) {
@@ -396,7 +359,8 @@ void renderMap(Window window, LevelMap levelMap) {
                     break;
 
                 case Field::Fruit:
-                    entity = new Fruit(column * 32, row *32, &tileFruitMelon);
+                    // entity = new Fruit(column * 32, row *32, &fruitTiles[rand() & 6]);
+                    entity = new Fruit(column * 32, row *32, &tileFruitApple);
                     break;
 
                 case Field::Player:
