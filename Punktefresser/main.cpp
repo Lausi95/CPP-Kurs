@@ -28,27 +28,6 @@ Tile tileWall(&mainTexture, 0, 0, 32, 32);
 Tile tilePoint(&mainTexture, 64, 0, 32, 32);
 Tile tileNormalBackground(&mainTexture, 64, 32, 32, 32);
 
-enum class Direction {
-    Up,
-    Down,
-    Left,
-    Right
-};
-
-class MovableEntity : public Entity {
-
-public:
-    MovableEntity(float x, float y) : Entity(x, y) {
-
-    }
-
-    virtual void changeDirection(Direction direction) = 0;
-    //virtual void move() = 0;
-
-private:
-
-};
-
 Field nextField(LevelMap& map, int x, int y, Direction direction) {
     if (direction == Direction::Left)
         x--;
@@ -91,16 +70,23 @@ public:
 
         if (directionBuffer != currentDirection) {
 
-            if (canMoveToOppositeDirection())
-                changeDirection(directionBuffer);
-            else if (directionBuffer == Direction::Up && canMoveUp(levelMap))
-                changeDirection(directionBuffer);
-            else if (directionBuffer == Direction::Down && canMoveDown(levelMap))
-                changeDirection(directionBuffer);
-            else if (directionBuffer == Direction::Left && canMoveLeft(levelMap))
-                changeDirection(directionBuffer);
-            else if (directionBuffer == Direction::Right && canMoveRight(levelMap))
-                changeDirection(directionBuffer);
+            int x = (int) getX();
+            int y = (int) getY();
+            if (x % 32 == 0 && y % 32 == 0) {
+                int nx = x / 32;
+                int ny = y / 32;
+
+                if (canMoveToOppositeDirection())
+                    changeDirection(directionBuffer);
+                else if (directionBuffer == Direction::Up && nextField(levelMap, nx, ny, Direction::Up) != Field::Wall)
+                    changeDirection(directionBuffer);
+                else if (directionBuffer == Direction::Down && nextField(levelMap, nx, ny, Direction::Down) != Field::Wall)
+                    changeDirection(directionBuffer);
+                else if (directionBuffer == Direction::Left && nextField(levelMap, nx, ny, Direction::Left) != Field::Wall)
+                    changeDirection(directionBuffer);
+                else if (directionBuffer == Direction::Right && nextField(levelMap, nx, ny, Direction::Right) != Field::Wall)
+                    changeDirection(directionBuffer);
+            }
         }
     }
 
@@ -113,50 +99,6 @@ public:
             currentDirection == Direction::Right && directionBuffer == Direction::Left;
     }
 
-    bool canMoveUp(LevelMap& map) {
-        int x = (int)getX();
-        int y = (int)getY();
-        if (x % 32 == 0 && y % 32 == 0) {
-            int nx = x / 32;
-            int ny = y / 32 - 1;
-            return map(nx, ny) != Field::WALL;
-        }
-        return false;
-    }
-
-    bool canMoveDown(LevelMap& map) {
-        int x = (int)getX();
-        int y = (int)getY();
-        if (x % 32 == 0 && y % 32 == 0) {
-            int nx = x / 32;
-            int ny = y / 32 + 1;
-            return map(nx, ny) != Field::WALL;
-        }
-        return false;
-    }
-
-    bool canMoveLeft(LevelMap& map) {
-        int x = (int)getX();
-        int y = (int)getY();
-        if (x % 32 == 0 && y % 32 == 0) {
-            int nx = x / 32 - 1;
-            int ny = y / 32;
-            return map(nx, ny) != Field::WALL;
-        }
-        return false;
-    }
-
-    bool canMoveRight(LevelMap& map) {
-        int x = (int)getX();
-        int y = (int)getY();
-        if (x % 32 == 0 && y % 32 == 0) {
-            int nx = x / 32 + 1;
-            int ny = y / 32;
-            return map(nx, ny) != Field::WALL;
-        }
-        return false;
-    }
-
     void move(LevelMap& map) {
 
         int ix = (int) getX();
@@ -165,7 +107,18 @@ public:
             int nx = ix / 32;
             int ny = iy / 32;
 
-            if (nextField(map, nx, ny, currentDirection) == Field::WALL) {
+            if (map(nx, ny) == Field::FloorWithPoint) {
+                map.setField(nx, ny, Field::Floor);
+                INFO("Collected Point")
+                // TODO: add point to scoreboard
+            }
+            if (map(nx, ny) == Field::Fruit) {
+                map.setField(nx, ny, Field::Floor);
+                INFO("Collected Fruit")
+                // TODO: add fruit "buff"? or additional Points?
+            }
+
+            if (nextField(map, nx, ny, currentDirection) == Field::Wall) {
                 changeDirection(oppositeDirection(currentDirection));
                 directionBuffer = currentDirection;
             }
@@ -375,35 +328,37 @@ void renderMap(Window window, LevelMap levelMap) {
             Field field = levelMap.getFieldAt(column, row);
             switch(field) {
 
-                case Field::EMPTY:
+                case Field::FloorWithPoint:
                     entity = new Background(column * 32, row *32, &tilePoint);
                     break;
 
-                case Field::WALL:
+                case Field::Floor:
+                    entity = new Background(column * 32, row * 32, &tileNormalBackground);
+                    break;
+
+                case Field::Wall:
                     entity = new Wall(column * 32, row *32, &tileWall);
                     break;
 
-                case Field::FRUIT:
-                    entity = new Fruit(column * 32, row *32, &tileFruitMelon);
+                case Field::Fruit:
+                    // entity = new Fruit(column * 32, row *32, &fruitTiles[rand() & 6]);
+                    entity = new Fruit(column * 32, row *32, &tileFruitApple);
                     break;
 
-                case Field::PLAYER:
+                case Field::Player:
                     if(pacman == NULL) {
                         pacman = new Pacman(column * 32, row *32);
                     }
-                    levelMap.setFieldAt(column, row, Field::EMPTY);
+                    levelMap.setField(column, row, Field::FloorWithPoint);
                     break;
 
-                case Field::ENEMY:
-                    Enemy* enemy = new Enemy(column * 32, row *32, &tileEnemy);
-                    enemies.push_back(enemy);
-                    levelMap.setFieldAt(column, row, Field::EMPTY);
+                case Field::Enemy:
+                    enemies.push_back(new Enemy(column * 32, row *32, &tileEnemy));
+                    levelMap.setField(column, row, Field::FloorWithPoint);
                     break;
             }
 
-            if(entity != NULL) {
-                window.renderEntity(entity);
-            }
+            window.renderEntity(entity);
         }
     }
 }

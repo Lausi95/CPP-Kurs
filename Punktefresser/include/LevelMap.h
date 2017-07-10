@@ -4,11 +4,12 @@
 #include <vector>
 
 enum class Field {
-    EMPTY,
-    WALL,
-    PLAYER,
-    FRUIT,
-    ENEMY
+    FloorWithPoint,
+    Floor,
+    Wall,
+    Player,
+    Fruit,
+    Enemy
 };
 
 class LevelMap {
@@ -19,7 +20,7 @@ public:
     int getColumnCount();
 
     Field getFieldAt(int row, int col);
-    void setFieldAt(int row, int col, Field field);
+    void setField(int row, int col, Field field);
 
     Field operator()(int row, int col) {
         return getFieldAt(row, col);

@@ -9,9 +9,13 @@
 
 #include "logging.h"
 
-#include "Entity.h"
-#include "Input.h"
 #include "Texture.h"
+#include "Direction.h"
+
+#include "Entity.h"
+#include "entities/MovableEntity.h"
+
+#include "Input.h"
 #include "Tile.h"
 #include "Timer.h"
 #include "Window.h"
