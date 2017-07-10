@@ -1,8 +1,8 @@
 #ifndef PUNKTEFRESSER_PACMAN_H
 #define PUNKTEFRESSER_PACMAN_H
 
-#include "entities/MovableEntity.h"
 #include "Tile.h"
+#include "entities/MovableEntity.h"
 
 struct PacmanTiles {
     Tile* lookingUpMountOpen;

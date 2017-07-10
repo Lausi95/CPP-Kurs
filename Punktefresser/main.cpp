@@ -1,5 +1,6 @@
 #include <LevelMap.h>
-#include "stdafx.h"
+#include <entities/StaticEntity.h>
+#include <stdafx.h>
 
 Texture mainTexture("assets/tiles.png");
 
@@ -28,82 +29,10 @@ Tile tileWall(&mainTexture, 0, 0, 32, 32);
 Tile tilePoint(&mainTexture, 64, 0, 32, 32);
 Tile tileNormalBackground(&mainTexture, 64, 32, 32, 32);
 
-class Enemy : public MovableEntity {
-
-public:
-    Enemy(float x, float y, Tile* tile) : MovableEntity(x, y) {
-
-        this->tile = tile;
-    }
-
-    Tile* getTile() {
-        return tile;
-    }
-
-    void changeDirection(Direction direction) {
-
-    }
-
-    void move() {
-
-    }
-
-private:
-    Tile* tile;
-};
-
-class Wall : public Entity {
-
-public:
-    Wall(float x, float y, Tile* tile) : Entity(x, y) {
-
-        this->tile = tile;
-    }
-
-    Tile* getTile() {
-        return tile;
-    }
-
-private:
-    Tile* tile;
-};
-
-class Background : public Entity {
-
-public:
-    Background(float x, float y, Tile* tile) : Entity(x, y) {
-
-        this->tile = tile;
-    }
-
-    Tile* getTile() {
-        return tile;
-    }
-
-private:
-    Tile* tile;
-};
-
-class Fruit : public Entity {
-
-public:
-    Fruit(float x, float y, Tile* tile) : Entity(x, y) {
-
-        this->tile = tile;
-    }
-
-    Tile* getTile() {
-        return tile;
-    }
-
-private:
-    Tile* tile;
-};
-
 PacmanTiles pacmanTiles = {
         &tilePlayerLookingTopMouthOpen,
         &tilePlayerLookingTopMouthClosed,
-        &tilePlayerLookingBotMouthClosed,
+        &tilePlayerLookingBotMouthOpen,
         &tilePlayerLookingBotMouthClosed,
         &tilePlayerLookingLeftMouthOpen,
         &tilePlayerLookingLeftMouthClosed,
@@ -123,27 +52,27 @@ void renderMap(Window window, LevelMap levelMap) {
             Entity* entity;
 
             //drawing background in every case (transperant fruits etc...)
-            entity = new Background(column * 32, row *32, &tileNormalBackground);
+            entity = new StaticEntity(column * 32, row *32, &tileNormalBackground);
             window.renderEntity(entity);
 
             Field field = levelMap.getFieldAt(column, row);
             switch(field) {
 
                 case Field::FloorWithPoint:
-                    entity = new Background(column * 32, row *32, &tilePoint);
+                    entity = new StaticEntity(column * 32, row *32, &tilePoint);
                     break;
 
                 case Field::Floor:
-                    entity = new Background(column * 32, row * 32, &tileNormalBackground);
+                    entity = new StaticEntity(column * 32, row * 32, &tileNormalBackground);
                     break;
 
                 case Field::Wall:
-                    entity = new Wall(column * 32, row *32, &tileWall);
+                    entity = new StaticEntity(column * 32, row *32, &tileWall);
                     break;
 
                 case Field::Fruit:
                     // entity = new Fruit(column * 32, row *32, &fruitTiles[rand() & 6]);
-                    entity = new Fruit(column * 32, row *32, &tileFruitApple);
+                    entity = new StaticEntity(column * 32, row *32, &tileFruitApple);
                     break;
 
                 case Field::Player:
