@@ -116,7 +116,7 @@ public:
         if (x % 32 == 0 && y % 32 == 0) {
             int nx = x / 32;
             int ny = y / 32 - 1;
-            return map(nx, ny) != Field::WALL;
+            return map(nx, ny) != Field::Wall;
         }
         return false;
     }
@@ -127,7 +127,7 @@ public:
         if (x % 32 == 0 && y % 32 == 0) {
             int nx = x / 32;
             int ny = y / 32 + 1;
-            return map(nx, ny) != Field::WALL;
+            return map(nx, ny) != Field::Wall;
         }
         return false;
     }
@@ -138,7 +138,7 @@ public:
         if (x % 32 == 0 && y % 32 == 0) {
             int nx = x / 32 - 1;
             int ny = y / 32;
-            return map(nx, ny) != Field::WALL;
+            return map(nx, ny) != Field::Wall;
         }
         return false;
     }
@@ -149,7 +149,7 @@ public:
         if (x % 32 == 0 && y % 32 == 0) {
             int nx = x / 32 + 1;
             int ny = y / 32;
-            return map(nx, ny) != Field::WALL;
+            return map(nx, ny) != Field::Wall;
         }
         return false;
     }
@@ -162,7 +162,7 @@ public:
             int nx = ix / 32;
             int ny = iy / 32;
 
-            if (nextField(map, nx, ny, currentDirection) == Field::WALL) {
+            if (nextField(map, nx, ny, currentDirection) == Field::Wall) {
                 changeDirection(oppositeDirection(currentDirection));
                 directionBuffer = currentDirection;
             }
@@ -372,35 +372,33 @@ void renderMap(Window window, LevelMap levelMap) {
             Field field = levelMap.getFieldAt(column, row);
             switch(field) {
 
-                case Field::EMPTY:
+                case Field::FloorWithPoint:
                     entity = new Background(column * 32, row *32, &tilePoint);
                     break;
 
-                case Field::WALL:
+                case Field::Wall:
                     entity = new Wall(column * 32, row *32, &tileWall);
                     break;
 
-                case Field::FRUIT:
+                case Field::Fruit:
                     entity = new Fruit(column * 32, row *32, &tileFruitMelon);
                     break;
 
-                case Field::PLAYER:
+                case Field::Player:
                     if(pacman == NULL) {
                         pacman = new Pacman(column * 32, row *32);
                     }
-                    levelMap.setFieldAt(column, row, Field::EMPTY);
+                    levelMap.setFieldAt(column, row, Field::FloorWithPoint);
                     break;
 
-                case Field::ENEMY:
+                case Field::Enemy:
                     Enemy* enemy = new Enemy(column * 32, row *32, &tileEnemy);
                     enemies.push_back(enemy);
-                    levelMap.setFieldAt(column, row, Field::EMPTY);
+                    levelMap.setFieldAt(column, row, Field::FloorWithPoint);
                     break;
             }
 
-            if(entity != NULL) {
-                window.renderEntity(entity);
-            }
+            window.renderEntity(entity);
         }
     }
 }

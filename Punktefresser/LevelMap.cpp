@@ -9,11 +9,11 @@ struct FieldMap {
 
     FieldMap() {
         for (int i = 0; i < 255; i++)
-            map[i] = Field::EMPTY;
-        map['#'] = Field::WALL;
-        map['P'] = Field::PLAYER;
-        map['E'] = Field::ENEMY;
-        map['F'] = Field::FRUIT;
+            map[i] = Field::FloorWithPoint;
+        map['#'] = Field::Wall;
+        map['P'] = Field::Player;
+        map['E'] = Field::Enemy;
+        map['F'] = Field::Fruit;
     }
 
     Field operator[](char c) {
