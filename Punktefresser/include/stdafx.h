@@ -17,6 +17,7 @@
 
 #include "Entity.h"
 #include "entities/MovableEntity.h"
+#include "entities/Pacman.h"
 
 #include "Input.h"
 #include "Tile.h"

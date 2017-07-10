@@ -24,9 +24,10 @@ set(SOURCE_FILES
         LevelMap.cpp
         include/entities/MovableEntity.h
         entities/MovableEntity.cpp
-        include/Direction.h Direction.cpp)
-        #include/entities/Pacman.h
-        #entities/Pacman.cpp.cpp)
+        include/Direction.h Direction.cpp
+        include/entities/Pacman.h
+        entities/Pacman.cpp.cpp)
+
 include_directories(Punktefresser include)
 add_executable(Punktefresser ${SOURCE_FILES})
 

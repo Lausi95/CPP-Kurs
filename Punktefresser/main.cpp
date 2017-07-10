@@ -28,196 +28,6 @@ Tile tileWall(&mainTexture, 0, 0, 32, 32);
 Tile tilePoint(&mainTexture, 64, 0, 32, 32);
 Tile tileNormalBackground(&mainTexture, 64, 32, 32, 32);
 
-class Pacman : public MovableEntity {
-
-public:
-    Pacman(float x, float y) : MovableEntity(x, y) {
-        this->currentTile = &tilePlayerLookingRightMouthOpen;
-        this->currentDirection = Direction::Right;
-        this->directionBuffer = Direction::Right;
-    }
-
-    Tile* getTile() {
-        return currentTile;
-    }
-
-    void setNextDirection(Direction direction) {
-        this->directionBuffer = direction;
-    }
-
-    void tryApplyDirection(LevelMap& levelMap) {
-
-        if (directionBuffer != currentDirection) {
-
-            int x = (int) getX();
-            int y = (int) getY();
-            if (x % 32 == 0 && y % 32 == 0) {
-                int nx = x / 32;
-                int ny = y / 32;
-
-                if (canMoveToOppositeDirection())
-                    changeDirection(directionBuffer);
-                else if (directionBuffer == Direction::Up && levelMap.nextField(nx, ny, Direction::Up) != Field::Wall)
-                    changeDirection(directionBuffer);
-                else if (directionBuffer == Direction::Down && levelMap.nextField(nx, ny, Direction::Down) != Field::Wall)
-                    changeDirection(directionBuffer);
-                else if (directionBuffer == Direction::Left && levelMap.nextField(nx, ny, Direction::Left) != Field::Wall)
-                    changeDirection(directionBuffer);
-                else if (directionBuffer == Direction::Right && levelMap.nextField(nx, ny, Direction::Right) != Field::Wall)
-                    changeDirection(directionBuffer);
-            }
-        }
-    }
-
-    bool canMoveToOppositeDirection() {
-
-        return
-            currentDirection == Direction::Up && directionBuffer == Direction::Down ||
-            currentDirection == Direction::Down && directionBuffer == Direction::Up ||
-            currentDirection == Direction::Left && directionBuffer == Direction::Right ||
-            currentDirection == Direction::Right && directionBuffer == Direction::Left;
-    }
-
-    void move(LevelMap& map) {
-
-        int ix = (int) getX();
-        int iy = (int) getY();
-        if (ix % 32 == 0 && iy % 32 == 0) {
-            int nx = ix / 32;
-            int ny = iy / 32;
-
-            if (map(nx, ny) == Field::FloorWithPoint) {
-                map.setField(nx, ny, Field::Floor);
-                INFO("Collected Point")
-                // TODO: add point to scoreboard
-            }
-            if (map(nx, ny) == Field::Fruit) {
-                map.setField(nx, ny, Field::Floor);
-                INFO("Collected Fruit")
-                // TODO: add fruit "buff"? or additional Points?
-            }
-
-            if (map.nextField(nx, ny, currentDirection) == Field::Wall) {
-                changeDirection(oppositeDirection(currentDirection));
-                directionBuffer = currentDirection;
-            }
-        }
-
-        stepsTaken++;
-        bool needReassignTile = false;
-        if(stepsTaken == 20) {
-            mouthClosed = !mouthClosed;
-            stepsTaken = 0;
-            needReassignTile = true;
-        }
-
-        switch(currentDirection) {
-
-            case Direction::Up:
-                setY(getY() - velocity);
-                if(needReassignTile) {
-                    if(mouthClosed) {
-                        currentTile = &tilePlayerLookingTopMouthClosed;
-                    }
-                    else {
-                        currentTile = &tilePlayerLookingTopMouthOpen;
-                    }
-                }
-                break;
-
-            case Direction::Down:
-                setY(getY() + velocity);
-                if(needReassignTile) {
-                    if(mouthClosed) {
-                        currentTile = &tilePlayerLookingBotMouthClosed;
-                    }
-                    else {
-                        currentTile = &tilePlayerLookingBotMouthOpen;
-                    }
-                }
-                break;
-
-            case Direction::Left:
-                setX(getX() - velocity);
-                if(needReassignTile) {
-                    if(mouthClosed) {
-                        currentTile = &tilePlayerLookingLeftMouthClosed;
-                    }
-                    else {
-                        currentTile = &tilePlayerLookingLeftMouthOpen;
-                    }
-                }
-                break;
-
-            case Direction::Right:
-                setX(getX() + velocity);
-                if(needReassignTile) {
-                    if(mouthClosed) {
-                        currentTile = &tilePlayerLookingRightMouthClosed;
-                    }
-                    else {
-                        currentTile = &tilePlayerLookingRightMouthOpen;
-                    }
-                }
-                break;
-        }
-    }
-
-private:
-    Tile* currentTile;
-
-    int stepsTaken = 0;
-    int velocity = 4;
-
-    bool mouthClosed = false;
-
-    Direction directionBuffer;
-    Direction currentDirection;
-
-    void changeDirection(Direction direction) {
-
-        switch(direction) {
-            case Direction::Up:
-                if(mouthClosed) {
-                    currentTile = &tilePlayerLookingTopMouthClosed;
-                }
-                else {
-                    currentTile = &tilePlayerLookingTopMouthOpen;
-                }
-                break;
-
-            case Direction::Down:
-                if(mouthClosed) {
-                    currentTile = &tilePlayerLookingBotMouthClosed;
-                }
-                else {
-                    currentTile = &tilePlayerLookingBotMouthOpen;
-                }
-                break;
-
-            case Direction::Left:
-                if(mouthClosed) {
-                    currentTile = &tilePlayerLookingLeftMouthClosed;
-                }
-                else {
-                    currentTile = &tilePlayerLookingLeftMouthOpen;
-                }
-                break;
-
-            case Direction::Right:
-                if(mouthClosed) {
-                    currentTile = &tilePlayerLookingRightMouthClosed;
-                }
-                else {
-                    currentTile = &tilePlayerLookingRightMouthOpen;
-                }
-                break;
-        }
-
-        currentDirection = direction;
-    }
-};
-
 class Enemy : public MovableEntity {
 
 public:
@@ -290,7 +100,19 @@ private:
     Tile* tile;
 };
 
-Pacman* pacman = NULL;
+PacmanTiles pacmanTiles = {
+        &tilePlayerLookingTopMouthOpen,
+        &tilePlayerLookingTopMouthClosed,
+        &tilePlayerLookingBotMouthClosed,
+        &tilePlayerLookingBotMouthClosed,
+        &tilePlayerLookingLeftMouthOpen,
+        &tilePlayerLookingLeftMouthClosed,
+        &tilePlayerLookingRightMouthOpen,
+        &tilePlayerLookingRightMouthClosed
+};
+
+Pacman pacman(0, 0, &pacmanTiles);
+
 std::vector <Enemy*> enemies;
 
 void renderMap(Window window, LevelMap levelMap) {
@@ -325,9 +147,8 @@ void renderMap(Window window, LevelMap levelMap) {
                     break;
 
                 case Field::Player:
-                    if(pacman == NULL) {
-                        pacman = new Pacman(column * 32, row *32);
-                    }
+                    pacman.setX(column * 32);
+                    pacman.setY(row * 32);
                     levelMap.setField(column, row, Field::FloorWithPoint);
                     break;
 
@@ -364,7 +185,7 @@ int main(int argc, char** argv) {
 
         renderMap(window, levelMap);
 
-        window.renderEntity(pacman);
+        window.renderEntity(&pacman);
 
         for(Enemy* enemy : enemies) {
             window.renderEntity(enemy);
@@ -374,16 +195,16 @@ int main(int argc, char** argv) {
         while (inputHandler.pollEvent()) {
 
             if (inputHandler.isKeyPressed(SDLK_w)) {
-                pacman->setNextDirection(Direction::Up);
+                pacman.setNextDirection(Direction::Up);
             }
             if (inputHandler.isKeyPressed(SDLK_s)) {
-                pacman->setNextDirection(Direction::Down);
+                pacman.setNextDirection(Direction::Down);
             }
             if (inputHandler.isKeyPressed(SDLK_a)) {
-                pacman->setNextDirection(Direction::Left);
+                pacman.setNextDirection(Direction::Left);
             }
             if (inputHandler.isKeyPressed(SDLK_d)) {
-                pacman->setNextDirection(Direction::Right);
+                pacman.setNextDirection(Direction::Right);
             }
 
             if (inputHandler.isQuitEvent()) {
@@ -393,8 +214,8 @@ int main(int argc, char** argv) {
         }
         // update
 
-        pacman->tryApplyDirection(levelMap);
-        pacman->move(levelMap);
+        pacman.tryApplyDirection(levelMap);
+        pacman.move(levelMap);
 
         window.update();
         timer.sleep(8);

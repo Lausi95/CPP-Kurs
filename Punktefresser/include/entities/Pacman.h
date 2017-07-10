@@ -1,13 +1,28 @@
 #ifndef PUNKTEFRESSER_PACMAN_H
 #define PUNKTEFRESSER_PACMAN_H
 
-#include "stdafx.h"
+#include "entities/MovableEntity.h"
+#include "Tile.h"
+
+struct PacmanTiles {
+    Tile* lookingUpMountOpen;
+    Tile* lookingUpMountClosed;
+
+    Tile* lookingDownMountOpen;
+    Tile* lookingDownMountClosed;
+
+    Tile* lookingLeftMountOpen;
+    Tile* lookingLeftMountClosed;
+
+    Tile* lookingRightMountOpen;
+    Tile* lookingRightMountClosed;
+};
 
 class Pacman : public MovableEntity {
-
 public:
-    Pacman(float x, float y) : MovableEntity(x, y) {
-        this->currentTile = &tilePlayerLookingRightMouthOpen;
+    Pacman(float x, float y, PacmanTiles* tiles) : MovableEntity(x, y) {
+        this->tiles = tiles;
+        this->currentTile = tiles->lookingRightMountOpen;
         this->currentDirection = Direction::Right;
         this->directionBuffer = Direction::Right;
     }
@@ -30,13 +45,13 @@ public:
 
                 if (canMoveToOppositeDirection())
                     changeDirection(directionBuffer);
-                else if (directionBuffer == Direction::Up && nextField(levelMap, nx, ny, Direction::Up) != Field::Wall)
+                else if (directionBuffer == Direction::Up && levelMap.nextField(nx, ny, Direction::Up) != Field::Wall)
                     changeDirection(directionBuffer);
-                else if (directionBuffer == Direction::Down && nextField(levelMap, nx, ny, Direction::Down) != Field::Wall)
+                else if (directionBuffer == Direction::Down && levelMap.nextField(nx, ny, Direction::Down) != Field::Wall)
                     changeDirection(directionBuffer);
-                else if (directionBuffer == Direction::Left && nextField(levelMap, nx, ny, Direction::Left) != Field::Wall)
+                else if (directionBuffer == Direction::Left && levelMap.nextField(nx, ny, Direction::Left) != Field::Wall)
                     changeDirection(directionBuffer);
-                else if (directionBuffer == Direction::Right && nextField(levelMap, nx, ny, Direction::Right) != Field::Wall)
+                else if (directionBuffer == Direction::Right && levelMap.nextField(nx, ny, Direction::Right) != Field::Wall)
                     changeDirection(directionBuffer);
             }
         }
@@ -69,7 +84,7 @@ public:
                 // TODO: add fruit "buff"? or additional Points?
             }
 
-            if (nextField(map, nx, ny, currentDirection) == Field::Wall) {
+            if (map.nextField(nx, ny, currentDirection) == Field::Wall) {
                 changeDirection(oppositeDirection(currentDirection));
                 directionBuffer = currentDirection;
             }
@@ -89,10 +104,10 @@ public:
                 setY(getY() - velocity);
                 if(needReassignTile) {
                     if(mouthClosed) {
-                        currentTile = &tilePlayerLookingTopMouthClosed;
+                        currentTile = tiles->lookingUpMountClosed;
                     }
                     else {
-                        currentTile = &tilePlayerLookingTopMouthOpen;
+                        currentTile = tiles->lookingUpMountOpen;
                     }
                 }
                 break;
@@ -101,10 +116,10 @@ public:
                 setY(getY() + velocity);
                 if(needReassignTile) {
                     if(mouthClosed) {
-                        currentTile = &tilePlayerLookingBotMouthClosed;
+                        currentTile = tiles->lookingDownMountClosed;
                     }
                     else {
-                        currentTile = &tilePlayerLookingBotMouthOpen;
+                        currentTile = tiles->lookingDownMountOpen;
                     }
                 }
                 break;
@@ -113,10 +128,10 @@ public:
                 setX(getX() - velocity);
                 if(needReassignTile) {
                     if(mouthClosed) {
-                        currentTile = &tilePlayerLookingLeftMouthClosed;
+                        currentTile = tiles->lookingLeftMountClosed;
                     }
                     else {
-                        currentTile = &tilePlayerLookingLeftMouthOpen;
+                        currentTile = tiles->lookingLeftMountOpen;
                     }
                 }
                 break;
@@ -125,10 +140,10 @@ public:
                 setX(getX() + velocity);
                 if(needReassignTile) {
                     if(mouthClosed) {
-                        currentTile = &tilePlayerLookingRightMouthClosed;
+                        currentTile = tiles->lookingRightMountClosed;
                     }
                     else {
-                        currentTile = &tilePlayerLookingRightMouthOpen;
+                        currentTile = tiles->lookingRightMountOpen;
                     }
                 }
                 break;
@@ -136,6 +151,7 @@ public:
     }
 
 private:
+    PacmanTiles* tiles;
     Tile* currentTile;
 
     int stepsTaken = 0;
@@ -151,37 +167,37 @@ private:
         switch(direction) {
             case Direction::Up:
                 if(mouthClosed) {
-                    currentTile = &tilePlayerLookingTopMouthClosed;
+                    currentTile = tiles->lookingUpMountClosed;
                 }
                 else {
-                    currentTile = &tilePlayerLookingTopMouthOpen;
+                    currentTile = tiles->lookingUpMountOpen;
                 }
                 break;
 
             case Direction::Down:
                 if(mouthClosed) {
-                    currentTile = &tilePlayerLookingBotMouthClosed;
+                    currentTile = tiles->lookingDownMountClosed;
                 }
                 else {
-                    currentTile = &tilePlayerLookingBotMouthOpen;
+                    currentTile = tiles->lookingDownMountOpen;
                 }
                 break;
 
             case Direction::Left:
                 if(mouthClosed) {
-                    currentTile = &tilePlayerLookingLeftMouthClosed;
+                    currentTile = tiles->lookingLeftMountClosed;
                 }
                 else {
-                    currentTile = &tilePlayerLookingLeftMouthOpen;
+                    currentTile = tiles->lookingLeftMountOpen;
                 }
                 break;
 
             case Direction::Right:
                 if(mouthClosed) {
-                    currentTile = &tilePlayerLookingRightMouthClosed;
+                    currentTile = tiles->lookingRightMountClosed;
                 }
                 else {
-                    currentTile = &tilePlayerLookingRightMouthOpen;
+                    currentTile = tiles->lookingRightMountOpen;
                 }
                 break;
         }
