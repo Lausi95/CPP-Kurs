@@ -20,11 +20,11 @@ int Entity::getHeight() {
     return getTile()->getRekt()->h;
 }
 
-const int Entity::getX() const {
+int Entity::getX() const {
     return x;
 }
 
-const int Entity::getY() const {
+int Entity::getY() const {
     return y;
 }
 
@@ -38,4 +38,12 @@ void Entity::setY(int y) {
 
 bool Entity::pointInside(int x, int y) {
     return x > getLeft() && x < getRight() && y > getTop() && y < getBottom();
+}
+
+int Entity::getX(int divisor) const {
+    return getX() / divisor;
+}
+
+int Entity::getY(int divisor) const {
+    return getY() / divisor;
 }

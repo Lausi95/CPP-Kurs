@@ -26,7 +26,6 @@ public:
 
     void setNextDirection(Direction direction);
     void tryApplyDirection(LevelMap& levelMap);
-    bool canMoveToOppositeDirection();
     void move(LevelMap& map);
 
 private:
@@ -39,9 +38,14 @@ private:
     bool mouthClosed = false;
 
     Direction directionBuffer;
-    Direction currentDirection;
 
-    void changeDirection(Direction direction);
+    void directionChanged(Direction direction);
+
+    bool isInDirectionChangableState();
+
+    bool canChangeDirection(LevelMap &levelMap);
+
+    bool shouldChangeDirection(LevelMap &levelMap);
 };
 
 #endif //PUNKTEFRESSER_PACMAN_H

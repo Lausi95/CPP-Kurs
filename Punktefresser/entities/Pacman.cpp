@@ -1,9 +1,8 @@
 #include "stdafx.h"
 
-Pacman::Pacman(float x, float y, PacmanTiles *tiles) : MovableEntity(x, y) {
+Pacman::Pacman(float x, float y, PacmanTiles *tiles) : MovableEntity(x, y, Direction::Right) {
     this->tiles = tiles;
     this->currentTile = tiles->lookingRightMountOpen;
-    this->currentDirection = Direction::Right;
     this->directionBuffer = Direction::Right;
 }
 
@@ -16,40 +15,34 @@ void Pacman::setNextDirection(Direction direction) {
 }
 
 void Pacman::tryApplyDirection(LevelMap &levelMap) {
-    if (directionBuffer != currentDirection) {
-        if (getX() % 32 == 0 && getY() % 32 == 0) {
-            int nx = getX() / 32;
-            int ny = getY() / 32;
-
-            if (canMoveToOppositeDirection())
-                changeDirection(directionBuffer);
-            else if (directionBuffer == Direction::Up && levelMap.nextField(nx, ny, Direction::Up) != Field::Wall)
-                changeDirection(directionBuffer);
-            else if (directionBuffer == Direction::Down && levelMap.nextField(nx, ny, Direction::Down) != Field::Wall)
-                changeDirection(directionBuffer);
-            else if (directionBuffer == Direction::Left && levelMap.nextField(nx, ny, Direction::Left) != Field::Wall)
-                changeDirection(directionBuffer);
-            else if (directionBuffer == Direction::Right && levelMap.nextField(nx, ny, Direction::Right) != Field::Wall)
-                changeDirection(directionBuffer);
-        }
-    }
+    if (shouldChangeDirection(levelMap))
+        changeDirection(directionBuffer);
 }
 
-bool Pacman::canMoveToOppositeDirection() {
-    return
-            currentDirection == Direction::Up && directionBuffer == Direction::Down ||
-            currentDirection == Direction::Down && directionBuffer == Direction::Up ||
-            currentDirection == Direction::Left && directionBuffer == Direction::Right ||
-            currentDirection == Direction::Right && directionBuffer == Direction::Left;
+bool Pacman::shouldChangeDirection(LevelMap &levelMap) {
+    return isInDirectionChangableState() && canChangeDirection(levelMap);
+}
+
+
+bool Pacman::isInDirectionChangableState() {
+    bool actualDirectionIsNotBufferedDirection = directionBuffer != getDirection();
+    bool standsAtAChangablePoint = getX() % 32 == 0 && getY() % 32 == 0;
+
+    return actualDirectionIsNotBufferedDirection && standsAtAChangablePoint;
+}
+
+bool Pacman::canChangeDirection(LevelMap &levelMap) {
+    bool directionBufferIsOppositeDirection = oppositeDirection(getDirection()) == directionBuffer;
+    bool nextFieldIsNotWall = levelMap.nextField(getX(32), getY(32), directionBuffer) != Field::Wall;
+
+    return directionBufferIsOppositeDirection || nextFieldIsNotWall;
 }
 
 void Pacman::move(LevelMap &map) {
 
-    int ix = (int) getX();
-    int iy = (int) getY();
-    if (ix % 32 == 0 && iy % 32 == 0) {
-        int nx = ix / 32;
-        int ny = iy / 32;
+    if (getX() % 32 == 0 && getY() % 32 == 0) {
+        int nx = getX() / 32;
+        int ny = getY() / 32;
 
         if (map(nx, ny) == Field::FloorWithPoint) {
             map.setField(nx, ny, Field::Floor);
@@ -62,9 +55,9 @@ void Pacman::move(LevelMap &map) {
             // TODO: add fruit "buff"? or additional Points?
         }
 
-        if (map.nextField(nx, ny, currentDirection) == Field::Wall) {
-            changeDirection(oppositeDirection(currentDirection));
-            directionBuffer = currentDirection;
+        if (map.nextField(nx, ny, getDirection()) == Field::Wall) {
+            changeDirection(oppositeDirection(getDirection()));
+            directionBuffer = getDirection();
         }
     }
 
@@ -76,7 +69,7 @@ void Pacman::move(LevelMap &map) {
         needReassignTile = true;
     }
 
-    switch(currentDirection) {
+    switch(getDirection()) {
 
         case Direction::Up:
             setY(getY() - velocity);
@@ -128,8 +121,7 @@ void Pacman::move(LevelMap &map) {
     }
 }
 
-void Pacman::changeDirection(Direction direction) {
-
+void Pacman::directionChanged(Direction direction) {
     switch(direction) {
         case Direction::Up:
             if(mouthClosed) {
@@ -167,6 +159,4 @@ void Pacman::changeDirection(Direction direction) {
             }
             break;
     }
-
-    currentDirection = direction;
 }

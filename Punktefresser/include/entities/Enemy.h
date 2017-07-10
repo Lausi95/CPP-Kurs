@@ -9,7 +9,7 @@ public:
     Enemy(float x, float y, Tile* tile);
 
     Tile* getTile();
-    void changeDirection(Direction direction);
+    void directionChanged(Direction direction);
     void move(LevelMap &levelMap);
 
 private:

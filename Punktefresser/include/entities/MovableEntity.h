@@ -2,10 +2,16 @@
 #define PUNKTEFRESSER_MOVABLEENTITY_H
 
 class MovableEntity : public Entity {
-public:
-    MovableEntity(float x, float y);
+    Direction currentDirection;
 
-    virtual void changeDirection(Direction direction) = 0;
+public:
+    MovableEntity(float x, float y, Direction initialDirection);
+
+    Direction getDirection();
+
+    void changeDirection(Direction newDirection);
+
+    virtual void directionChanged(Direction direction) = 0;
     virtual void move(LevelMap &levelMap) = 0;
 };
 

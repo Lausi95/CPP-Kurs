@@ -26,10 +26,12 @@ public:
     int getHeight();
 
     // gets the x-Position of the entity.
-    const int getX() const;
+    int getX() const;
+    int getX(int divisor) const;
 
     // gets the y-Position of the entity.
-    const int getY() const;
+    int getY() const;
+    int getY(int divisor) const;
 
     // gets the left position of the entity.
     inline int getLeft() { return getX(); }
