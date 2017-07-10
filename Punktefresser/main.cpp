@@ -162,6 +162,17 @@ public:
             int nx = ix / 32;
             int ny = iy / 32;
 
+            if (map(nx, ny) == Field::FloorWithPoint) {
+                map.setField(nx, ny, Field::Floor);
+                INFO("Collected Point")
+                // TODO: add point to scoreboard
+            }
+            if (map(nx, ny) == Field::Fruit) {
+                map.setField(nx, ny, Field::Floor);
+                INFO("Collected Fruit")
+                // TODO: add fruit "buff"? or additional Points?
+            }
+
             if (nextField(map, nx, ny, currentDirection) == Field::Wall) {
                 changeDirection(oppositeDirection(currentDirection));
                 directionBuffer = currentDirection;
