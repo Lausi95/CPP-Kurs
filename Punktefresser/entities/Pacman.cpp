@@ -10,7 +10,7 @@ Tile *Pacman::getTile() {
     return currentTile;
 }
 
-void Pacman::setNextDirection(Direction direction) {
+void Pacman::setDirectionBuffer(Direction direction) {
     this->directionBuffer = direction;
 }
 

@@ -118,16 +118,16 @@ int main(int argc, char** argv) {
         while (inputHandler.pollEvent()) {
 
             if (inputHandler.isKeyPressed(SDLK_w)) {
-                pacman.setNextDirection(Direction::Up);
+                pacman.setDirectionBuffer(Direction::Up);
             }
             if (inputHandler.isKeyPressed(SDLK_s)) {
-                pacman.setNextDirection(Direction::Down);
+                pacman.setDirectionBuffer(Direction::Down);
             }
             if (inputHandler.isKeyPressed(SDLK_a)) {
-                pacman.setNextDirection(Direction::Left);
+                pacman.setDirectionBuffer(Direction::Left);
             }
             if (inputHandler.isKeyPressed(SDLK_d)) {
-                pacman.setNextDirection(Direction::Right);
+                pacman.setDirectionBuffer(Direction::Right);
             }
 
             if (inputHandler.isQuitEvent()) {

@@ -24,7 +24,7 @@ public:
 
     Tile* getTile();
 
-    void setNextDirection(Direction direction);
+    void setDirectionBuffer(Direction direction);
     void tryApplyDirection(LevelMap& levelMap);
     void move(LevelMap& map);
 
@@ -42,9 +42,7 @@ private:
     void directionChanged(Direction direction);
 
     bool isInDirectionChangableState();
-
     bool canChangeDirection(LevelMap &levelMap);
-
     bool shouldChangeDirection(LevelMap &levelMap);
 };
 
