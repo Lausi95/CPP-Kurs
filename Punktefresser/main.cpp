@@ -1,5 +1,4 @@
-#include <LevelMap.h>
-#include <entities/StaticEntity.h>
+#include <list>
 #include <stdafx.h>
 
 Texture mainTexture("assets/tiles.png");
@@ -42,9 +41,9 @@ PacmanTiles pacmanTiles = {
 
 Pacman pacman(0, 0, &pacmanTiles);
 
-std::vector<Enemy> enemies;
-std::vector<StaticEntity> fruits;
-std::vector<StaticEntity> environment;
+std::list<Enemy> enemies;
+std::list<StaticEntity> fruits;
+std::list<StaticEntity> environment;
 
 void initializeEntities(LevelMap levelMap) {
     for(int row = 0; row < levelMap.getRowCount(); row++) {
@@ -97,7 +96,6 @@ int main(int argc, char** argv) {
     InputHandler inputHandler;
     bool running = true;
     Timer timer;
-
 
     while (running) {
         // render
