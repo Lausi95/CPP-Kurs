@@ -26,7 +26,7 @@ set(SOURCE_FILES
         entities/MovableEntity.cpp
         include/Direction.h Direction.cpp
         include/entities/Pacman.h
-        entities/Pacman.cpp.cpp include/entities/Enemy.h include/entities/StaticEntity.h)
+        entities/Pacman.cpp include/entities/Enemy.h include/entities/StaticEntity.h)
 
 include_directories(Punktefresser include)
 add_executable(Punktefresser ${SOURCE_FILES})
