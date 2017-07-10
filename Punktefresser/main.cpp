@@ -396,8 +396,7 @@ void renderMap(Window window, LevelMap levelMap) {
                     break;
 
                 case Field::Enemy:
-                    Enemy* enemy = new Enemy(column * 32, row *32, &tileEnemy);
-                    enemies.push_back(enemy);
+                    enemies.push_back(new Enemy(column * 32, row *32, &tileEnemy));
                     levelMap.setFieldAt(column, row, Field::FloorWithPoint);
                     break;
             }
