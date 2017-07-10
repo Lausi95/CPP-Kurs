@@ -6,19 +6,11 @@
 
 class Enemy : public MovableEntity {
 public:
-    Enemy(float x, float y, Tile* tile) : MovableEntity(x, y) {
-        this->tile = tile;
-    }
+    Enemy(float x, float y, Tile* tile);
 
-    Tile* getTile() {
-        return tile;
-    }
-
-    void changeDirection(Direction direction) {
-    }
-
-    void move() {
-    }
+    Tile* getTile();
+    void changeDirection(Direction direction);
+    void move(LevelMap &levelMap);
 
 private:
     Tile* tile;

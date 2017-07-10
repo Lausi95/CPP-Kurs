@@ -9,19 +9,11 @@ private:
     Tile* tile;
 
 public:
-    StaticEntity(float x, float y, Tile* tile) : Entity(x, y) {
-        this->tile = tile;
-    }
+    StaticEntity(float x, float y, Tile* tile);
 
-    Tile* getTile() {
-        return tile;
-    }
+    Tile* getTile();
 
-    bool operator ==(const StaticEntity &b) const {
-        bool xSame = getX() == b.getX();
-        bool ySame = getY() == b.getY();
-        return xSame && ySame;
-    }
+    bool operator ==(const StaticEntity &b) const;
 };
 
 #endif //PUNKTEFRESSER_STATICENTITY_H
