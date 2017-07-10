@@ -3,13 +3,6 @@
 
 #include <SDL2/SDL.h>
 
-enum class Direction {
-    Up,
-    Down,
-    Left,
-    Right
-};
-
 class InputHandler {
 public:
     bool pollEvent();
