@@ -376,6 +376,10 @@ void renderMap(Window window, LevelMap levelMap) {
                     entity = new Background(column * 32, row *32, &tilePoint);
                     break;
 
+                case Field::Floor:
+                    entity = new Background(column * 32, row * 32, &tileNormalBackground);
+                    break;
+
                 case Field::Wall:
                     entity = new Wall(column * 32, row *32, &tileWall);
                     break;
