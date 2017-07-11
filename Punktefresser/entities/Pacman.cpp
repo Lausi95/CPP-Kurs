@@ -4,7 +4,7 @@ Pacman::Pacman(float x, float y, PacmanTiles *tiles) : MovableEntity(x, y, Direc
     this->tiles = tiles;
     this->directionBuffer = Direction::Right;
 
-    this->mouthClosed = false;
+    this->currentState = PacmanState::MouthOpen;
     this->currentTile = tiles->lookingRightMouthOpen;
     this->currentMouthClosedTile = tiles->lookingRightMouthClosed;
     this->currentMouthOpenedTile = tiles->lookingRightMouthOpen;
@@ -85,7 +85,7 @@ void Pacman::move(LevelMap &map) {
 
 void Pacman::updateMouthOpenClosedState() {
     if(++stepsTaken == 20) {
-        mouthClosed = !mouthClosed;
+        currentState = oppositePacmanState(currentState);
         stepsTaken = 0;
         setCurrentMouthStateTile();
     }
@@ -116,8 +116,15 @@ void Pacman::updateMouthStateTilesAccordingToDirection(const Direction &directio
 }
 
 void Pacman::setCurrentMouthStateTile() {
-    if (mouthClosed)
+    if (currentState == PacmanState::MouthClosed)
         currentTile = currentMouthClosedTile;
     else
         currentTile = currentMouthOpenedTile;
+}
+
+PacmanState oppositePacmanState(PacmanState &pacmanState) {
+    if (pacmanState == PacmanState::MouthClosed)
+        return PacmanState::MouthOpen;
+    else
+        return PacmanState::MouthClosed;
 }

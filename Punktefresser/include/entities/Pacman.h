@@ -1,6 +1,13 @@
 #ifndef PUNKTEFRESSER_PACMAN_H
 #define PUNKTEFRESSER_PACMAN_H
 
+enum class PacmanState {
+    MouthOpen,
+    MouthClosed
+};
+
+PacmanState oppositePacmanState(PacmanState &pacmanState);
+
 struct PacmanTiles {
     Tile* lookingUpMouthOpen;
     Tile* lookingUpMouthClosed;
@@ -28,7 +35,7 @@ public:
 private:
     PacmanTiles* tiles;
 
-    bool mouthClosed;
+    PacmanState currentState;
     Tile* currentTile;
     Tile* currentMouthOpenedTile;
     Tile* currentMouthClosedTile;
