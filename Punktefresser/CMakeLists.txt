@@ -12,21 +12,18 @@ set(SOURCE_FILES
         include/Tile.h
         include/Timer.h
         include/Window.h
-        Entity.cpp
-        Input.cpp
-        logging.cpp
-        Texture.cpp
-        Tile.cpp
-        Timer.cpp
-        Window.cpp
-        main.cpp
         include/LevelMap.h
-        LevelMap.cpp
-        include/entities/MovableEntity.h
-        entities/MovableEntity.cpp
-        include/Direction.h Direction.cpp
-        include/entities/Pacman.h
-        entities/Pacman.cpp include/entities/Enemy.h include/entities/StaticEntity.h entities/Enemy.cpp entities/StaticEntity.cpp)
+        include/Direction.h
+        src/Entity.cpp
+        src/Input.cpp
+        src/logging.cpp
+        src/Texture.cpp
+        src/Tile.cpp
+        src/Timer.cpp
+        src/Window.cpp
+        src/main.cpp
+        src/LevelMap.cpp
+        src/Direction.cpp)
 
 include_directories(Punktefresser include)
 add_executable(Punktefresser ${SOURCE_FILES})

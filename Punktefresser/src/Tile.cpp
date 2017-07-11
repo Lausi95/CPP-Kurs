@@ -2,7 +2,7 @@
 // Created by tom on 05.05.17.
 //
 
-#include "include/Tile.h"
+#include "Tile.h"
 
 Tile::Tile(Texture *texture, int posX, int posY, int width, int height) {
     this->texture = texture;

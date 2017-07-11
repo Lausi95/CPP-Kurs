@@ -20,10 +20,6 @@
 #include "Tile.h"
 
 #include "Entity.h"
-#include "entities/MovableEntity.h"
-#include "entities/Pacman.h"
-#include "entities/Enemy.h"
-#include "entities/StaticEntity.h"
 
 #include "Input.h"
 #include "Timer.h"
