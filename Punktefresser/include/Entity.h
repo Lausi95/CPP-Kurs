@@ -22,7 +22,7 @@ public:
     Entity(int x, int y);
 
     // gets the renderEntity rectangle of the entity.
-    SDL_Rect_ptr getRekt();
+    rect_ptr getRekt();
 
     // gets the x-Position of the entity.
     int getX() const;
@@ -41,7 +41,7 @@ public:
     bool isOnTilePoint() const;
 
 private:
-    SDL_Rect_ptr rect;
+    rect_ptr rect;
 
     int x;
     int y;

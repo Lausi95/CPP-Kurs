@@ -14,8 +14,8 @@ public:
     template <typename T>
     void renderEntity(T entity) {
         SDL_Surface_ptr texture = entity->getTile()->getTexture()->getSurface();
-        SDL_Rect_ptr textureRect = entity->getTile()->getRekt();
-        SDL_Rect_ptr entityRect = entity->getRekt();
+        rect_ptr textureRect = entity->getTile()->getRekt();
+        rect_ptr entityRect = entity->getRekt();
 
         SDL_BlitSurface(texture.get(), textureRect.get(), sdlSurface, entityRect.get());
     }

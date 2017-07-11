@@ -1,12 +1,12 @@
 #include <Entity.h>
 
 Entity::Entity(int x, int y) {
-    this->rect = SDL_Rect_ptr(new SDL_Rect);
+    this->rect = rect_ptr(new SDL_Rect);
     this->x = x;
     this->y = y;
 }
 
-SDL_Rect_ptr Entity::getRekt() {
+rect_ptr Entity::getRekt() {
     this->rect->x = this->x;
     this->rect->y = this->y;
     return this->rect;

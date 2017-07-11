@@ -3,7 +3,7 @@
 
 const int FRAME_SLEEP_TIME = 8;
 
-using Texture_SPTR = std::shared_ptr<Texture>;
+using texture_ptr = std::shared_ptr<Texture>;
 
 enum Tiles {
     TILE_WALL,
@@ -56,7 +56,7 @@ void initializeEntities(tile_ptr* tilemap,
 }
 
 int main(int argc, char** argv) {
-    Texture_SPTR texture(new Texture("assets/tiles.png"));
+    texture_ptr texture(new Texture("assets/tiles.png"));
 
     tile_ptr tilemap[] = {
             tile_ptr(new Tile(texture, 0, 0, 32, 32)),
