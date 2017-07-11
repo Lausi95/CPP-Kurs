@@ -6,14 +6,15 @@
 
 Tile::Tile(Texture_SPTR texture, int posX, int posY, int width, int height) {
     this->texture = Texture_SPTR(texture);
-    this->rect.x = posX;
-    this->rect.y = posY;
-    this->rect.w = width;
-    this->rect.h = height;
+    this->rect = SDL_Rect_ptr(new SDL_Rect);
+    this->rect->x = posX;
+    this->rect->y = posY;
+    this->rect->w = width;
+    this->rect->h = height;
 }
 
-SDL_Rect *Tile::getRekt() {
-    return &this->rect;
+SDL_Rect_ptr Tile::getRekt() {
+    return rect;
 }
 
 Texture_SPTR Tile::getTexture() {

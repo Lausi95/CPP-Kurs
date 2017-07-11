@@ -1,7 +1,15 @@
 #ifndef HALLOWELT_ENTITY_H
 #define HALLOWELT_ENTITY_H
 
-#include <stdafx.h>
+#include <SDL2/SDL.h>
+
+#include <memory>
+#include <Tile.h>
+#include <Direction.h>
+#include <LevelMap.h>
+#include <logging.h>
+
+using tile_ptr = std::shared_ptr<Tile>;
 
 // A Entity is a renderable Objekt. It has a Position and dimension.
 // The dimension is equal to the tile that is renderd with the Entity.
@@ -13,11 +21,8 @@ public:
     // Created a new entity with a position.
     Entity(int x, int y);
 
-    // Gets the tile to renderEntity the entity and determine its width and height.
-    virtual Tile* getTile() = 0;
-
     // gets the renderEntity rectangle of the entity.
-    SDL_Rect* getRekt();
+    SDL_Rect_ptr getRekt();
 
     // gets the x-Position of the entity.
     int getX() const;
@@ -36,7 +41,7 @@ public:
     bool isOnTilePoint() const;
 
 private:
-    SDL_Rect rect;
+    SDL_Rect_ptr rect;
 
     int x;
     int y;

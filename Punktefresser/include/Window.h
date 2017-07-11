@@ -14,10 +14,10 @@ public:
     template <typename T>
     void renderEntity(T entity) {
         SDL_Surface* texture = entity->getTile()->getTexture()->getSurface();
-        SDL_Rect* textureRect = entity->getTile()->getRekt();
-        SDL_Rect* entityRect = entity->getRekt();
+        SDL_Rect_ptr textureRect = entity->getTile()->getRekt();
+        SDL_Rect_ptr entityRect = entity->getRekt();
 
-        SDL_BlitSurface(texture, textureRect, sdlSurface, entityRect);
+        SDL_BlitSurface(texture, textureRect.get(), sdlSurface, entityRect.get());
     }
 
     //renders text on the surface of the windows

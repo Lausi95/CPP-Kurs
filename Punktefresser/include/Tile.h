@@ -5,6 +5,7 @@
 #include <memory>
 
 using Texture_SPTR = std::shared_ptr<Texture>;
+using SDL_Rect_ptr = std::shared_ptr<SDL_Rect>;
 
 // A Tile is a rectangle shaped Part of a Texture.
 class Tile {
@@ -13,14 +14,14 @@ public:
     Tile(Texture_SPTR texture, int posX, int posY, int width, int height);
 
     // gets the pointer to a SDL_Rect objekt, that represents the partition of the tile on the Texture.
-    SDL_Rect* getRekt();
+    SDL_Rect_ptr getRekt();
 
     // gets the pointer to the texure of the Tile.
     Texture_SPTR getTexture();
 
 private:
     Texture_SPTR texture;
-    SDL_Rect rect;
+    SDL_Rect_ptr rect;
 };
 
 

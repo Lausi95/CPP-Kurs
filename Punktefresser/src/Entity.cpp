@@ -1,23 +1,23 @@
-#include <stdafx.h>
+#include <Entity.h>
 
 Entity::Entity(int x, int y) {
-    this->rect = SDL_Rect();
+    this->rect = SDL_Rect_ptr(new SDL_Rect);
     this->x = x;
     this->y = y;
 }
 
-SDL_Rect *Entity::getRekt() {
-    rect.x = x;
-    rect.y = y;
-    return &rect;
+SDL_Rect_ptr Entity::getRekt() {
+    this->rect->x = this->x;
+    this->rect->y = this->y;
+    return this->rect;
 }
 
 int Entity::getX() const {
-    return x;
+    return this->x;
 }
 
 int Entity::getY() const {
-    return y;
+    return this->y;
 }
 
 void Entity::setX(int x) {
@@ -29,15 +29,15 @@ void Entity::setY(int y) {
 }
 
 int Entity::getX(int divisor) const {
-    return getX() / divisor;
+    return this->getX() / divisor;
 }
 
 int Entity::getY(int divisor) const {
-    return getY() / divisor;
+    return this->getY() / divisor;
 }
 
 bool Entity::isOnTilePoint() const {
-    return getX() % WIDTH == 0 && getY() % HEIGHT == 0;
+    return this->getX() % Entity::WIDTH == 0 && this->getY() % Entity::HEIGHT == 0;
 }
 
 StaticEntity::StaticEntity(float x, float y, Tile *tile) : Entity(x, y) {
