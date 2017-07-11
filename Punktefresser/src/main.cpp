@@ -76,14 +76,13 @@ int main(int argc, char** argv) {
 
     PacmanTiles pacmanTiles = {
             new Tile(texture, 128+1, 32+1, 32-1, 32-1),
-            new Tile(texture, 96+1, 32+1, 32-1, 32-1),
-            new Tile(texture, 128+1, 0+1, 32-1, 32-1),
-            new Tile(texture, 96+1, 0+1, 32-1, 32-1),
-
             new Tile(texture, 224+1, 32+1, 32-1, 32-1),
+            new Tile(texture,  96+1, 32+1, 32-1, 32-1),
             new Tile(texture, 192+1, 32+1, 32-1, 32-1),
-            new Tile(texture, 192+1, 0+1, 32-1, 32-1),
-            new Tile(texture, 224+1, 0+1, 32-1, 32-1)
+            new Tile(texture, 128+1,  0+1, 32-1, 32-1),
+            new Tile(texture, 224+1,  0+1, 32-1, 32-1),
+            new Tile(texture,  96+1,  0+1, 32-1, 32-1),
+            new Tile(texture, 192+1,  0+1, 32-1, 32-1)
     };
 
     Pacman pacman(0, 0, &pacmanTiles);
