@@ -26,14 +26,6 @@ void Window::update() {
     SDL_UpdateWindowSurface(this->sdlWindow);
 }
 
-void Window::renderEntity(Entity *entity) {
-    SDL_Surface* texture = entity->getTile()->getTexture()->getSurface();
-    SDL_Rect* textureRect = entity->getTile()->getRekt();
-    SDL_Rect* entityRect = entity->getRekt();
-
-    SDL_BlitSurface(texture, textureRect, sdlSurface, entityRect);
-}
-
 void Window::renderText(std::string text) {
 
     TTF_Font* font = TTF_OpenFont("arial.ttf", 20);

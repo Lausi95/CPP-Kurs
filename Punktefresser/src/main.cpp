@@ -1,7 +1,7 @@
-#include <list>
+#include <Entity.h>
 #include <stdafx.h>
 
-#define FRAME_SLEEP_TIME 8
+const int FRAME_SLEEP_TIME = 8;
 
 Texture mainTexture("assets/tiles.png");
 

@@ -1,10 +1,8 @@
 #ifndef HALLOWELT_WINDOW_H
 #define HALLOWELT_WINDOW_H
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-
-#include "Entity.h"
+#include <stdafx.h>
+#include <Entity.h>
 
 // Wrapps a SDL_Window and gives it the ability to renderEntity Entities on its surface.
 class Window {
@@ -13,7 +11,14 @@ public:
     Window(const char *title, int width, int height);
 
     // renders a entity on the surface of the window.
-    void renderEntity(Entity *entity);
+    template <typename T>
+    void renderEntity(T entity) {
+        SDL_Surface* texture = entity->getTile()->getTexture()->getSurface();
+        SDL_Rect* textureRect = entity->getTile()->getRekt();
+        SDL_Rect* entityRect = entity->getRekt();
+
+        SDL_BlitSurface(texture, textureRect, sdlSurface, entityRect);
+    }
 
     //renders text on the surface of the windows
     void renderText(std::string);
