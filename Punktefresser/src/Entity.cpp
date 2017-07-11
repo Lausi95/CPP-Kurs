@@ -7,8 +7,8 @@ Entity::Entity(int x, int y) {
 }
 
 SDL_Rect *Entity::getRekt() {
-    rect.x = (int)x;
-    rect.y = (int)y;
+    rect.x = x;
+    rect.y = y;
     return &rect;
 }
 
@@ -34,10 +34,6 @@ void Entity::setX(int x) {
 
 void Entity::setY(int y) {
     this->y = y;
-}
-
-bool Entity::pointInside(int x, int y) {
-    return x > getLeft() && x < getRight() && y > getTop() && y < getBottom();
 }
 
 int Entity::getX(int divisor) const {
@@ -146,7 +142,7 @@ void Pacman::move(LevelMap &map) {
 
     updateMouthOpenClosedState();
 
-    switch(getDirection()) {
+    switch (getDirection()) {
         case Direction::Up:
             setY(getY() - velocity);
             break;
@@ -163,7 +159,7 @@ void Pacman::move(LevelMap &map) {
 }
 
 void Pacman::updateMouthOpenClosedState() {
-    if(++stepsTaken == 20) {
+    if (++stepsTaken == 20) {
         currentState = oppositePacmanState(currentState);
         stepsTaken = 0;
         setCurrentMouthStateTile();
