@@ -49,12 +49,12 @@ private:
 
 class StaticEntity : public Entity {
 private:
-    Tile* tile;
+    tile_ptr tile;
 
 public:
-    StaticEntity(float x, float y, Tile* tile);
+    StaticEntity(float x, float y, tile_ptr &tile);
 
-    Tile* getTile();
+    tile_ptr getTile();
 
     bool operator ==(const StaticEntity &b) const;
 };
@@ -70,9 +70,6 @@ public:
     // changes the Direction
     void changeDirection(Direction newDirection);
 
-    // event function, gets called, if the direction is changed
-    virtual void directionChanged(Direction direction) = 0;
-
     // lets the entity move in a defined way
     virtual void move(LevelMap &levelMap) = 0;
 };
@@ -84,65 +81,43 @@ enum class PacmanState {
 
 PacmanState oppositePacmanState(PacmanState &pacmanState);
 
-struct PacmanTiles {
-    Tile* lookingUpMouthOpen;
-    Tile* lookingUpMouthClosed;
-
-    Tile* lookingDownMouthOpen;
-    Tile* lookingDownMouthClosed;
-
-    Tile* lookingLeftMouthOpen;
-    Tile* lookingLeftMouthClosed;
-
-    Tile* lookingRightMouthOpen;
-    Tile* lookingRightMouthClosed;
-};
-
 class Pacman : public MovableEntity {
 public:
-    Pacman(float x, float y, PacmanTiles* tiles);
+    Pacman(float x, float y, tile_ptr tiles[]);
 
-    Tile* getTile();
+    tile_ptr getTile();
 
     void setDirectionBuffer(Direction direction);
     void tryApplyDirection(LevelMap& levelMap);
     void move(LevelMap& map);
 
 private:
-    PacmanTiles* tiles;
+    tile_ptr* pacmanTiles;
 
     PacmanState currentState;
-    Tile* currentTile;
-    Tile* currentMouthOpenedTile;
-    Tile* currentMouthClosedTile;
 
     int stepsTaken = 0;
     const int velocity = 4;
     Direction directionBuffer;
 
-    void directionChanged(Direction direction);
+    tile_ptr getTile(Direction direction, PacmanState state);
 
     bool isInDirectionChangableState();
     bool canChangeDirection(LevelMap &levelMap);
     bool shouldChangeDirection(LevelMap &levelMap);
-
-    void setCurrentMouthStateTile();
-
-    void updateMouthStateTilesAccordingToDirection(const Direction &direction);
 
     void updateMouthOpenClosedState();
 };
 
 class Enemy : public MovableEntity {
 public:
-    Enemy(float x, float y, Tile* tile);
+    Enemy(float x, float y, tile_ptr &tile);
 
-    Tile* getTile();
-    void directionChanged(Direction direction);
+    tile_ptr getTile();
     void move(LevelMap &levelMap);
 
 private:
-    Tile* tile;
+    tile_ptr tile;
 };
 
 

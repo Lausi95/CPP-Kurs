@@ -40,11 +40,11 @@ bool Entity::isOnTilePoint() const {
     return this->getX() % Entity::WIDTH == 0 && this->getY() % Entity::HEIGHT == 0;
 }
 
-StaticEntity::StaticEntity(float x, float y, Tile *tile) : Entity(x, y) {
-    this->tile = tile;
+StaticEntity::StaticEntity(float x, float y, tile_ptr  &tile) : Entity(x, y) {
+    this->tile = tile_ptr(tile);
 }
 
-Tile *StaticEntity::getTile() {
+tile_ptr StaticEntity::getTile() {
     return tile;
 }
 
@@ -60,25 +60,21 @@ MovableEntity::MovableEntity(float x, float y, Direction initialDirectiono) : En
 
 void MovableEntity::changeDirection(Direction newDirection) {
     this->currentDirection = newDirection;
-    directionChanged(newDirection);
 }
 
 Direction MovableEntity::getDirection() {
     return this->currentDirection;
 }
 
-Pacman::Pacman(float x, float y, PacmanTiles *tiles) : MovableEntity(x, y, Direction::Right) {
-    this->tiles = tiles;
+Pacman::Pacman(float x, float y, tile_ptr tiles[8]) : MovableEntity(x, y, Direction::Right) {
+    this->pacmanTiles = tiles;
     this->directionBuffer = Direction::Right;
 
     this->currentState = PacmanState::MouthOpen;
-    this->currentTile = tiles->lookingRightMouthOpen;
-    this->currentMouthClosedTile = tiles->lookingRightMouthClosed;
-    this->currentMouthOpenedTile = tiles->lookingRightMouthOpen;
 }
 
-Tile *Pacman::getTile() {
-    return currentTile;
+tile_ptr Pacman::getTile() {
+    return getTile(getDirection(), currentState);
 }
 
 void Pacman::setDirectionBuffer(Direction direction) {
@@ -154,39 +150,11 @@ void Pacman::updateMouthOpenClosedState() {
     if (++stepsTaken == 20) {
         currentState = oppositePacmanState(currentState);
         stepsTaken = 0;
-        setCurrentMouthStateTile();
     }
 }
 
-void Pacman::directionChanged(Direction direction) {
-    updateMouthStateTilesAccordingToDirection(direction);
-    setCurrentMouthStateTile();
-}
-
-void Pacman::updateMouthStateTilesAccordingToDirection(const Direction &direction) {
-    if (direction == Direction::Up) {
-        currentMouthClosedTile = tiles->lookingUpMouthClosed;
-        currentMouthOpenedTile = tiles->lookingUpMouthOpen;
-    }
-    if (direction == Direction::Down) {
-        currentMouthClosedTile = tiles->lookingDownMouthClosed;
-        currentMouthOpenedTile = tiles->lookingDownMouthOpen;
-    }
-    if (direction == Direction::Left) {
-        currentMouthClosedTile = tiles->lookingLeftMouthClosed;
-        currentMouthOpenedTile = tiles->lookingLeftMouthOpen;
-    }
-    if (direction == Direction::Right) {
-        currentMouthClosedTile = tiles->lookingRightMouthClosed;
-        currentMouthOpenedTile = tiles->lookingRightMouthOpen;
-    }
-}
-
-void Pacman::setCurrentMouthStateTile() {
-    if (currentState == PacmanState::MouthClosed)
-        currentTile = currentMouthClosedTile;
-    else
-        currentTile = currentMouthOpenedTile;
+tile_ptr Pacman::getTile(Direction direction, PacmanState state) {
+    return pacmanTiles[(int)direction * 2 + (int)state];
 }
 
 PacmanState oppositePacmanState(PacmanState &pacmanState) {
@@ -197,15 +165,12 @@ PacmanState oppositePacmanState(PacmanState &pacmanState) {
 }
 
 
-Enemy::Enemy(float x, float y, Tile *tile) : MovableEntity(x, y, Direction::Right) {
-    this->tile = tile;
+Enemy::Enemy(float x, float y, tile_ptr &tile) : MovableEntity(x, y, Direction::Right) {
+    this->tile = tile_ptr(tile);
 }
 
-Tile *Enemy::getTile() {
+tile_ptr Enemy::getTile() {
     return tile;
-}
-
-void Enemy::directionChanged(Direction direction) {
 }
 
 void Enemy::move(LevelMap &levelMap) {
