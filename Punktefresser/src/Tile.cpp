@@ -14,9 +14,9 @@ Tile::Tile(texture_ptr texture, int posX, int posY, int width, int height) {
 }
 
 rect_ptr Tile::getRekt() {
-    return rect;
+    return rect_ptr(rect);
 }
 
 texture_ptr Tile::getTexture() {
-    return this->texture;
+    return texture_ptr(texture);
 }

@@ -13,7 +13,7 @@ public:
     // renders a entity on the surface of the window.
     template <typename T>
     void renderEntity(T entity) {
-        SDL_Surface_ptr texture = entity->getTile()->getTexture()->getSurface();
+        surface_ptr texture = entity->getTile()->getTexture()->getSurface();
         rect_ptr textureRect = entity->getTile()->getRekt();
         rect_ptr entityRect = entity->getRekt();
 

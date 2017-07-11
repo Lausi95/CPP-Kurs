@@ -4,7 +4,7 @@
 #include <SDL2/SDL_surface.h>
 #include <memory>
 
-using SDL_Surface_ptr = std::shared_ptr<SDL_Surface>;
+using surface_ptr = std::shared_ptr<SDL_Surface>;
 
 // A Basic class for holding a Texture loaded as a PNG.
 class Texture {
@@ -13,10 +13,10 @@ public:
     Texture(const char *source);
 
     // gets a SDL_Surface pointer to the texure.
-    SDL_Surface_ptr getSurface();
+    surface_ptr getSurface();
 
 private:
-    SDL_Surface_ptr textureSurface;
+    surface_ptr textureSurface;
 };
 
 #endif

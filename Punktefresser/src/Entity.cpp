@@ -7,9 +7,9 @@ Entity::Entity(int x, int y) {
 }
 
 rect_ptr Entity::getRekt() {
-    this->rect->x = this->x;
-    this->rect->y = this->y;
-    return this->rect;
+    rect->x = x;
+    rect->y = y;
+    return rect_ptr(rect);
 }
 
 int Entity::getX() const {
@@ -45,7 +45,7 @@ StaticEntity::StaticEntity(float x, float y, tile_ptr  &tile) : Entity(x, y) {
 }
 
 tile_ptr StaticEntity::getTile() {
-    return tile;
+    return tile_ptr(tile);
 }
 
 bool StaticEntity::operator==(const StaticEntity &b) const {
@@ -74,7 +74,7 @@ Pacman::Pacman(float x, float y, tile_ptr tiles[8]) : MovableEntity(x, y, Direct
 }
 
 tile_ptr Pacman::getTile() {
-    return getTile(getDirection(), currentState);
+    return tile_ptr(getTile(getDirection(), currentState));
 }
 
 void Pacman::setDirectionBuffer(Direction direction) {
@@ -170,7 +170,7 @@ Enemy::Enemy(float x, float y, tile_ptr &tile) : MovableEntity(x, y, Direction::
 }
 
 tile_ptr Enemy::getTile() {
-    return tile;
+    return tile_ptr(tile);
 }
 
 void Enemy::move(LevelMap &levelMap) {

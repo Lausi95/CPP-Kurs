@@ -7,9 +7,9 @@ Texture::Texture(const char *source) {
     ss << "Loading Texture \"" << source << "\"";
     INFO(ss)
 
-    this->textureSurface = SDL_Surface_ptr(IMG_Load(source));
+    this->textureSurface = surface_ptr(IMG_Load(source));
 }
 
-SDL_Surface_ptr Texture::getSurface() {
-    return this->textureSurface;
+surface_ptr Texture::getSurface() {
+    return surface_ptr(textureSurface);
 }
