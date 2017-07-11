@@ -4,8 +4,8 @@
 
 #include "Tile.h"
 
-Tile::Tile(Texture *texture, int posX, int posY, int width, int height) {
-    this->texture = texture;
+Tile::Tile(Texture_SPTR texture, int posX, int posY, int width, int height) {
+    this->texture = Texture_SPTR(texture);
     this->rect.x = posX;
     this->rect.y = posY;
     this->rect.w = width;
@@ -16,6 +16,6 @@ SDL_Rect *Tile::getRekt() {
     return &this->rect;
 }
 
-Texture *Tile::getTexture() {
+Texture_SPTR Tile::getTexture() {
     return this->texture;
 }

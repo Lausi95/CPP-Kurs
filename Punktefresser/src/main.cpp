@@ -3,51 +3,23 @@
 
 const int FRAME_SLEEP_TIME = 8;
 
-Texture mainTexture("assets/tiles.png");
+using Texture_SPTR = std::shared_ptr<Texture>;
 
-Tile tilePlayerLookingTopMouthOpen(&mainTexture, 128+1, 32+1, 32-1, 32-1);
-Tile tilePlayerLookingBotMouthOpen(&mainTexture, 96+1, 32+1, 32-1, 32-1);
-Tile tilePlayerLookingLeftMouthOpen(&mainTexture, 128+1, 0+1, 32-1, 32-1);
-Tile tilePlayerLookingRightMouthOpen(&mainTexture, 96+1, 0+1, 32-1, 32-1);
-
-Tile tilePlayerLookingTopMouthClosed(&mainTexture, 224+1, 32+1, 32-1, 32-1);
-Tile tilePlayerLookingBotMouthClosed(&mainTexture, 192+1, 32+1, 32-1, 32-1);
-Tile tilePlayerLookingLeftMouthClosed(&mainTexture, 224+1, 0+1, 32-1, 32-1);
-Tile tilePlayerLookingRightMouthClosed(&mainTexture, 192+1, 0+1, 32-1, 32-1);
-
-Tile tileEnemy(&mainTexture, 160, 0, 32, 32);
-
-Tile tileFruitBanana(&mainTexture, 0, 64, 32, 32);
-Tile tileFruitPeach(&mainTexture, 32, 64, 32, 32);
-Tile tileFruitGrapes(&mainTexture, 64, 64, 32, 32);
-Tile tileFruitApple(&mainTexture, 96, 64, 32, 32);
-Tile tileFruitMelon(&mainTexture, 128, 64, 32, 32);
-Tile tileFruitPineapple(&mainTexture, 160, 64, 32, 32);
-Tile fruitTiles[] = {tileFruitBanana, tileFruitPeach, tileFruitGrapes, tileFruitApple, tileFruitMelon, tileFruitPineapple};
-
-Tile tileWall(&mainTexture, 0, 0, 32, 32);
-
-Tile tilePoint(&mainTexture, 64, 0, 32, 32);
-Tile tileNormalBackground(&mainTexture, 64, 32, 32, 32);
-
-PacmanTiles pacmanTiles = {
-        &tilePlayerLookingTopMouthOpen,
-        &tilePlayerLookingTopMouthClosed,
-        &tilePlayerLookingBotMouthOpen,
-        &tilePlayerLookingBotMouthClosed,
-        &tilePlayerLookingLeftMouthOpen,
-        &tilePlayerLookingLeftMouthClosed,
-        &tilePlayerLookingRightMouthOpen,
-        &tilePlayerLookingRightMouthClosed
+enum Tiles {
+    TILE_WALL,
+    TILE_POINT,
+    TILE_NORMAL_BACKGROUND,
+    TILE_ENEMY
 };
 
-Pacman pacman(0, 0, &pacmanTiles);
+void initializeEntities(Tile* tilemap,
+                        Tile* fruitTiles,
+                        LevelMap &levelMap,
+                        std::list<StaticEntity> &environment,
+                        std::list<StaticEntity> &fruits,
+                        std::list<Enemy> &enemies,
+                        Pacman &pacman) {
 
-std::list<Enemy> enemies;
-std::list<StaticEntity> fruits;
-std::list<StaticEntity> environment;
-
-void initializeEntities(LevelMap levelMap) {
     for(int row = 0; row < levelMap.getRowCount(); row++) {
         for(int column = 0; column < levelMap.getColumnCount(); column++) {
             int x = Entity::WIDTH * column;
@@ -55,27 +27,27 @@ void initializeEntities(LevelMap levelMap) {
 
             switch(levelMap(column, row)) {
                 case Field::FloorWithPoint:
-                    environment.push_back(StaticEntity(x, y, &tilePoint));
+                    environment.push_back(StaticEntity(x, y, &tilemap[Tiles::TILE_POINT]));
                     break;
                 case Field::Floor:
-                    environment.push_back(StaticEntity(x, y, &tileNormalBackground));
+                    environment.push_back(StaticEntity(x, y, &tilemap[Tiles::TILE_NORMAL_BACKGROUND]));
                     break;
                 case Field::Wall:
-                    environment.push_back(StaticEntity(x, y, &tileWall));
+                    environment.push_back(StaticEntity(x, y, &tilemap[Tiles::TILE_WALL]));
                     break;
                 case Field::Fruit:
                     fruits.push_back(StaticEntity(x, y, &fruitTiles[rand() % 6]));
-                    environment.push_back(StaticEntity(x, y, &tileNormalBackground));
+                    environment.push_back(StaticEntity(x, y, &tilemap[Tiles::TILE_NORMAL_BACKGROUND]));
                     break;
                 case Field::Player:
                     pacman.setX(x);
                     pacman.setY(y);
-                    environment.push_back(StaticEntity(x, y, &tileNormalBackground));
+                    environment.push_back(StaticEntity(x, y, &tilemap[Tiles::TILE_NORMAL_BACKGROUND]));
                     levelMap.setField(column, row, Field::FloorWithPoint);
                     break;
                 case Field::Enemy:
-                    environment.push_back(StaticEntity(x, y, &tileNormalBackground));
-                    enemies.push_back(Enemy(x, y, &tileEnemy));
+                    environment.push_back(StaticEntity(x, y, &tilemap[Tiles::TILE_NORMAL_BACKGROUND]));
+                    enemies.push_back(Enemy(x, y, &tilemap[Tiles::TILE_ENEMY]));
                     levelMap.setField(column, row, Field::FloorWithPoint);
                     break;
             }
@@ -84,13 +56,48 @@ void initializeEntities(LevelMap levelMap) {
 }
 
 int main(int argc, char** argv) {
+    Texture_SPTR texture(new Texture("assets/tiles.png"));
+
+    Tile tilemap[] = {
+            Tile(texture, 0, 0, 32, 32),
+            Tile(texture, 64, 0, 32, 32),
+            Tile(texture, 64, 32, 32, 32),
+            Tile(texture, 160, 0, 32, 32)
+    };
+
+    Tile fruitTiles[] = {
+            Tile(texture, 0, 64, 32, 32),
+            Tile(texture, 32, 64, 32, 32),
+            Tile(texture, 64, 64, 32, 32),
+            Tile(texture, 96, 64, 32, 32),
+            Tile(texture, 128, 64, 32, 32),
+            Tile(texture, 160, 64, 32, 32)
+    };
+
+    PacmanTiles pacmanTiles = {
+            new Tile(texture, 128+1, 32+1, 32-1, 32-1),
+            new Tile(texture, 96+1, 32+1, 32-1, 32-1),
+            new Tile(texture, 128+1, 0+1, 32-1, 32-1),
+            new Tile(texture, 96+1, 0+1, 32-1, 32-1),
+
+            new Tile(texture, 224+1, 32+1, 32-1, 32-1),
+            new Tile(texture, 192+1, 32+1, 32-1, 32-1),
+            new Tile(texture, 192+1, 0+1, 32-1, 32-1),
+            new Tile(texture, 224+1, 0+1, 32-1, 32-1)
+    };
+
+    Pacman pacman(0, 0, &pacmanTiles);
+    std::list<Enemy> enemies;
+    std::list<StaticEntity> fruits;
+    std::list<StaticEntity> environment;
+
     srand (time(NULL));
 
     // load level
     LevelMap levelMap = LevelMap::load("levels/default.lvl");
 
     // initialize entities
-    initializeEntities(levelMap);
+    initializeEntities(tilemap, fruitTiles, levelMap, environment, fruits, enemies, pacman);
 
     // initialize window
     int levelWidth = levelMap.getColumnCount() * Entity::WIDTH;
@@ -114,7 +121,6 @@ int main(int argc, char** argv) {
 
         // input
         while (inputHandler.pollEvent()) {
-
             if (inputHandler.isKeyPressed(SDLK_w)) {
                 pacman.setDirectionBuffer(Direction::Up);
             }
@@ -142,7 +148,7 @@ int main(int argc, char** argv) {
             for (StaticEntity entity : environment) {
                 if (entity.getX() == pacman.getX() && entity.getY() == pacman.getY()) {
                     environment.remove(entity);
-                    environment.push_back(StaticEntity(pacman.getX(), pacman.getY(), &tileNormalBackground));
+                    environment.push_back(StaticEntity(pacman.getX(), pacman.getY(), &tilemap[Tiles::TILE_NORMAL_BACKGROUND]));
                 }
             }
         }

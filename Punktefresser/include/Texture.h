@@ -1,8 +1,8 @@
 #ifndef HALLOWELT_TEXTURE_H
 #define HALLOWELT_TEXTURE_H
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
+
+#include <SDL2/SDL_surface.h>
 
 // A Basic class for holding a Texture loaded as a PNG.
 class Texture {
@@ -16,6 +16,5 @@ public:
 private:
     SDL_Surface *textureSurface;
 };
-
 
 #endif

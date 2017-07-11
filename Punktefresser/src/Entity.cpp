@@ -117,7 +117,7 @@ void Pacman::move(LevelMap &map) {
 
         if (map(xw, yw) == Field::FloorWithPoint) {
             map.setField(xw, yw, Field::Floor);
-            INFO("Collected Point")
+            INFO("Collected TILE_POINT")
             // TODO: add point to scoreboard
         }
         if (map(xw, yw) == Field::Fruit) {

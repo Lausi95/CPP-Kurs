@@ -1,8 +1,7 @@
 #ifndef HALLOWELT_ENTITY_H
 #define HALLOWELT_ENTITY_H
 
-#include "Tile.h"
-#include "LevelMap.h"
+#include <stdafx.h>
 
 // A Entity is a renderable Objekt. It has a Position and dimension.
 // The dimension is equal to the tile that is renderd with the Entity.
