@@ -1,9 +1,6 @@
 #ifndef HALLOWELT_ENTITY_H
 #define HALLOWELT_ENTITY_H
 
-#define TILE_WIDTH 32
-#define TILE_HEIGHT 32
-
 #include "Tile.h"
 #include "LevelMap.h"
 
@@ -11,6 +8,9 @@
 // The dimension is equal to the tile that is renderd with the Entity.
 class Entity {
 public:
+    static const int WIDTH = 32;
+    static const int HEIGHT = 32;
+
     // Created a new entity with a position.
     Entity(int x, int y);
 
@@ -19,12 +19,6 @@ public:
 
     // gets the renderEntity rectangle of the entity.
     SDL_Rect* getRekt();
-
-    // gets the width of the entity.
-    int getWidth();
-
-    // gets the height of the entity.
-    int getHeight();
 
     // gets the x-Position of the entity.
     int getX() const;

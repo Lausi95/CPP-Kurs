@@ -12,14 +12,6 @@ SDL_Rect *Entity::getRekt() {
     return &rect;
 }
 
-int Entity::getWidth() {
-    return getTile()->getRekt()->w;
-}
-
-int Entity::getHeight() {
-    return getTile()->getRekt()->h;
-}
-
 int Entity::getX() const {
     return x;
 }
@@ -45,7 +37,7 @@ int Entity::getY(int divisor) const {
 }
 
 bool Entity::isOnTilePoint() const {
-    return getX() % TILE_WIDTH == 0 && getY() % TILE_HEIGHT == 0;
+    return getX() % WIDTH == 0 && getY() % HEIGHT == 0;
 }
 
 StaticEntity::StaticEntity(float x, float y, Tile *tile) : Entity(x, y) {
@@ -120,8 +112,8 @@ bool Pacman::canChangeDirection(LevelMap &levelMap) {
 void Pacman::move(LevelMap &map) {
 
     if (isOnTilePoint()) {
-        int xw = getX(TILE_WIDTH);
-        int yw = getY(TILE_HEIGHT);
+        int xw = getX(WIDTH);
+        int yw = getY(HEIGHT);
 
         if (map(xw, yw) == Field::FloorWithPoint) {
             map.setField(xw, yw, Field::Floor);

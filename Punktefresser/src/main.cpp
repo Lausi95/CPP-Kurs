@@ -50,8 +50,8 @@ std::list<StaticEntity> environment;
 void initializeEntities(LevelMap levelMap) {
     for(int row = 0; row < levelMap.getRowCount(); row++) {
         for(int column = 0; column < levelMap.getColumnCount(); column++) {
-            int x = TILE_WIDTH * column;
-            int y = TILE_HEIGHT * row;
+            int x = Entity::WIDTH * column;
+            int y = Entity::HEIGHT * row;
 
             switch(levelMap(column, row)) {
                 case Field::FloorWithPoint:
@@ -93,8 +93,8 @@ int main(int argc, char** argv) {
     initializeEntities(levelMap);
 
     // initialize window
-    int levelWidth = levelMap.getColumnCount() * TILE_WIDTH;
-    int levelHeigth = levelMap.getRowCount() * TILE_HEIGHT;
+    int levelWidth = levelMap.getColumnCount() * Entity::WIDTH;
+    int levelHeigth = levelMap.getRowCount() * Entity::HEIGHT;
     Window window("Punktefresser", levelWidth, levelHeigth);
 
     // initialize input handler
