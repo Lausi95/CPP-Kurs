@@ -146,7 +146,7 @@ int main(int argc, char** argv) {
 
         if (pacman->getX() % 32 == 0 && pacman->getY() % 32 == 0) {
             for (entity_ptr entity : environment) {
-                if (entity->getX() == pacman->getX() && entity->getY() == pacman->getY()) {
+                if (entity->getX() == pacman->getX() && entity->getY() == pacman->getY() && levelMap(pacman->getX(32), pacman->getY(32)) == Field::FloorWithPoint) {
                     environment.remove(entity);
                     environment.push_back(std::make_shared<StaticEntity>(pacman->getX(), pacman->getY(), environmentTiles[Tiles::TILE_BACKGROUND]));
                 }
