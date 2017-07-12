@@ -23,14 +23,7 @@ public:
     // updates the window to display the rendered surface.
     void update();
 
-    // gets the width of the window.
-    int getWidth();
-
-    // gets the height of the window.
-    int getHeight();
-
 private:
-    const char* title;
     int width;
     int height;
 

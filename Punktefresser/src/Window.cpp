@@ -3,10 +3,6 @@
 bool sdlInitialized = false;
 
 Window::Window(const char *title, int width, int height) {
-    this->title = title;
-    this->width = width;
-    this->height = height;
-
     if (!sdlInitialized) {
         INFO("Initializing SDL")
         SDL_Init(SDL_INIT_VIDEO);
@@ -16,10 +12,10 @@ Window::Window(const char *title, int width, int height) {
     }
 
     INFO("Creating SDL Window")
-    this->sdlWindow = SDL_CreateWindow(this->title, 200, 200, this->width, this->height, SDL_WINDOW_SHOWN);
+    sdlWindow = SDL_CreateWindow(title, 200, 200, width, height, SDL_WINDOW_SHOWN);
 
     INFO("Getting Surface from Window")
-    this->sdlSurface = SDL_GetWindowSurface(this->sdlWindow);
+    sdlSurface = SDL_GetWindowSurface(this->sdlWindow);
 }
 
 Window::~Window() {
@@ -27,7 +23,7 @@ Window::~Window() {
 }
 
 void Window::update() {
-    SDL_UpdateWindowSurface(this->sdlWindow);
+    SDL_UpdateWindowSurface(sdlWindow);
 }
 
 void Window::renderText(std::string text) {
@@ -47,14 +43,6 @@ void Window::renderText(std::string text) {
     SDL_BlitSurface(surfaceMessage, &message_rect, sdlSurface, &message_rect);
 
     TTF_CloseFont(font);
-}
-
-int Window::getWidth() {
-    return this->width;
-}
-
-int Window::getHeight() {
-    return this->height;
 }
 
 void Window::renderEntity(entity_ptr entity) {
