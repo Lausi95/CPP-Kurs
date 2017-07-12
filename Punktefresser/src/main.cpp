@@ -151,6 +151,12 @@ int main(int argc, char** argv) {
                     environment.push_back(std::make_shared<StaticEntity>(pacman->getX(), pacman->getY(), environmentTiles[Tiles::TILE_BACKGROUND]));
                 }
             }
+
+            for (entity_ptr fruit : fruits) {
+                if (pacman->getX() == fruit->getX() && pacman->getY() == fruit->getY()) {
+                    fruit->hide();
+                }
+            }
         }
 
         window.update();

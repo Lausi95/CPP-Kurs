@@ -46,9 +46,11 @@ void Window::renderText(std::string text) {
 }
 
 void Window::renderEntity(entity_ptr entity) {
-    surface_ptr texture = entity->getTile()->getTexture()->getSurface();
-    rect_ptr textureRect = entity->getTile()->getRekt();
-    rect_ptr entityRect = entity->getRekt();
+    if (entity->isVisible()) {
+        surface_ptr texture = entity->getTile()->getTexture()->getSurface();
+        rect_ptr textureRect = entity->getTile()->getRekt();
+        rect_ptr entityRect = entity->getRekt();
 
-    SDL_BlitSurface(texture.get(), textureRect.get(), sdlSurface, entityRect.get());
+        SDL_BlitSurface(texture.get(), textureRect.get(), sdlSurface, entityRect.get());
+    }
 }

@@ -40,6 +40,18 @@ bool Entity::isOnTilePoint() const {
     return this->getX() % Entity::WIDTH == 0 && this->getY() % Entity::HEIGHT == 0;
 }
 
+bool Entity::isVisible() {
+    return this->visible;
+}
+
+void Entity::hide() {
+    visible = false;
+}
+
+void Entity::show() {
+    visible = true;
+}
+
 StaticEntity::StaticEntity(float x, float y, tile_ptr  &tile) : Entity(x, y) {
     this->tile = tile_ptr(tile);
 }

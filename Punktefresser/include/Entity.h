@@ -41,11 +41,16 @@ public:
     bool isOnTilePoint() const;
     virtual tile_ptr getTile() = 0;
 
+    bool isVisible();
+    void hide();
+    void show();
+
 private:
     rect_ptr rect;
 
     int x;
     int y;
+    bool visible = true;
 };
 
 class StaticEntity : public Entity {
