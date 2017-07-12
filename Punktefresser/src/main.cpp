@@ -8,12 +8,12 @@ using texture_ptr = std::shared_ptr<Texture>;
 enum Tiles {
     TILE_WALL,
     TILE_POINT,
-    TILE_NORMAL_BACKGROUND,
+    TILE_BACKGROUND,
     TILE_ENEMY
 };
 
-void initializeEntities(tile_ptr* tilemap,
-                        tile_ptr* fruitTiles,
+void initializeEntities(tile_ptr envirionomentTiles[4],
+                        tile_ptr fruitTiles[6],
                         LevelMap &levelMap,
                         std::list<StaticEntity> &environment,
                         std::list<StaticEntity> &fruits,
@@ -27,27 +27,27 @@ void initializeEntities(tile_ptr* tilemap,
 
             switch(levelMap(column, row)) {
                 case Field::FloorWithPoint:
-                    environment.push_back(StaticEntity(x, y, tilemap[Tiles::TILE_POINT]));
+                    environment.push_back(StaticEntity(x, y, envirionomentTiles[Tiles::TILE_POINT]));
                     break;
                 case Field::Floor:
-                    environment.push_back(StaticEntity(x, y, tilemap[Tiles::TILE_NORMAL_BACKGROUND]));
+                    environment.push_back(StaticEntity(x, y, envirionomentTiles[Tiles::TILE_BACKGROUND]));
                     break;
                 case Field::Wall:
-                    environment.push_back(StaticEntity(x, y, tilemap[Tiles::TILE_WALL]));
+                    environment.push_back(StaticEntity(x, y, envirionomentTiles[Tiles::TILE_WALL]));
                     break;
                 case Field::Fruit:
                     fruits.push_back(StaticEntity(x, y, fruitTiles[rand() % 6]));
-                    environment.push_back(StaticEntity(x, y, tilemap[Tiles::TILE_NORMAL_BACKGROUND]));
+                    environment.push_back(StaticEntity(x, y, envirionomentTiles[Tiles::TILE_BACKGROUND]));
                     break;
                 case Field::Player:
                     pacman.setX(x);
                     pacman.setY(y);
-                    environment.push_back(StaticEntity(x, y, tilemap[Tiles::TILE_NORMAL_BACKGROUND]));
+                    environment.push_back(StaticEntity(x, y, envirionomentTiles[Tiles::TILE_BACKGROUND]));
                     levelMap.setField(column, row, Field::FloorWithPoint);
                     break;
                 case Field::Enemy:
-                    environment.push_back(StaticEntity(x, y, tilemap[Tiles::TILE_NORMAL_BACKGROUND]));
-                    enemies.push_back(Enemy(x, y, tilemap[Tiles::TILE_ENEMY]));
+                    environment.push_back(StaticEntity(x, y, envirionomentTiles[Tiles::TILE_BACKGROUND]));
+                    enemies.push_back(Enemy(x, y, envirionomentTiles[Tiles::TILE_ENEMY]));
                     levelMap.setField(column, row, Field::FloorWithPoint);
                     break;
             }
@@ -58,7 +58,7 @@ void initializeEntities(tile_ptr* tilemap,
 int main(int argc, char** argv) {
     texture_ptr texture(new Texture("assets/tiles.png"));
 
-    tile_ptr tilemap[] = {
+    tile_ptr environmentTiles[] = {
             tile_ptr(new Tile(texture, 0, 0, 32, 32)),
             tile_ptr(new Tile(texture, 64, 0, 32, 32)),
             tile_ptr(new Tile(texture, 64, 32, 32, 32)),
@@ -96,7 +96,7 @@ int main(int argc, char** argv) {
     LevelMap levelMap = LevelMap::load("levels/default.lvl");
 
     // initialize entities
-    initializeEntities(tilemap, fruitTiles, levelMap, environment, fruits, enemies, pacman);
+    initializeEntities(environmentTiles, fruitTiles, levelMap, environment, fruits, enemies, pacman);
 
     // initialize window
     int levelWidth = levelMap.getColumnCount() * Entity::WIDTH;
@@ -147,7 +147,7 @@ int main(int argc, char** argv) {
             for (StaticEntity entity : environment) {
                 if (entity.getX() == pacman.getX() && entity.getY() == pacman.getY()) {
                     environment.remove(entity);
-                    environment.push_back(StaticEntity(pacman.getX(), pacman.getY(), tilemap[Tiles::TILE_NORMAL_BACKGROUND]));
+                    environment.push_back(StaticEntity(pacman.getX(), pacman.getY(), environmentTiles[Tiles::TILE_BACKGROUND]));
                 }
             }
         }
