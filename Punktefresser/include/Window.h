@@ -12,6 +12,8 @@ public:
     // creates a new Window with a title and a width and a height.
     Window(const char *title, int width, int height);
 
+    ~Window();
+
     // renders a entity on the surface of the window.
     void renderEntity(entity_ptr entity);
 

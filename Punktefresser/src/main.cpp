@@ -57,7 +57,7 @@ void initializeEntities(std::array<tile_ptr , 4> environmentTiles,
 }
 
 int main(int argc, char** argv) {
-    texture_ptr texture(new Texture("assets/tiles.png"));
+    texture_ptr texture = std::make_shared<Texture>("assets/tiles.png");
 
     std::array<tile_ptr, 4> environmentTiles({
             std::make_shared<Tile>(texture, 0, 0, 32, 32),
