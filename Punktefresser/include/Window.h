@@ -4,6 +4,8 @@
 #include <stdafx.h>
 #include <Entity.h>
 
+using entity_ptr = std::shared_ptr<Entity>;
+
 // Wrapps a SDL_Window and gives it the ability to renderEntity Entities on its surface.
 class Window {
 public:
@@ -11,14 +13,7 @@ public:
     Window(const char *title, int width, int height);
 
     // renders a entity on the surface of the window.
-    template <typename T>
-    void renderEntity(T entity) {
-        surface_ptr texture = entity->getTile()->getTexture()->getSurface();
-        rect_ptr textureRect = entity->getTile()->getRekt();
-        rect_ptr entityRect = entity->getRekt();
-
-        SDL_BlitSurface(texture.get(), textureRect.get(), sdlSurface, entityRect.get());
-    }
+    void renderEntity(entity_ptr entity);
 
     //renders text on the surface of the windows
     void renderText(std::string);

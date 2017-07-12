@@ -56,3 +56,11 @@ int Window::getWidth() {
 int Window::getHeight() {
     return this->height;
 }
+
+void Window::renderEntity(entity_ptr entity) {
+    surface_ptr texture = entity->getTile()->getTexture()->getSurface();
+    rect_ptr textureRect = entity->getTile()->getRekt();
+    rect_ptr entityRect = entity->getRekt();
+
+    SDL_BlitSurface(texture.get(), textureRect.get(), sdlSurface, entityRect.get());
+}

@@ -39,6 +39,7 @@ public:
     void setY(int y);
 
     bool isOnTilePoint() const;
+    virtual tile_ptr getTile() = 0;
 
 private:
     rect_ptr rect;
@@ -83,7 +84,7 @@ PacmanState oppositePacmanState(PacmanState &pacmanState);
 
 class Pacman : public MovableEntity {
 public:
-    Pacman(float x, float y, tile_ptr tiles[]);
+    Pacman(float x, float y, std::array<tile_ptr, 8> tiles);
 
     tile_ptr getTile();
 
@@ -92,7 +93,7 @@ public:
     void move(LevelMap& map);
 
 private:
-    tile_ptr* pacmanTiles;
+    std::array<tile_ptr, 8> pacmanTiles;
 
     PacmanState currentState;
 

@@ -66,8 +66,8 @@ Direction MovableEntity::getDirection() {
     return this->currentDirection;
 }
 
-Pacman::Pacman(float x, float y, tile_ptr tiles[8]) : MovableEntity(x, y, Direction::Right) {
-    this->pacmanTiles = tiles;
+Pacman::Pacman(float x, float y, std::array<tile_ptr, 8> tiles) : MovableEntity(x, y, Direction::Right) {
+    this->pacmanTiles = std::move(tiles);
     this->directionBuffer = Direction::Right;
 
     this->currentState = PacmanState::MouthOpen;

@@ -4,6 +4,7 @@
 const int FRAME_SLEEP_TIME = 8;
 
 using texture_ptr = std::shared_ptr<Texture>;
+using pacman_ptr  = std::shared_ptr<Pacman>;
 
 enum Tiles {
     TILE_WALL,
@@ -12,13 +13,13 @@ enum Tiles {
     TILE_ENEMY
 };
 
-void initializeEntities(tile_ptr envirionomentTiles[4],
-                        tile_ptr fruitTiles[6],
+void initializeEntities(std::array<tile_ptr , 4> environmentTiles,
+                        std::array<tile_ptr , 6> fruitTiles,
                         LevelMap &levelMap,
-                        std::list<StaticEntity> &environment,
-                        std::list<StaticEntity> &fruits,
-                        std::list<Enemy> &enemies,
-                        Pacman &pacman) {
+                        std::list<entity_ptr> &environment,
+                        std::list<entity_ptr> &fruits,
+                        std::list<entity_ptr> &enemies,
+                        pacman_ptr pacman) {
 
     for(int row = 0; row < levelMap.getRowCount(); row++) {
         for(int column = 0; column < levelMap.getColumnCount(); column++) {
@@ -27,27 +28,27 @@ void initializeEntities(tile_ptr envirionomentTiles[4],
 
             switch(levelMap(column, row)) {
                 case Field::FloorWithPoint:
-                    environment.push_back(StaticEntity(x, y, envirionomentTiles[Tiles::TILE_POINT]));
+                    environment.push_back(std::make_shared<StaticEntity>(StaticEntity(x, y, environmentTiles[TILE_POINT])));
                     break;
                 case Field::Floor:
-                    environment.push_back(StaticEntity(x, y, envirionomentTiles[Tiles::TILE_BACKGROUND]));
+                    environment.push_back(std::make_shared<StaticEntity>(x, y, environmentTiles[TILE_BACKGROUND]));
                     break;
                 case Field::Wall:
-                    environment.push_back(StaticEntity(x, y, envirionomentTiles[Tiles::TILE_WALL]));
+                    environment.push_back(std::make_shared<StaticEntity>(x, y, environmentTiles[TILE_WALL]));
                     break;
                 case Field::Fruit:
-                    fruits.push_back(StaticEntity(x, y, fruitTiles[rand() % 6]));
-                    environment.push_back(StaticEntity(x, y, envirionomentTiles[Tiles::TILE_BACKGROUND]));
+                    fruits.push_back(std::make_shared<StaticEntity>(x, y, fruitTiles[rand() % 6]));
+                    environment.push_back(std::make_shared<StaticEntity>(x, y, environmentTiles[TILE_BACKGROUND]));
                     break;
                 case Field::Player:
-                    pacman.setX(x);
-                    pacman.setY(y);
-                    environment.push_back(StaticEntity(x, y, envirionomentTiles[Tiles::TILE_BACKGROUND]));
+                    pacman->setX(x);
+                    pacman->setY(y);
+                    environment.push_back(std::make_shared<StaticEntity>(x, y, environmentTiles[TILE_BACKGROUND]));
                     levelMap.setField(column, row, Field::FloorWithPoint);
                     break;
                 case Field::Enemy:
-                    environment.push_back(StaticEntity(x, y, envirionomentTiles[Tiles::TILE_BACKGROUND]));
-                    enemies.push_back(Enemy(x, y, envirionomentTiles[Tiles::TILE_ENEMY]));
+                    environment.push_back(std::make_shared<StaticEntity>(x, y, environmentTiles[TILE_BACKGROUND]));
+                    enemies.push_back(std::make_shared<Enemy>(x, y, environmentTiles[TILE_ENEMY]));
                     levelMap.setField(column, row, Field::FloorWithPoint);
                     break;
             }
@@ -58,37 +59,37 @@ void initializeEntities(tile_ptr envirionomentTiles[4],
 int main(int argc, char** argv) {
     texture_ptr texture(new Texture("assets/tiles.png"));
 
-    tile_ptr environmentTiles[] = {
-            tile_ptr(new Tile(texture, 0, 0, 32, 32)),
-            tile_ptr(new Tile(texture, 64, 0, 32, 32)),
-            tile_ptr(new Tile(texture, 64, 32, 32, 32)),
-            tile_ptr(new Tile(texture, 160, 0, 32, 32))
-    };
+    std::array<tile_ptr, 4> environmentTiles({
+            std::make_shared<Tile>(texture, 0, 0, 32, 32),
+            std::make_shared<Tile>(texture, 64, 0, 32, 32),
+            std::make_shared<Tile>(texture, 64, 32, 32, 32),
+            std::make_shared<Tile>(texture, 160, 0, 32, 32)
+    });
 
-    tile_ptr fruitTiles[] = {
-            tile_ptr(new Tile(texture, 0, 64, 32, 32)),
-            tile_ptr(new Tile(texture, 32, 64, 32, 32)),
-            tile_ptr(new Tile(texture, 64, 64, 32, 32)),
-            tile_ptr(new Tile(texture, 96, 64, 32, 32)),
-            tile_ptr(new Tile(texture, 128, 64, 32, 32)),
-            tile_ptr(new Tile(texture, 160, 64, 32, 32))
-    };
+    std::array<tile_ptr, 6> fruitTiles({
+            std::make_shared<Tile>(texture, 0, 64, 32, 32),
+            std::make_shared<Tile>(texture, 32, 64, 32, 32),
+            std::make_shared<Tile>(texture, 64, 64, 32, 32),
+            std::make_shared<Tile>(texture, 96, 64, 32, 32),
+            std::make_shared<Tile>(texture, 128, 64, 32, 32),
+            std::make_shared<Tile>(texture, 160, 64, 32, 32)
+    });
 
-    tile_ptr pacmanTiles[] = {
-            tile_ptr(new Tile(texture, 128+1, 32+1, 32-1, 32-1)),
-            tile_ptr(new Tile(texture, 224+1, 32+1, 32-1, 32-1)),
-            tile_ptr(new Tile(texture,  96+1, 32+1, 32-1, 32-1)),
-            tile_ptr(new Tile(texture, 192+1, 32+1, 32-1, 32-1)),
-            tile_ptr(new Tile(texture, 128+1,  0+1, 32-1, 32-1)),
-            tile_ptr(new Tile(texture, 224+1,  0+1, 32-1, 32-1)),
-            tile_ptr(new Tile(texture,  96+1,  0+1, 32-1, 32-1)),
-            tile_ptr(new Tile(texture, 192+1,  0+1, 32-1, 32-1)),
-    };
+    std::array<tile_ptr, 8> pacmanTiles({
+            std::make_shared<Tile>(texture, 128 + 1, 32 + 1, 32 - 1, 32 - 1),
+            std::make_shared<Tile>(texture, 224 + 1, 32 + 1, 32 - 1, 32 - 1),
+            std::make_shared<Tile>(texture, 96 + 1, 32 + 1, 32 - 1, 32 - 1),
+            std::make_shared<Tile>(texture, 192 + 1, 32 + 1, 32 - 1, 32 - 1),
+            std::make_shared<Tile>(texture, 128 + 1, 0 + 1, 32 - 1, 32 - 1),
+            std::make_shared<Tile>(texture, 224 + 1, 0 + 1, 32 - 1, 32 - 1),
+            std::make_shared<Tile>(texture, 96 + 1, 0 + 1, 32 - 1, 32 - 1),
+            std::make_shared<Tile>(texture, 192 + 1, 0 + 1, 32 - 1, 32 - 1)
+    });
 
-    Pacman pacman(0, 0, pacmanTiles);
-    std::list<Enemy> enemies;
-    std::list<StaticEntity> fruits;
-    std::list<StaticEntity> environment;
+    pacman_ptr pacman = std::make_shared<Pacman>(0, 0, pacmanTiles);
+    std::list<entity_ptr> enemies;
+    std::list<entity_ptr> fruits;
+    std::list<entity_ptr> environment;
 
     srand (time(NULL));
 
@@ -110,27 +111,27 @@ int main(int argc, char** argv) {
 
     while (running) {
         // render
-        for (StaticEntity entity : environment)
-            window.renderEntity(&entity);
-        for (StaticEntity fruit : fruits)
-            window.renderEntity(&fruit);
-        for (Enemy entity : enemies)
-            window.renderEntity(&entity);
-        window.renderEntity(&pacman);
+        for (entity_ptr entity : environment)
+            window.renderEntity(entity);
+        for (entity_ptr fruit : fruits)
+            window.renderEntity(fruit);
+        for (entity_ptr entity : enemies)
+            window.renderEntity(entity);
+        window.renderEntity(pacman);
 
         // input
         while (inputHandler.pollEvent()) {
             if (inputHandler.isKeyPressed(SDLK_w)) {
-                pacman.setDirectionBuffer(Direction::Up);
+                pacman->setDirectionBuffer(Direction::Up);
             }
             if (inputHandler.isKeyPressed(SDLK_s)) {
-                pacman.setDirectionBuffer(Direction::Down);
+                pacman->setDirectionBuffer(Direction::Down);
             }
             if (inputHandler.isKeyPressed(SDLK_a)) {
-                pacman.setDirectionBuffer(Direction::Left);
+                pacman->setDirectionBuffer(Direction::Left);
             }
             if (inputHandler.isKeyPressed(SDLK_d)) {
-                pacman.setDirectionBuffer(Direction::Right);
+                pacman->setDirectionBuffer(Direction::Right);
             }
 
             if (inputHandler.isQuitEvent()) {
@@ -140,14 +141,14 @@ int main(int argc, char** argv) {
         }
 
         // update
-        pacman.tryApplyDirection(levelMap);
-        pacman.move(levelMap);
+        pacman->tryApplyDirection(levelMap);
+        pacman->move(levelMap);
 
-        if (pacman.getX() % 32 == 0 && pacman.getY() % 32 == 0) {
-            for (StaticEntity entity : environment) {
-                if (entity.getX() == pacman.getX() && entity.getY() == pacman.getY()) {
+        if (pacman->getX() % 32 == 0 && pacman->getY() % 32 == 0) {
+            for (entity_ptr entity : environment) {
+                if (entity->getX() == pacman->getX() && entity->getY() == pacman->getY()) {
                     environment.remove(entity);
-                    environment.push_back(StaticEntity(pacman.getX(), pacman.getY(), environmentTiles[Tiles::TILE_BACKGROUND]));
+                    environment.push_back(std::make_shared<StaticEntity>(pacman->getX(), pacman->getY(), environmentTiles[Tiles::TILE_BACKGROUND]));
                 }
             }
         }
