@@ -107,7 +107,11 @@ private:
     bool canChangeDirection(LevelMap &levelMap);
     bool shouldChangeDirection(LevelMap &levelMap);
 
-    void updateMouthOpenClosedState();
+    void handleMouthOpenClosedState();
+
+    void handleRebounce(LevelMap &map);
+
+    void handleMovement();
 };
 
 class Enemy : public MovableEntity {

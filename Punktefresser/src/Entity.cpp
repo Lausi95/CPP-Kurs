@@ -106,30 +106,26 @@ bool Pacman::canChangeDirection(LevelMap &levelMap) {
 }
 
 void Pacman::move(LevelMap &map) {
+    handleRebounce(map);
+    handleMouthOpenClosedState();
+    handleMovement();
+}
 
-    if (isOnTilePoint()) {
-        int xw = getX(WIDTH);
-        int yw = getY(HEIGHT);
-
-        if (map(xw, yw) == Field::FloorWithPoint) {
-            map.setField(xw, yw, Field::Floor);
-            INFO("Collected TILE_POINT")
-            // TODO: add point to scoreboard
-        }
-        if (map(xw, yw) == Field::Fruit) {
-            map.setField(xw, yw, Field::Floor);
-            INFO("Collected Fruit")
-            // TODO: add fruit "buff"? or additional Points?
-        }
-
-        if (map.nextField(xw, yw, getDirection()) == Field::Wall) {
-            changeDirection(oppositeDirection(getDirection()));
-            directionBuffer = getDirection();
-        }
+void Pacman::handleRebounce(LevelMap &map) {
+    if (isOnTilePoint() && map.nextField(getX(WIDTH), getY(HEIGHT), getDirection()) == Field::Wall) {
+        changeDirection(oppositeDirection(getDirection()));
+        directionBuffer = getDirection();
     }
+}
 
-    updateMouthOpenClosedState();
+void Pacman::handleMouthOpenClosedState() {
+    if (++stepsTaken == 20) {
+        currentState = oppositePacmanState(currentState);
+        stepsTaken = 0;
+    }
+}
 
+void Pacman::handleMovement() {
     switch (getDirection()) {
         case Direction::Up:
             setY(getY() - velocity);
@@ -143,13 +139,6 @@ void Pacman::move(LevelMap &map) {
         case Direction::Right:
             setX(getX() + velocity);
             break;
-    }
-}
-
-void Pacman::updateMouthOpenClosedState() {
-    if (++stepsTaken == 20) {
-        currentState = oppositePacmanState(currentState);
-        stepsTaken = 0;
     }
 }
 
