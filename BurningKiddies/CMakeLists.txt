@@ -3,9 +3,9 @@ project(BurningKiddies)
 
 set(CMAKE_CXX_STANDARD 14)
 
-set(SOURCE_FILES main.cpp)
+set(SOURCE_FILES src/main.cpp)
 
-include_directories(SpaceShipRace include)
+include_directories(BurningKiddies include)
 add_executable(BurningKiddies ${SOURCE_FILES})
 
 target_link_libraries(BurningKiddies SDL2 SDL2_image SDL2_ttf)
