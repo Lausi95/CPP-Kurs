@@ -1,50 +1,21 @@
 #include <BurnEngine.h>
-
-class SimpleEntity : public burnengine::Entity {
-    burnengine::Tile* tile;
-
-public:
-    SimpleEntity(burnengine::Tile& tile, int x, int y) : Entity(x, y) {
-        this->tile = &tile;
-    }
-
-    burnengine::Tile* getTile() {
-        return tile;
-    }
-};
+#include <Level.h>
 
 int main() {
     using namespace burnengine;
 
     initialize();
-    Game game("Burning Kiddies", 400, 300);
+    Texture texture("assets/images/tiles/background_tile_slab.png", 32, 32);
+    Tile tile(texture, 0, 0);
+    BackgroundEntity backgroundEntity(tile);
 
-    Texture dirtTexture("assets/images/tiles/floor_dirt.jpg", 32, 32);
-    Tile dirtTile(dirtTexture, 0, 0);
-    SimpleEntity entity(dirtTile, 0, 0);
+    Level level(backgroundEntity, 800, 608);
+
+    Game game("Burning Kiddies", level.getWidth(), level.getHeight());
 
     while (game.isRunning()) {
         game.update();
-
-        if (game.getTicks() % 1000 == 0) {
-            if (game.isKeyDown(SDLK_w)) {
-                entity.getRect()->y--;
-            }
-
-            if (game.isKeyDown(SDLK_a)) {
-                entity.getRect()->x--;
-            }
-
-            if (game.isKeyDown(SDLK_s)) {
-                entity.getRect()->y++;
-            }
-
-            if (game.isKeyDown(SDLK_d)) {
-                entity.getRect()->x++;
-            }
-        }
-
-        game.render(entity);
+        level.render(game);
     }
 
     return 0;

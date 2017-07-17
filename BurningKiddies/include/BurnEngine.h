@@ -44,6 +44,14 @@ namespace burnengine {
 
         virtual Tile* getTile() = 0;
         inline SDL_Rect* getRect() { return rect.get(); }
+
+        virtual inline int getX() { return rect->x; }
+        virtual inline int getY() { return rect->y; }
+        virtual inline int getWidth() { return getTile()->getRect()->w; }
+        virtual inline int getHeight() { return getTile()->getRect()->h; }
+
+        void setX(int x);
+        void setY(int y);
     };
 
 

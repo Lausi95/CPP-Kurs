@@ -74,3 +74,11 @@ burnengine::Entity::Entity(int x, int y) {
     this->rect->x = x;
     this->rect->y = y;
 }
+
+void burnengine::Entity::setX(int x) {
+    this->rect->x = x;
+}
+
+void burnengine::Entity::setY(int y) {
+    this->rect->y = y;
+}
