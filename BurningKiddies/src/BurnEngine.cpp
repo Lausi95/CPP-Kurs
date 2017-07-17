@@ -23,11 +23,14 @@ void burnengine::Game::update() {
     ticks++;
 
     while (SDL_PollEvent(&event)) {
-        if (event.type == SDL_KEYDOWN) {
-            keys[event.key.keysym.sym] = true;
-        }
-        if (event.type == SDL_KEYUP) {
-            keys[event.key.keysym.sym] = false;
+        int code = (int)event.key.keysym.sym;
+        if (code < 1024) {
+            if (event.type == SDL_KEYDOWN) {
+                keys[code] = true;
+            }
+            if (event.type == SDL_KEYUP) {
+                keys[code] = false;
+            }
         }
 
         running = running && event.type != SDL_QUIT;
@@ -44,7 +47,7 @@ void burnengine::Game::resetTicks() {
     ticks = 0;
 }
 
-bool burnengine::Game::isKeyDown(const SDL_Keycode &keycode) const {
+bool burnengine::Game::isKeyDown(const SDL_Keycode& keycode) const {
     return keys[keycode];
 }
 

@@ -1,7 +1,4 @@
-#include <iostream>
 #include <BurnEngine.h>
-
-#include <SDL2/SDL.h>
 
 class SimpleEntity : public burnengine::Entity {
     burnengine::Tile* tile;
