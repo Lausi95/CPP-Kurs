@@ -45,6 +45,8 @@ namespace burnengine {
         void setBackground(BackgroundEntity& entity);
         void setLavaEntity(LavaEntity& lavaEntity);
         void addEnvironmentEntity(Entity& entity);
+
+        void renderLava(Game& game);
     };
 
 }

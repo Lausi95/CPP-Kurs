@@ -6,7 +6,7 @@ namespace burnengine {
         this->tile = &tile;
     }
 
-    Tile *burnengine::BackgroundEntity::getTile() {
+    Tile* burnengine::BackgroundEntity::getTile() {
         return tile;
     }
 
@@ -19,17 +19,19 @@ namespace burnengine {
         if (backgroundEntity != nullptr)
             renderBackground(game);
 
-        if (lavaEntity != nullptr) {
-            int nx = getWidth() / lavaEntity->getWidth();
-            for (int x = 0; x < nx; ++x) {
-                lavaEntity->setX(x * lavaEntity->getWidth());
-                lavaEntity->setY(getHeight() - lavaEntity->getHeight() + 1);
-                game.render(*lavaEntity);
-            }
-        }
+        if (lavaEntity != nullptr)
+            renderLava(game);
 
         for (burnengine::Entity* entity : environment)
             game.render(*entity);
+    }
+
+    void Level::renderLava(Game& game) {
+        for (int x = 0; x < getWidth() / lavaEntity->getWidth(); x++) {
+            lavaEntity->setX(x * lavaEntity->getWidth());
+            lavaEntity->setY(getHeight() - lavaEntity->getHeight() + 1);
+            game.render(*lavaEntity);
+        }
     }
 
     void Level::renderBackground(burnengine::Game& game) const {
