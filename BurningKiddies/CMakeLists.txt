@@ -3,7 +3,7 @@ project(BurningKiddies)
 
 set(CMAKE_CXX_STANDARD 14)
 
-set(SOURCE_FILES src/main.cpp include/BurnEngine.h src/BurnEngine.cpp include/Level.h src/Level.cpp)
+set(SOURCE_FILES src/main.cpp include/BurnEngine.h src/BurnEngine.cpp include/Level.h src/Level.cpp include/Player.h src/Player.cpp src/Player.h)
 
 include_directories(BurningKiddies include)
 add_executable(BurningKiddies ${SOURCE_FILES})
