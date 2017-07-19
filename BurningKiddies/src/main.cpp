@@ -35,12 +35,32 @@ int main() {
         game.update();
         level.render(game);
         game.render(player);
+        player.update();
+
+        player.setAY(0.2);
+
+        if (player.getY() > level.getHeight() - lavaEntity.getHeight() * 2) {
+            player.setY(level.getHeight() - lavaEntity.getHeight() * 2);
+            player.setVY(0);
+            player.setAY(0);
+        }
 
         if (game.isKeyDown(SDLK_d)) {
-            player.setX(player.getX() + 0.3f);
+            player.setVX(1.7f);
+            player.setLookingDirection(LookingDirection::Right);
         }
         if (game.isKeyDown(SDLK_a)) {
-            player.setX(player.getX() - 0.3f);
+            player.setVX(-1.7f);
+            player.setLookingDirection(LookingDirection::Left);
+        }
+
+        if (game.isKeyDown(SDLK_w) && player.getAY() == 0) {
+            player.setVY(-7);
+            player.setAY(0.2);
+        }
+
+        if (!game.isKeyDown(SDLK_d) && !game.isKeyDown(SDLK_a)) {
+            player.setVX(0);
         }
     }
 

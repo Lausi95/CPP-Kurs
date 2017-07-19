@@ -9,4 +9,19 @@ namespace burnengine {
     Tile* Player::getTile() {
         return tiles[(int)lookingDirection];
     }
+
+    void Player::setLookingDirection(LookingDirection direction) {
+        this->lookingDirection = direction;
+    }
+
+    void Player::update() {
+        vx = vx + ax;
+        vy = vy + ay;
+        setX(getX() + vx);
+        setY(getY() + vy);
+    }
+
+    float Player::getAY() {
+        return ay;
+    }
 }
