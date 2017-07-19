@@ -6,7 +6,7 @@
 
 namespace burnengine {
 
-    class BackgroundEntity : public Entity {
+    class BackgroundEntity : public Entity<int> {
     private:
         Tile* tile;
 
@@ -15,7 +15,7 @@ namespace burnengine {
         Tile* getTile();
     };
 
-    class LavaEntity : public Entity {
+    class LavaEntity : public Entity<int> {
     private:
         Tile* tile;
 
@@ -28,7 +28,7 @@ namespace burnengine {
     private:
         BackgroundEntity* backgroundEntity = nullptr;
         LavaEntity* lavaEntity = nullptr;
-        std::vector<burnengine::Entity*> environment;
+        std::vector<burnengine::Entity<int>*> environment;
 
         int width;
         int height;
@@ -43,7 +43,7 @@ namespace burnengine {
 
         void setBackground(BackgroundEntity& entity);
         void setLavaEntity(LavaEntity& lavaEntity);
-        void addEnvironmentEntity(Entity& entity);
+        void addEnvironmentEntity(Entity<int>& entity);
 
     private:
         void renderLava(Game& game) const;

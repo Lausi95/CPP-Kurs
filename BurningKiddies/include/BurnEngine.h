@@ -35,25 +35,39 @@ namespace burnengine {
     };
 
 
+    template<typename T>
     class Entity {
     private:
+        T x, y;
+        int w, h;
         std::unique_ptr<SDL_Rect> rect;
 
     public:
-        Entity(int x, int y);
+        Entity(T x, T y)  {
+            this->rect = std::make_unique<SDL_Rect>();
+            this->x = x;
+            this->y = y;
+        }
 
         virtual Tile* getTile() = 0;
-        inline SDL_Rect* getRect() { return rect.get(); }
+        inline SDL_Rect* getRect() {
+            rect->x = (int)x;
+            rect->y = (int)y;
+            return rect.get();
+        }
 
-        virtual inline int getX() { return rect->x; }
-        virtual inline int getY() { return rect->y; }
+        virtual inline T getX() { return x; }
+        virtual inline T getY() { return y; }
         virtual inline int getWidth() { return getTile()->getRect()->w; }
         virtual inline int getHeight() { return getTile()->getRect()->h; }
 
-        void setX(int x);
-        void setY(int y);
+        inline void setX(T x) {
+            this->x = x;
+        }
+        inline void setY(T y) {
+            this->y = y;
+        }
     };
-
 
     class Game {
     private:
@@ -73,7 +87,11 @@ namespace burnengine {
         inline bool isRunning() const { return running; }
         inline const unsigned long long getTicks() const { return ticks; }
 
-        void render(Entity& entity);
+        template <typename T>
+        void render(Entity<T>& entity) {
+            SDL_BlitSurface(entity.getTile()->getTexture()->surface, entity.getTile()->getRect(), wnd_surface, entity.getRect());
+        }
+
         void resetTicks();
 
         bool isKeyDown(const SDL_Keycode& keycode) const;

@@ -22,7 +22,7 @@ namespace burnengine {
         if (lavaEntity != nullptr)
             renderLava(game);
 
-        for (burnengine::Entity* entity : environment)
+        for (burnengine::Entity<int>* entity : environment)
             game.render(*entity);
     }
 
@@ -60,7 +60,7 @@ namespace burnengine {
         this->backgroundEntity = &entity;
     }
 
-    void Level::addEnvironmentEntity(Entity &entity) {
+    void Level::addEnvironmentEntity(Entity<int> &entity) {
         this->environment.push_back(&entity);
     }
 

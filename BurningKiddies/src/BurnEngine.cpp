@@ -39,10 +39,6 @@ void burnengine::Game::update() {
     SDL_UpdateWindowSurface(wnd);
 }
 
-void burnengine::Game::render(Entity& entity) {
-    SDL_BlitSurface(entity.getTile()->getTexture()->surface, entity.getTile()->getRect(), wnd_surface, entity.getRect());
-}
-
 void burnengine::Game::resetTicks() {
     ticks = 0;
 }
@@ -67,18 +63,4 @@ burnengine::Tile::Tile(burnengine::Texture &texture, int cell_x, int cell_y, int
     this->rect->y = cell_y * this->texture->cellHeight;
     this->rect->w = cell_w * this->texture->cellWidth;
     this->rect->h = cell_h * this->texture->cellHeight;
-}
-
-burnengine::Entity::Entity(int x, int y) {
-    this->rect = std::make_unique<SDL_Rect>();
-    this->rect->x = x;
-    this->rect->y = y;
-}
-
-void burnengine::Entity::setX(int x) {
-    this->rect->x = x;
-}
-
-void burnengine::Entity::setY(int y) {
-    this->rect->y = y;
 }
