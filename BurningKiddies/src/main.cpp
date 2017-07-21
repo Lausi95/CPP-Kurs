@@ -2,6 +2,9 @@
 #include <Level.h>
 #include <Player.h>
 
+#define GRAVITY 9.81f
+#define VELOCITY_NORM 0.3f
+
 int main() {
     using namespace burnengine;
 
@@ -37,7 +40,7 @@ int main() {
         game.render(player);
         player.update();
 
-        player.setAY(0.2);
+        player.setAY(VELOCITY_NORM * VELOCITY_NORM);
 
         if (player.getY() > level.getHeight() - lavaEntity.getHeight() * 2) {
             player.setY(level.getHeight() - lavaEntity.getHeight() * 2);
@@ -56,7 +59,7 @@ int main() {
 
         if (game.isKeyDown(SDLK_w) && player.getAY() == 0) {
             player.setVY(-7);
-            player.setAY(0.2);
+            player.setAY(GRAVITY * VELOCITY_NORM);
         }
 
         if (!game.isKeyDown(SDLK_d) && !game.isKeyDown(SDLK_a)) {
