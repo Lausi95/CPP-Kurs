@@ -6,6 +6,7 @@
 #include <SDL2/SDL_ttf.h>
 
 #include <memory>
+#include <vector>
 
 namespace burnengine {
 
@@ -69,6 +70,15 @@ namespace burnengine {
         }
     };
 
+    class Screen {
+    private:
+        std::vector<Entity*> entities;
+
+    public:
+        void addEntity(Entity* entity);
+        inline std::vector<Entity*> getEntities() { return entities; }
+    };
+
     class Game {
     private:
         SDL_Window* wnd;
@@ -88,8 +98,9 @@ namespace burnengine {
         inline const unsigned long long getTicks() const { return ticks; }
 
         template <typename T>
-        void render(Entity<T>& entity) {
-            SDL_BlitSurface(entity.getTile()->getTexture()->surface, entity.getTile()->getRect(), wnd_surface, entity.getRect());
+        void render(Screen* screen) {
+            for (Entity* entity : screen->getEntities())
+                SDL_BlitSurface(entity->getTile()->getTexture()->surface, entity->getTile()->getRect(), wnd_surface, entity->getRect());
         }
 
         void resetTicks();

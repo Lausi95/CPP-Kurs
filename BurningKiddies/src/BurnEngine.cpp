@@ -64,3 +64,7 @@ burnengine::Tile::Tile(burnengine::Texture &texture, int cell_x, int cell_y, int
     this->rect->w = cell_w * this->texture->cellWidth;
     this->rect->h = cell_h * this->texture->cellHeight;
 }
+
+void burnengine::Screen::addEntity(burnengine::Entity* entity) {
+    entities.push_back(entity);
+}

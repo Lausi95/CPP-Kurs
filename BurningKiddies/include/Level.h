@@ -24,7 +24,7 @@ namespace burnengine {
         Tile* getTile();
     };
 
-    class Level {
+    class Level : public Screen {
     private:
         BackgroundEntity* backgroundEntity = nullptr;
         LavaEntity* lavaEntity = nullptr;
@@ -39,17 +39,9 @@ namespace burnengine {
         inline int getWidth() const { return width; }
         inline int getHeight() const { return height; }
 
-        void render(Game& game) const;
-
         void setBackground(BackgroundEntity& entity);
         void setLavaEntity(LavaEntity& lavaEntity);
         void addEnvironmentEntity(Entity<int>& entity);
-
-    private:
-        void renderLava(Game& game) const;
-        void renderLavaChunk(Game& game, int x) const;
-        void renderBackground(Game& game) const;
-        void renderBackgroundChunk(Game& game, int x, int y) const;
     };
 
 }

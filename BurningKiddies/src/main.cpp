@@ -3,7 +3,7 @@
 #include <Player.h>
 
 #define GRAVITY 9.81f
-#define VELOCITY_NORM 0.3f
+#define VELOCITY_NORM 0.01f
 
 int main() {
     using namespace burnengine;
@@ -30,17 +30,20 @@ int main() {
             &playerLookingRightTile
     };
 
+    Screen level1Screen;
+
     burnengine::Player player(playerTiles, 200, 200);
 
     Game game("Burning Kiddies", level.getWidth(), level.getHeight());
 
+    Screen* currentScreen = & level1Screen;
+
     while (game.isRunning()) {
         game.update();
-        level.render(game);
-        game.render(player);
+        game.render(currentScreen);
         player.update();
 
-        player.setAY(VELOCITY_NORM * VELOCITY_NORM);
+        player.setAY(GRAVITY * VELOCITY_NORM);
 
         if (player.getY() > level.getHeight() - lavaEntity.getHeight() * 2) {
             player.setY(level.getHeight() - lavaEntity.getHeight() * 2);
