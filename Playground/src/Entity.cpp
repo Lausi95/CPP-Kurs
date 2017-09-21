@@ -12,11 +12,11 @@ Entity::~Entity() {
     delete _rectangle;
 }
 
-float Entity::getWidth() {
+int Entity::getWidth() {
     return _rectangle->getWidth();
 }
 
-float Entity::getHeight() {
+int Entity::getHeight() {
     return _rectangle->getHeight();
 }
 

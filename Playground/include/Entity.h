@@ -13,8 +13,8 @@ public:
 
     float getX();
     float getY();
-    float getWidth();
-    float getHeight();
+    int getWidth();
+    int getHeight();
     Rectangle* getRectangle();
 
     void setX(float x);
