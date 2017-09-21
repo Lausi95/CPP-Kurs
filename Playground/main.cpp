@@ -1,11 +1,13 @@
 #include <World.h>
 #include <Input.h>
-#include <vector>
 
 class SimpleEntity : public Entity {
     Tile* _tile;
 
 public:
+    float vy = 0;
+    bool canJump = false;
+
     SimpleEntity(Tile* tile, float x, float y) : Entity(x, y, tile->getWidth(), tile->getHeight()) {
         _tile = tile;
     }
@@ -15,7 +17,7 @@ public:
     }
 };
 
-Camera camera(400, 300, "You May Not Touch The Ground");
+Camera camera(800, 1000, "You May Not Touch The Ground");
 
 Texture texture("assets/rooms/gate.png");
 Tile tile(&texture, 0, 0, 1000, 700);
@@ -37,10 +39,21 @@ int main() {
             egg.setX(egg.getX() - 1.0f);
         if (input.isDDown())
             egg.setX(egg.getX() + 1.0f);
-        if (input.isWDown())
-            egg.setY(egg.getY() - 1.0f);
-        if (input.isSDown())
-            egg.setY(egg.getY() + 1.0f);
+
+        if (input.isWDown() && egg.canJump) {
+            egg.vy = -4.0f;
+            egg.canJump = false;
+        }
+
+        egg.setY(egg.getY() + egg.vy);
+
+        if (egg.getBottom() >= entity.getBottom()) {
+            egg.vy = 0;
+            egg.canJump = true;
+        } else {
+            egg.vy += 0.04f;
+        }
+
         camera.lockOn(&egg);
         world.draw();
     } while (!input.quitTriggered());

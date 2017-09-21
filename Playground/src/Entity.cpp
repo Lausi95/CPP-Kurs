@@ -39,3 +39,7 @@ void Entity::setY(float y) {
 Rectangle *Entity::getRectangle() {
     return _rectangle;
 }
+
+int Entity::getBottom() {
+    return (int) _rectangle->getY() + _rectangle->getHeight();
+}

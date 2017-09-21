@@ -20,6 +20,8 @@ public:
     void setX(float x);
     void setY(float y);
 
+    int getBottom();
+
     virtual Tile* getTile() = 0;
 };
 
