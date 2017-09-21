@@ -1,25 +1,15 @@
 #include <Entity.h>
 
-Entity::Entity(Tile *tile) {
-    _tile = tile;
+Entity::Entity() {
     _rectangle = new Rectangle();
 }
 
-Entity::Entity(Tile *tile, float x, float y) {
-    _tile = tile;
-    _rectangle = new Rectangle(x, y, tile->getWidth(), tile->getHeight());
-}
-
-Entity::Entity(Texture *texture, int width, int height, float x, float y) {
-    _tile = new Tile(texture, 0, 0, width, height);
+Entity::Entity(float x, float y, int width, int height) {
     _rectangle = new Rectangle(x, y, width, height);
-    _tileIsSelfCreated = true;
 }
 
 Entity::~Entity() {
     delete _rectangle;
-    if (_tileIsSelfCreated)
-        delete _tile;
 }
 
 float Entity::getWidth() {
@@ -44,10 +34,6 @@ void Entity::setX(float x) {
 
 void Entity::setY(float y) {
     _rectangle->setY(y);
-}
-
-Tile *Entity::getTile() {
-    return _tile;
 }
 
 Rectangle *Entity::getRectangle() {

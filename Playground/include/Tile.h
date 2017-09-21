@@ -12,8 +12,8 @@ public:
     Tile(Texture* texture, int x, int y, int width, int height);
     ~Tile();
 
-    float getWidth();
-    float getHeight();
+    int getWidth();
+    int getHeight();
     Texture* getTexture();
     Rectangle* getRectangle();
 };

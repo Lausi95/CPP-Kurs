@@ -1,6 +1,6 @@
 #include <World.h>
 
-World::World(Camera *camera, Entity* entities, int entityCount) {
+World::World(Camera *camera, std::vector<Entity*> entities, int entityCount) {
     _camera = camera;
     _entities = entities;
     _entityCount = entityCount;
@@ -8,7 +8,7 @@ World::World(Camera *camera, Entity* entities, int entityCount) {
 
 void World::draw() {
     _camera->clear();
-    for (int i = 0; i < _entityCount; i++)
-        _camera->show(&_entities[i]);
+    for (Entity* entity : _entities)
+        _camera->show(entity);
     _camera->update();
 }

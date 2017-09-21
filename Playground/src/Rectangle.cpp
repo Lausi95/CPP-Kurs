@@ -1,16 +1,17 @@
 #include <Rectangle.h>
 
 Rectangle::Rectangle() {
-    _x = _y = _width = _height = 0.0f;
+    _x = _y = 0.0f;
+    _width = _height = 0;
 }
 
-Rectangle::Rectangle(float width, float height) {
+Rectangle::Rectangle(int width, int height) {
     _x = _y = 0;
     _width = width;
     _height = height;
 }
 
-Rectangle::Rectangle(float x, float y, float width, float height) {
+Rectangle::Rectangle(float x, float y, int width, int height) {
     _x = x;
     _y = y;
     _width = width;
@@ -25,11 +26,11 @@ float Rectangle::getY() {
     return _y;
 }
 
-float Rectangle::getWidth() {
+int Rectangle::getWidth() {
     return _width;
 }
 
-float Rectangle::getHeight() {
+int Rectangle::getHeight() {
     return _height;
 }
 
@@ -41,11 +42,11 @@ void Rectangle::setY(float y) {
     _y = y;
 }
 
-void Rectangle::setWidth(float width) {
+void Rectangle::setWidth(int width) {
     _width = width;
 }
 
-void Rectangle::setHeight(float height) {
+void Rectangle::setHeight(int height) {
     _height = height;
 }
 
@@ -54,7 +55,7 @@ void Rectangle::setPosition(float x, float y) {
     setY(y);
 }
 
-void Rectangle::setDimension(float width, float height) {
+void Rectangle::setDimension(int width, int height) {
     setWidth(width);
     setHeight(height);
 }
@@ -71,7 +72,7 @@ SDL_Rect Rectangle::toSDLRect() {
     SDL_Rect rect;
     rect.x = (int) _x;
     rect.y = (int) _y;
-    rect.w = (int) _width;
-    rect.h = (int) _height;
+    rect.w = _width;
+    rect.h = _height;
     return rect;
 }

@@ -2,14 +2,15 @@
 #define PLAYGROUND_WORLD_H
 
 #include <Camera.h>
+#include <vector>
 
 class World {
     Camera* _camera;
-    Entity* _entities;
+    std::vector<Entity*> _entities;
     int _entityCount;
 
 public:
-    World(Camera* camera, Entity* entities, int entityCount);
+    World(Camera* camera, std::vector<Entity*> entities, int entityCount);
     void draw();
 };
 

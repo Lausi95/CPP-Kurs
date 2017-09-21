@@ -1,16 +1,32 @@
 #include <World.h>
 #include <Input.h>
+#include <vector>
+
+class SimpleEntity : public Entity {
+    Tile* _tile;
+
+public:
+    SimpleEntity(Tile* tile, float x, float y) : Entity(x, y, tile->getWidth(), tile->getHeight()) {
+        _tile = tile;
+    }
+
+    Tile* getTile() {
+        return _tile;
+    }
+};
 
 Camera camera(400, 300, "You May Not Touch The Ground");
 
 Texture texture("assets/rooms/gate.png");
-Entity entity(&texture, 1000, 700, 0, 0);
+Tile tile(&texture, 0, 0, 1000, 700);
+SimpleEntity entity(&tile, 0, 0);
 
 Texture textureEgg("assets/items/dragonegg.png");
-Entity egg(&textureEgg, 118, 135, 0, 0);
+Tile tileEgg(&textureEgg, 0, 0, 118, 135);
+SimpleEntity egg(&tileEgg, 0, 0);
 
-Entity entities[] = {entity, egg};
-World world(&camera, entities, 2);
+std::vector<Entity*> e {&entity, &egg};
+World world(&camera, e, 2);
 
 Input input;
 

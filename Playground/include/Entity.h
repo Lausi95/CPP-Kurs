@@ -4,15 +4,11 @@
 #include <Tile.h>
 
 class Entity {
-    Tile* _tile;
     Rectangle* _rectangle;
 
-    bool _tileIsSelfCreated = false;
-
 public:
-    Entity(Tile* tile);
-    Entity(Tile* tile, float x, float y);
-    Entity(Texture* texture, int width, int height, float x, float y);
+    Entity();
+    Entity(float x, float y, int width, int height);
     ~Entity();
 
     float getX();
@@ -21,10 +17,10 @@ public:
     float getHeight();
     Rectangle* getRectangle();
 
-    Tile* getTile();
-
     void setX(float x);
     void setY(float y);
+
+    virtual Tile* getTile() = 0;
 };
 
 #endif //PLAYGROUND_ENTITY_H

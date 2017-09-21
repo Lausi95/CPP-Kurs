@@ -6,26 +6,26 @@
 class Rectangle {
     float _x;
     float _y;
-    float _width;
-    float _height;
+    int _width;
+    int _height;
 
 public:
     Rectangle();
-    Rectangle(float width, float height);
-    Rectangle(float x, float y, float width, float height);
+    Rectangle(int width, int height);
+    Rectangle(float x, float y, int width, int height);
 
     float getX();
     float getY();
-    float getWidth();
-    float getHeight();
+    int getWidth();
+    int getHeight();
 
     void setX(float x);
     void setY(float y);
-    void setWidth(float width);
-    void setHeight(float height);
+    void setWidth(int width);
+    void setHeight(int height);
 
     void setPosition(float x, float y);
-    void setDimension(float width, float height);
+    void setDimension(int width, int height);
 
     bool intersects(Rectangle& rectangle);
 

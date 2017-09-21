@@ -9,11 +9,11 @@ Tile::~Tile() {
     delete _rectangle;
 }
 
-float Tile::getWidth() {
+int Tile::getWidth() {
     return _rectangle->getWidth();
 }
 
-float Tile::getHeight() {
+int Tile::getHeight() {
     return _rectangle->getHeight();
 }
 

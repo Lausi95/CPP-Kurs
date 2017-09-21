@@ -1,11 +1,11 @@
 #include <Texture.h>
 
-bool sdlImgaeInitialized = false;
+bool sdlImageInitialized = false;
 
 Texture::Texture(const char *file) {
-    if (!sdlImgaeInitialized) {
+    if (!sdlImageInitialized) {
         IMG_Init(IMG_INIT_PNG);
-        sdlImgaeInitialized = true;
+        sdlImageInitialized = true;
     }
 
     _file = file;
