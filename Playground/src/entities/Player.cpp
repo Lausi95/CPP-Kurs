@@ -33,9 +33,9 @@ void Player::update() {
 void Player::setVx(float vx) {
     _vx = vx;
     if (vx > 0)
-        _lookingDirection = LookingDirection::Left;
-    else
         _lookingDirection = LookingDirection::Right;
+    else if (vx < 0)
+        _lookingDirection = LookingDirection::Left;
 }
 
 void Player::setVy(float vy) {

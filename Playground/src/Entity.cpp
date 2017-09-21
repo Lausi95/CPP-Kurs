@@ -40,6 +40,34 @@ Rectangle *Entity::getRectangle() {
     return _rectangle;
 }
 
-int Entity::getBottom() {
-    return (int) _rectangle->getY() + _rectangle->getHeight();
+float Entity::getBottom() {
+    return _rectangle->getY() + _rectangle->getHeight();
+}
+
+void Entity::setBottom(float bottom) {
+    _rectangle->setY(bottom - (float)_rectangle->getHeight());
+}
+
+float Entity::getTop() {
+    return _rectangle->getY();
+}
+
+void Entity::setTop(float top) {
+    _rectangle->setY(top);
+}
+
+float Entity::getLeft() {
+    return _rectangle->getX();
+}
+
+void Entity::setLeft(float left) {
+    _rectangle->setX(left);
+}
+
+float Entity::getRight() {
+    return _rectangle->getX() + _rectangle->getWidth();
+}
+
+void Entity::setRight(float right) {
+    _rectangle->setX(right - (float) _rectangle->getWidth());
 }

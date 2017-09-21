@@ -5,14 +5,17 @@
 
 Camera camera(800, 1000, "You May Not Touch The Ground");
 
-Texture texture("assets/rooms/gate.png");
-Tile tile(&texture, 0, 0, 1000, 700);
+Texture texture("assets/images/backgrounds/sky.png");
+Tile tile(&texture, 0, 0, 800, 608);
 SimpleEntity entity(&tile, 0, 0);
 
-Texture textureEgg("assets/items/dragonegg.png");
-Tile tileEgg(&textureEgg, 0, 0, 118, 135);
-std::array<Tile*, 2> playerTiles {&tileEgg, &tileEgg};
-Player player(playerTiles, 0, 0, 118, 135);
+
+Texture playerBoyLeftTexture("assets/images/tiles/player_boy_left.png");
+Tile    playerBoyLeftTile(&playerBoyLeftTexture, 0, 0, 32, 32);
+Texture playerBoyRightTexture("assets/images/tiles/player_boy_right.png");
+Tile    playerBoyRightTile(&playerBoyRightTexture, 0, 0, 32, 32);
+std::array<Tile*, 2> playerTiles {&playerBoyRightTile, &playerBoyLeftTile};
+Player player(playerTiles, 0, 0, 32, 32);
 
 std::vector<Entity*> e {&entity, &player};
 World world(&camera, e, 2);
@@ -37,9 +40,15 @@ int main() {
         if (player.getBottom() >= entity.getBottom()) {
             player.setVy(0);
             player.enableJump();
+            player.setBottom(entity.getBottom());
         } else {
             player.addVy(0.2f);
         }
+
+        if (player.getLeft() < entity.getLeft())
+            player.setLeft(0.0f);
+        if (player.getRight() > entity.getRight())
+            player.setRight(entity.getRight());
 
         camera.lockOn(&player);
         world.draw();

@@ -20,7 +20,17 @@ public:
     void setX(float x);
     void setY(float y);
 
-    int getBottom();
+    float getBottom();
+    void setBottom(float bottom);
+
+    float getTop();
+    void setTop(float top);
+
+    float getLeft();
+    void setLeft(float left);
+
+    float getRight();
+    void setRight(float right);
 
     virtual Tile* getTile() = 0;
 };
