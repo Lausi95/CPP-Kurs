@@ -1,9 +1,8 @@
 #include <World.h>
 
-World::World(Camera *camera, std::vector<Entity*> entities, int entityCount) {
+World::World(Camera *camera, std::vector<Entity*> entities) {
     _camera = camera;
     _entities = entities;
-    _entityCount = entityCount;
 }
 
 void World::draw() {
@@ -11,4 +10,8 @@ void World::draw() {
     for (Entity* entity : _entities)
         _camera->show(entity);
     _camera->update();
+}
+
+void World::lockOn(Entity* entity) {
+    _camera->lockOn(entity);
 }
