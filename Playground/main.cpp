@@ -2,6 +2,9 @@
 #include <Input.h>
 #include <entities/SimpleEntity.h>
 #include <entities/Player.h>
+#include <state/Worlds.h>
+
+Worlds currentWorld = WORLD_LEVEL_1;
 
 class Level : public World {
     Player* _player;
@@ -13,6 +16,9 @@ public:
         _player = player;
         _boundingEntity = boundingEntity;
         _input = input;
+    }
+
+    void initialize() {
     }
 
     void update(float dt) {
@@ -63,11 +69,26 @@ Player player(playerTiles, 0, 0, 32, 32);
 std::vector<Entity*> e {&entity, &player};
 Level world(&camera, e, &player, &entity, &input);
 
+World* worlds[] {
+    &world,
+    &world
+};
+
 int main() {
-    World* currentWorld = &world;
     do {
         input.update();
-        currentWorld->update(1.0f /*Unit, as long as the time since last frame is not calculated*/);
-        currentWorld->draw();
+        Worlds world = currentWorld;
+
+        if (!worlds[world]->initialized()) {
+            worlds[world]->initialize();
+            worlds[world]->setInitialized(true);
+        }
+
+        worlds[world]->update(1.0f /*Unit, as long as the time since last frame is not calculated*/);
+        worlds[world]->draw();
+
+        if (world != currentWorld) {
+            worlds[currentWorld]->setInitialized(false);
+        }
     } while (!input.quitTriggered());
 }

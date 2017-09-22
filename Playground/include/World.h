@@ -7,12 +7,16 @@
 class World {
     Camera* _camera;
     std::vector<Entity*> _entities;
+    bool _initialized;
 
 public:
     World(Camera* camera, std::vector<Entity*> entities);
     void draw();
     void lockOn(Entity* entity);
+    bool initialized();
+    void setInitialized(bool initialized);
 
+    virtual void initialize() = 0;
     virtual void update(float dt) = 0;
 };
 

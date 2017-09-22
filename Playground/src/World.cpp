@@ -15,3 +15,11 @@ void World::draw() {
 void World::lockOn(Entity* entity) {
     _camera->lockOn(entity);
 }
+
+bool World::initialized() {
+    return _initialized;
+}
+
+void World::setInitialized(bool initialized) {
+    _initialized = initialized;
+}

@@ -1,0 +1,9 @@
+#ifndef PLAYGROUND_WORLDS_H
+#define PLAYGROUND_WORLDS_H
+
+enum Worlds {
+    WORLD_MENU,
+    WORLD_LEVEL_1
+};
+
+#endif //PLAYGROUND_WORLDS_H
