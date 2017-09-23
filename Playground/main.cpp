@@ -3,6 +3,11 @@
 #include <entities/SimpleEntity.h>
 #include <entities/Player.h>
 #include <state/Worlds.h>
+#include <BackgroundMusic.h>
+
+
+#include "SDL2/SDL.h"
+#include "SDL2/SDL_mixer.h"
 
 Worlds currentWorld = WORLD_LEVEL_1;
 
@@ -75,6 +80,12 @@ World* worlds[] {
 };
 
 int main() {
+
+    BackgroundMusic backgroundMusic(MP3, "assets/music/Spectra.mp3");
+    backgroundMusic.init();
+
+    backgroundMusic.start();
+
     do {
         input.update();
         Worlds world = currentWorld;
@@ -91,4 +102,7 @@ int main() {
             worlds[currentWorld]->setInitialized(false);
         }
     } while (!input.quitTriggered());
+
+    backgroundMusic.stop();
+    backgroundMusic.cleanUp();
 }
