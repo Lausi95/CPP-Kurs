@@ -2,16 +2,37 @@
 #include <Input.h>
 #include <entities/SimpleEntity.h>
 #include <entities/Player.h>
+#include <entities/Button.h>
 #include <state/Worlds.h>
 #include <BackgroundMusic.h>
 
+Worlds currentWorld = WORLD_MENU;
 
-#include "SDL2/SDL.h"
-#include "SDL2/SDL_mixer.h"
+class Menu : public World {
 
-Worlds currentWorld = WORLD_LEVEL_1;
+    Entity* _background;
+    Input*  _input;
+
+public:
+    Menu(Camera* camera, const std::vector<Entity*>& entities, Input* input) : World(camera, entities) {
+        _background = entities.front();
+        _input = input;
+    }
+
+    void initialize() override {
+    }
+
+    void update(float dt) override {
+        lockOn(_background);
+
+        if (_input->isSpaceDown()) {
+            currentWorld = WORLD_LEVEL_1;
+        }
+    }
+};
 
 class Level : public World {
+
     Player* _player;
     Entity* _boundingEntity;
     Input*  _input;
@@ -23,10 +44,10 @@ public:
         _input = input;
     }
 
-    void initialize() {
+    void initialize() override {
     }
 
-    void update(float dt) {
+    void update(float dt) override {
         if (_input->isADown())
             _player->setVx(-1.0f);
         else if (_input->isDDown())
@@ -56,13 +77,19 @@ public:
     }
 };
 
-Camera camera(800, 1000, "You May Not Touch The Ground");
+Camera camera(800, 608, "You May Not Touch The Ground");
 Input input;
 
-Texture texture("assets/images/backgrounds/sky.png");
-Tile tile(&texture, 0, 0, 800, 608);
-SimpleEntity entity(&tile, 0, 0);
+Texture skyTexture("assets/images/backgrounds/sky.png");
+Tile skyTile(&skyTexture, 0, 0, 800, 608);
+SimpleEntity skyEntity(&skyTile, 0, 0);
 
+Texture wallpaperTexture("assets/images/backgrounds/wallpaper.png");
+Tile wallpaperTile(&wallpaperTexture, 0, 0, 800, 608);
+SimpleEntity wallpaperEntity(&wallpaperTile, 0, 0);
+
+Tile buttonTile(&skyTexture, 0, 0, 100, 50);
+Button startButton(&buttonTile, 0, 0);
 
 Texture playerBoyLeftTexture("assets/images/tiles/player_boy_left.png");
 Tile    playerBoyLeftTile(&playerBoyLeftTexture, 0, 0, 32, 32);
@@ -71,11 +98,14 @@ Tile    playerBoyRightTile(&playerBoyRightTexture, 0, 0, 32, 32);
 std::array<Tile*, 2> playerTiles {&playerBoyRightTile, &playerBoyLeftTile};
 Player player(playerTiles, 0, 0, 32, 32);
 
-std::vector<Entity*> e {&entity, &player};
-Level world(&camera, e, &player, &entity, &input);
+std::vector<Entity*> menuEntities {&wallpaperEntity, &startButton};
+Menu menu(&camera, menuEntities, &input);
+
+std::vector<Entity*> e {&skyEntity, &player};
+Level world(&camera, e, &player, &skyEntity, &input);
 
 World* worlds[] {
-    &world,
+    &menu,
     &world
 };
 

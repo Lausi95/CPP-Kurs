@@ -28,6 +28,7 @@ void Input::update() {
         updateKeyStatus(_event, SDLK_w, _wIsDown);
         updateKeyStatus(_event, SDLK_a, _aIsDown);
         updateKeyStatus(_event, SDLK_d, _dIsDown);
+        updateKeyStatus(_event, SDLK_SPACE, _spaceIsDown);
     }
 }
 
@@ -52,6 +53,10 @@ bool Input::isSDown() {
     return _sIsDown;
 }
 
+bool Input::isSpaceDown() {
+    return _spaceIsDown;
+}
+
 bool Input::isADown(bool reset) {
     return getKeyAndUpdate(_aIsDown, reset);
 }
@@ -66,4 +71,8 @@ bool Input::isWDown(bool reset) {
 
 bool Input::isSDown(bool reset) {
     return getKeyAndUpdate(_sIsDown, reset);
+}
+
+bool Input::isSpaceDown(bool reset) {
+    return getKeyAndUpdate(_spaceIsDown, reset);
 }

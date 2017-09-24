@@ -11,6 +11,7 @@ class Input {
     bool _dIsDown;
     bool _wIsDown;
     bool _sIsDown;
+    bool _spaceIsDown;
 
     void handleQuitEvent();
 
@@ -21,11 +22,13 @@ public:
     bool isDDown();
     bool isWDown();
     bool isSDown();
+    bool isSpaceDown();
 
     bool isADown(bool reset);
     bool isDDown(bool reset);
     bool isWDown(bool reset);
     bool isSDown(bool reset);
+    bool isSpaceDown(bool reset);
 
     void update();
     bool quitTriggered();
