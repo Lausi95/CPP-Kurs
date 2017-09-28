@@ -22,7 +22,7 @@ void Player::jumpSetEnabled(bool enabled) {
 }
 
 void Player::jump() {
-    if (_canJump) _vy = -12.0f;
+    if (_canJump) _vy = -5.0f;
     jumpSetEnabled(false);
 }
 

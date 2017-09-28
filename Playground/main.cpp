@@ -73,7 +73,7 @@ public:
             _player->jumpSetEnabled(true);
             _player->setBottom(_boundingEntity->getBottom());
         } else {
-            _player->addVy(0.2f);
+            _player->addVy(0.05f);
         }
 
         if (_player->getLeft() < _boundingEntity->getLeft())
