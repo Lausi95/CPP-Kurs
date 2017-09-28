@@ -23,7 +23,7 @@ public:
     void setLookingDirection(LookingDirection lookingDirection);
 
     bool canJump();
-    void enableJump();
+    void jumpSetEnabled(bool enabled);
     void jump();
 
     void setVx(float vx);

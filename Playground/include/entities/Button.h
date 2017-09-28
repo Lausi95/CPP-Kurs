@@ -8,7 +8,7 @@ class Button : public Entity {
 
 public:
 
-    Button(Tile* tile, float x, float y) : Entity(x, y, tile->getWidth(), tile->getHeight()) {
+    Button(char* text, Tile* tile, float x, float y) : Entity(x, y, tile->getWidth(), tile->getHeight()) {
         _tile = tile;
     }
 

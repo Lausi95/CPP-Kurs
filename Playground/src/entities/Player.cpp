@@ -17,12 +17,13 @@ bool Player::canJump() {
     return _canJump;
 }
 
-void Player::enableJump() {
-    _canJump = true;
+void Player::jumpSetEnabled(bool enabled) {
+    _canJump = enabled;
 }
 
 void Player::jump() {
-    if (_canJump) _vy = -4.0f;
+    if (_canJump) _vy = -12.0f;
+    jumpSetEnabled(false);
 }
 
 void Player::update() {
