@@ -6,6 +6,7 @@
 #include <SoundSystem.h>
 #include <MenuFactory.h>
 #include <iostream>
+#include <GlobalSettings.h>
 
 Worlds currentWorld = WORLD_MENU;
 
@@ -66,12 +67,12 @@ public:
     }
 };
 
-Camera camera(800, 608, "You May Not Touch The Ground");
+Camera camera(WINDOW_WIDTH, WINDOW_HEIGHT, "You May Not Touch The Ground");
 Input input;
 SoundSystem soundSystem(MP3);
 
 Texture skyTexture("assets/images/backgrounds/sky.png");
-Tile skyTile(&skyTexture, 0, 0, 800, 608);
+Tile skyTile(&skyTexture, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 SimpleEntity skyEntity(&skyTile, 0, 0);
 
 Texture playerBoyLeftTexture("assets/images/tiles/player_boy_left.png");

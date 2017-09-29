@@ -10,6 +10,12 @@
 #include <state/Worlds.h>
 #include <SoundSystem.h>
 
+const int BUTTON_WIDTH = 200;
+const int BUTTON_HEIGHT = 50;
+
+const int BUTTON_COUNT = 3;
+const int VERTICAL_MARGIN = 100;
+
 class Menu : public World {
 
     Entity* _background;
@@ -46,7 +52,10 @@ public:
 class MenuFactory {
 
 public:
-    Menu getMenu(Camera* camera, Input* input, SoundSystem* soundSystem, void (*callbackChangeWorld)(Worlds));
+    Menu getMenu(Camera* camera,
+                 Input* input,
+                 SoundSystem* soundSystem,
+                 void (*callbackChangeWorld)(Worlds));
 };
 
 
