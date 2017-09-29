@@ -2,35 +2,16 @@
 #include <Input.h>
 #include <entities/SimpleEntity.h>
 #include <entities/Player.h>
-#include <entities/Button.h>
 #include <state/Worlds.h>
 #include <SoundSystem.h>
+#include <MenuFactory.h>
+#include <iostream>
 
 Worlds currentWorld = WORLD_MENU;
 
-class Menu : public World {
-
-    Entity* _background;
-    Input*  _input;
-
-public:
-    Menu(Camera* camera, const std::vector<Entity*>& entities, Input* input, SoundSystem* soundSystem) : World(camera, entities) {
-        _background = entities.front();
-        _input = input;
-    }
-
-    void initialize() override {
-
-    }
-
-    void update(float dt) override {
-        lockOn(_background);
-
-        if (_input->isSpaceDown()) {
-            currentWorld = WORLD_LEVEL_1;
-        }
-    }
-};
+void changeWorld(Worlds newWorld) {
+    currentWorld = newWorld;
+}
 
 class Level : public World {
 
@@ -93,10 +74,6 @@ Texture skyTexture("assets/images/backgrounds/sky.png");
 Tile skyTile(&skyTexture, 0, 0, 800, 608);
 SimpleEntity skyEntity(&skyTile, 0, 0);
 
-Texture wallpaperTexture("assets/images/backgrounds/wallpaper.png");
-Tile wallpaperTile(&wallpaperTexture, 0, 0, 800, 608);
-SimpleEntity wallpaperEntity(&wallpaperTile, 0, 0);
-
 Texture playerBoyLeftTexture("assets/images/tiles/player_boy_left.png");
 Tile    playerBoyLeftTile(&playerBoyLeftTexture, 0, 0, 32, 32);
 Texture playerBoyRightTexture("assets/images/tiles/player_boy_right.png");
@@ -104,21 +81,21 @@ Tile    playerBoyRightTile(&playerBoyRightTexture, 0, 0, 32, 32);
 std::array<Tile*, 2> playerTiles {&playerBoyRightTile, &playerBoyLeftTile};
 Player player(playerTiles, 0, 0, 32, 32);
 
-std::vector<Entity*> menuEntities {&wallpaperEntity};
-Menu menu(&camera, menuEntities, &input, &soundSystem);
-
 std::vector<Entity*> e {&skyEntity, &player};
 Level world(&camera, e, &player, &skyEntity, &input, &soundSystem);
-
-World* worlds[] {
-    &menu,
-    &world
-};
 
 int main() {
 
     soundSystem.init();
     soundSystem.startMusic("assets/music/Spectra.mp3");
+
+    MenuFactory* menuFactory = new MenuFactory();
+    Menu menu = menuFactory->getMenu(&camera, &input, &soundSystem, &changeWorld);
+
+    World* worlds[] {
+        &menu,
+        &world
+    };
 
     do {
         input.update();
