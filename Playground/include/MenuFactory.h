@@ -30,7 +30,7 @@ class Menu : public World {
 
 private:
     int _updateCalls = 0;
-    const int UPDATE_CALLS_THRESHOLD = 30;
+    const int UPDATE_CALLS_THRESHOLD = 25;
 
 public:
     Menu(Camera* camera,
@@ -48,6 +48,8 @@ public:
         _buttons = buttons;
         _highlightedButton = buttons.front();
         _hoveredButtonIndex = 0;
+
+        updateHoveredButton();
     }
 
     void initialize() override {
@@ -55,14 +57,6 @@ public:
     }
 
     void update(float dt) override {
-
-        _updateCalls++;
-        if (_updateCalls < UPDATE_CALLS_THRESHOLD) {
-            return;
-        }
-        else {
-            _updateCalls = 0;
-        }
 
         if (_input->isSpaceDown()) {
 
@@ -75,26 +69,50 @@ public:
 
         if (_input->isWDown()) {
 
-            _buttons.at(_hoveredButtonIndex)->setHovered(false);
+            if (buttonUpdate())  {
 
-            _hoveredButtonIndex -= 1;
-            if (_hoveredButtonIndex < 0) {
-                _hoveredButtonIndex = _buttons.size() - 1;
+                _buttons.at(_hoveredButtonIndex)->setHovered(false);
+
+                _hoveredButtonIndex -= 1;
+                if (_hoveredButtonIndex < 0) {
+                    _hoveredButtonIndex = _buttons.size() - 1;
+                }
+
+                updateHoveredButton();
             }
         }
 
         if (_input->isSDown()) {
 
-            _buttons.at(_hoveredButtonIndex)->setHovered(false);
+            if (buttonUpdate())  {
 
-            _hoveredButtonIndex += 1;
-            if (_hoveredButtonIndex > _buttons.size() - 1) {
-                _hoveredButtonIndex = 0;
+                _buttons.at(_hoveredButtonIndex)->setHovered(false);
+
+                _hoveredButtonIndex += 1;
+                if (_hoveredButtonIndex > _buttons.size() - 1) {
+                    _hoveredButtonIndex = 0;
+                }
+
+                updateHoveredButton();
             }
         }
 
+    }
+
+    void updateHoveredButton() {
         _highlightedButton = _buttons.at(_hoveredButtonIndex);
         _highlightedButton->setHovered(true);
+    }
+
+    bool buttonUpdate() {
+
+        _updateCalls++;
+        if (_updateCalls < UPDATE_CALLS_THRESHOLD) {
+            return false;
+        }
+
+        _updateCalls = 0;
+        return true;
     }
 };
 
