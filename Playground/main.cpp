@@ -14,9 +14,15 @@ Camera camera(WINDOW_WIDTH, WINDOW_HEIGHT, "You May Not Touch The Ground");
 Input input;
 SoundSystem soundSystem(MP3);
 
+Button* startButton;
+Button* changeSkinButton;
+Button* muteButton;
+
+
 void changeWorld(World* newWorld) {
     currentWorld = newWorld;
 }
+
 
 class Level : public World {
 
@@ -71,6 +77,7 @@ public:
     }
 };
 
+
 Level* getLevel1(int skin) {
 
     Texture* playerLeftTexture = NULL;
@@ -102,14 +109,24 @@ Level* getLevel1(int skin) {
     return level;
 }
 
+
 void onClickStart() {
     Level* level1 = getLevel1(skin);
     changeWorld(level1);
 }
 
+
 void onClickSkin() {
     skin = (skin + 1) % 2;
+
+    if (skin == 0) {
+        changeSkinButton->setText("Skin: boy");
+    }
+    else {
+        changeSkinButton->setText("Skin: girl");
+    }
 }
+
 
 void onClickMute() {
 
@@ -117,13 +134,20 @@ void onClickMute() {
     soundSystem.mute(! soundSystem.isMuted());
 }
 
+
 Menu * getMenuWorld() {
 
     int x = (WINDOW_WIDTH / 2) - (BUTTON_WIDTH / 2);
     int y = (WINDOW_HEIGHT - (2 * VERTICAL_MARGIN)) / BUTTON_COUNT;
-    Button* startButton = new Button("Start", &onClickStart, BUTTON_WIDTH, BUTTON_HEIGHT, x, y*1);
-    Button* changeSkinButton = new Button("Change Skin", &onClickSkin, BUTTON_WIDTH, BUTTON_HEIGHT, x, y*2);
-    Button* muteButton = new Button("Mute", &onClickMute, BUTTON_WIDTH, BUTTON_HEIGHT, x, y*3);
+
+    startButton = new Button(&onClickStart, BUTTON_WIDTH, BUTTON_HEIGHT, x, y*1);
+    startButton->setText("Start");
+
+    changeSkinButton = new Button(&onClickSkin, BUTTON_WIDTH, BUTTON_HEIGHT, x, y*2);
+    changeSkinButton->setText("Skin: boy");
+
+    muteButton = new Button(&onClickMute, BUTTON_WIDTH, BUTTON_HEIGHT, x, y*3);
+    muteButton->setText("Mute");
 
     std::vector<Button*> buttons {
             startButton, changeSkinButton, muteButton

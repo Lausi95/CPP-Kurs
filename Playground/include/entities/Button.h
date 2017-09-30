@@ -11,19 +11,20 @@ class Button : public Entity {
     char* _text;
 
     int _width, _height;
+    bool _hovered = false;
 
 public:
 
-    Button(char* text, void (*onclick)(void), int width, int height, float x, float y);
+    Button(void (*onclick)(void), int width, int height, float x, float y);
 
     Tile* getTile() override {
         return _tile;
     }
 
+    void setText(char* text);
     void renderText(char* text);
-
     void setHovered(bool hovered);
-
+    void draw();
     void (*_onclick)(void);
 };
 

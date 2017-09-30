@@ -1,18 +1,23 @@
 #include <entities/Button.h>
 
-Button::Button(char* text, void (*onclick)(void), int width, int height, float x, float y) : Entity(x, y, width, height) {
+Button::Button(void (*onclick)(void), int width, int height, float x, float y) : Entity(x, y, width, height) {
 
     _width = width;
     _height = height;
 
-    _text = text;
+    _text = " ";
     _onclick = onclick;
 
     TTF_Init();
 
-    setHovered(false);
+    draw();
 }
 
+
+void Button::setText(char* text) {
+    _text = text;
+    draw();
+}
 
 void Button::renderText(char *text) {
 
@@ -35,19 +40,23 @@ void Button::renderText(char *text) {
     message_rect->w = surfaceMessage->w;
     message_rect->h = surfaceMessage->h;
 
-
-
     SDL_BlitSurface(surfaceMessage, &surfaceMessage->clip_rect, buttonSurface, message_rect);
 
     TTF_CloseFont(font);
 }
 
+
 void Button::setHovered(bool hovered) {
+    _hovered = hovered;
+    draw();
+}
+
+void Button::draw() {
 
     Texture* buttonTexture;
     Tile* buttonTile;
 
-    if (hovered) {
+    if (_hovered) {
         buttonTexture = new Texture("assets/images/tiles/button_hovered.png");
         buttonTile = new Tile(buttonTexture, 0, 0, _width, _height);
     }
