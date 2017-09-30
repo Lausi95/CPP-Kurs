@@ -8,16 +8,20 @@
 class Button : public Entity {
 
     Tile* _tile;
+    char* _text;
 
 public:
 
-    Button(char* text, Tile* tile, float x, float y);
+    Button(char* text, int width, int height, float x, float y);
 
     Tile* getTile() override {
         return _tile;
     }
 
     void renderText(char* text);
+
+    void highlight();
+
 
 };
 

@@ -12,6 +12,10 @@ Texture::Texture(const char *file) {
     _surface = IMG_Load(file);
 }
 
+Texture::~Texture() {
+    SDL_FreeSurface(_surface);
+}
+
 const char *Texture::getFile() {
     return _file;
 }

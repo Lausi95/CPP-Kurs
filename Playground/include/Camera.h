@@ -7,6 +7,7 @@
 class Camera {
     SDL_Surface* _surface;
     SDL_Window* _window;
+    SDL_Renderer* _renderer;
 
     int _width;
     int _height;

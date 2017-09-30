@@ -10,6 +10,7 @@ class Texture {
 
 public:
     explicit Texture(const char* file);
+    ~Texture();
 
     const char* getFile();
     SDL_Surface* getSurface();

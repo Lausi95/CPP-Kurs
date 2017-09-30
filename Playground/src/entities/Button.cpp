@@ -1,11 +1,15 @@
 #include <entities/Button.h>
 
-Button::Button(char* text, Tile* tile, float x, float y) : Entity(x, y, tile->getWidth(), tile->getHeight()) {
+Button::Button(char* text, int width, int height, float x, float y) : Entity(x, y, width, height) {
 
-    _tile = tile;
+    Texture* buttonTexture = new Texture("assets/images/tiles/button_default.png");
+    Tile* buttonTile = new Tile(buttonTexture, 0, 0, width, height);
+
+    _tile = buttonTile;
+    _text = text;
 
     TTF_Init();
-    renderText(text);
+    renderText(_text);
 }
 
 
@@ -35,4 +39,15 @@ void Button::renderText(char *text) {
     SDL_BlitSurface(surfaceMessage, &surfaceMessage->clip_rect, buttonSurface, message_rect);
 
     TTF_CloseFont(font);
+}
+
+void Button::highlight() {
+
+    Texture* buttonTexture = new Texture("assets/images/tiles/button_highlighted.png");
+    Tile* buttonTile = new Tile(buttonTexture, 0, 0, getTile()->getWidth(), getTile()->getHeight());
+
+    _tile = buttonTile;
+
+    renderText(_text);
+
 }
