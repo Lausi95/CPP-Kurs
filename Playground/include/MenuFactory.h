@@ -24,7 +24,13 @@ class Menu : public World {
 
     std::vector<Button*> _buttons;
     Button* _highlightedButton;
-    long _highlightedButtonIndex;
+
+    //needs to be unsigned to see if we have got back to last button if < 0
+    long _hoveredButtonIndex;
+
+private:
+    int _updateCalls = 0;
+    const int UPDATE_CALLS_THRESHOLD = 30;
 
 public:
     Menu(Camera* camera,
@@ -41,40 +47,50 @@ public:
 
         _buttons = buttons;
         _highlightedButton = buttons.front();
-        _highlightedButtonIndex = 0;
+        _hoveredButtonIndex = 0;
     }
 
     void initialize() override {
-
+        lockOn(_background);
     }
 
     void update(float dt) override {
-        lockOn(_background);
+
+        _updateCalls++;
+        if (_updateCalls < UPDATE_CALLS_THRESHOLD) {
+            return;
+        }
+        else {
+            _updateCalls = 0;
+        }
 
         if (_input->isSpaceDown()) {
 
-            _buttons.at(_highlightedButtonIndex);
+            _buttons.at(_hoveredButtonIndex);
             //_callbackChangeWorld(WORLD_LEVEL_1);
         }
 
         if (_input->isWDown()) {
 
-            _highlightedButtonIndex -= 1;
-            if (_highlightedButtonIndex < 0) {
-                _highlightedButtonIndex = _buttons.size() - 1;
-            }
+            _buttons.at(_hoveredButtonIndex)->setHovered(false);
 
+            _hoveredButtonIndex -= 1;
+            if (_hoveredButtonIndex < 0) {
+                _hoveredButtonIndex = _buttons.size() - 1;
+            }
         }
 
         if (_input->isSDown()) {
 
-            _highlightedButtonIndex += 1;
-            if (_highlightedButtonIndex > _buttons.size() - 1) {
-                _highlightedButtonIndex = 0;
+            _buttons.at(_hoveredButtonIndex)->setHovered(false);
+
+            _hoveredButtonIndex += 1;
+            if (_hoveredButtonIndex > _buttons.size() - 1) {
+                _hoveredButtonIndex = 0;
             }
         }
 
-        _highlightedButton = _buttons.at(_highlightedButtonIndex);
+        _highlightedButton = _buttons.at(_hoveredButtonIndex);
         _highlightedButton->setHovered(true);
     }
 };
