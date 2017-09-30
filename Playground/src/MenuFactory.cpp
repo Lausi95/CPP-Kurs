@@ -11,13 +11,13 @@ std::vector<Entity*> entities {
         &wallpaperEntity
 };
 
-Menu MenuFactory::getMenu(Camera* camera,
-                          Input* input,
-                          SoundSystem* soundSystem,
-                          std::vector<Button*> buttons) {
+Menu* MenuFactory::getMenu(Camera* camera,
+                            Input* input,
+                            SoundSystem* soundSystem,
+                            std::vector<Button*> buttons) {
 
     //append buttons to entities
     entities.insert(entities.end(), buttons.begin(), buttons.end());
 
-    return Menu(camera, entities, buttons, input, soundSystem);
+    return new Menu(camera, entities, buttons, input, soundSystem);
 }

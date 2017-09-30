@@ -7,9 +7,14 @@
 #include <MenuFactory.h>
 #include <GlobalSettings.h>
 
-Worlds currentWorld = WORLD_MENU;
+World* currentWorld;
+int skin = 0;
 
-void changeWorld(Worlds newWorld) {
+Camera camera(WINDOW_WIDTH, WINDOW_HEIGHT, "You May Not Touch The Ground");
+Input input;
+SoundSystem soundSystem(MP3);
+
+void changeWorld(World* newWorld) {
     currentWorld = newWorld;
 }
 
@@ -66,30 +71,44 @@ public:
     }
 };
 
-Camera camera(WINDOW_WIDTH, WINDOW_HEIGHT, "You May Not Touch The Ground");
-Input input;
-SoundSystem soundSystem(MP3);
+Level* getLevel1(int skin) {
 
-Texture skyTexture("assets/images/backgrounds/sky.png");
-Tile skyTile(&skyTexture, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
-SimpleEntity skyEntity(&skyTile, 0, 0);
+    Texture* playerLeftTexture = NULL;
+    Texture* playerRightTexture = NULL;
 
-Texture playerBoyLeftTexture("assets/images/tiles/player_boy_left.png");
-Tile    playerBoyLeftTile(&playerBoyLeftTexture, 0, 0, 32, 32);
-Texture playerBoyRightTexture("assets/images/tiles/player_boy_right.png");
-Tile    playerBoyRightTile(&playerBoyRightTexture, 0, 0, 32, 32);
-std::array<Tile*, 2> playerTiles {&playerBoyRightTile, &playerBoyLeftTile};
-Player player(playerTiles, 0, 0, 32, 32);
+    if (skin == 0) {
+        playerLeftTexture = new Texture("assets/images/tiles/player_boy_left.png");
+        playerRightTexture = new Texture("assets/images/tiles/player_boy_right.png");
+    }
+    else {
+        playerLeftTexture = new Texture("assets/images/tiles/player_girl_left.png");
+        playerRightTexture = new Texture("assets/images/tiles/player_girl_right.png");
+    }
 
-std::vector<Entity*> e {&skyEntity, &player};
-Level world(&camera, e, &player, &skyEntity, &input, &soundSystem);
+    Texture* skyTexture = new Texture("assets/images/backgrounds/sky.png");
+    Tile* skyTile = new Tile(skyTexture, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+    SimpleEntity* skyEntity = new SimpleEntity(skyTile, 0, 0);
+
+
+    Tile*    playerLeftTile = new Tile(playerLeftTexture, 0, 0, 32, 32);
+
+    Tile*    playerRightTile = new Tile(playerRightTexture, 0, 0, 32, 32);
+    std::array<Tile*, 2> playerTiles {playerRightTile, playerLeftTile};
+    Player* player = new Player(playerTiles, 0, 0, 32, 32);
+
+    std::vector<Entity*> e {skyEntity, player};
+    Level* level = new Level(&camera, e, player, skyEntity, &input, &soundSystem);
+
+    return level;
+}
 
 void onClickStart() {
-    changeWorld(WORLD_LEVEL_1);
+    Level* level1 = getLevel1(skin);
+    changeWorld(level1);
 }
 
 void onClickSkin() {
-
+    skin = (skin + 1) % 2;
 }
 
 void onClickMute() {
@@ -98,7 +117,7 @@ void onClickMute() {
     soundSystem.mute(! soundSystem.isMuted());
 }
 
-Menu getMenuWorld() {
+Menu * getMenuWorld() {
 
     int x = (WINDOW_WIDTH / 2) - (BUTTON_WIDTH / 2);
     int y = (WINDOW_HEIGHT - (2 * VERTICAL_MARGIN)) / BUTTON_COUNT;
@@ -111,7 +130,7 @@ Menu getMenuWorld() {
     };
 
     MenuFactory* menuFactory = new MenuFactory();
-    Menu menu = menuFactory->getMenu(&camera, &input, &soundSystem, buttons);
+    Menu* menu = menuFactory->getMenu(&camera, &input, &soundSystem, buttons);
 
     return menu;
 }
@@ -121,27 +140,23 @@ int main() {
     soundSystem.init();
     soundSystem.startMusic("assets/music/Spectra.mp3");
 
-    Menu menu = getMenuWorld();
-
-    World* worlds[] {
-        &menu,
-        &world
-    };
+    Menu* menu = getMenuWorld();
+    currentWorld = menu;w
 
     do {
         input.update();
-        Worlds world = currentWorld;
+        World* world = currentWorld;
 
-        if (!worlds[world]->initialized()) {
-            worlds[world]->initialize();
-            worlds[world]->setInitialized(true);
+        if (!world->initialized()) {
+            world->initialize();
+            world->setInitialized(true);
         }
 
-        worlds[world]->update(1.0f /*Unit, as long as the time since last frame is not calculated*/);
-        worlds[world]->draw();
+        world->update(1.0f /*Unit, as long as the time since last frame is not calculated*/);
+        world->draw();
 
         if (world != currentWorld) {
-            worlds[currentWorld]->setInitialized(false);
+            world->setInitialized(false);
         }
     } while (!input.quitTriggered());
 

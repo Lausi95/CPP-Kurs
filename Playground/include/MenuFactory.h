@@ -127,10 +127,10 @@ public:
 class MenuFactory {
 
 public:
-    Menu getMenu(Camera* camera,
-                 Input* input,
-                 SoundSystem* soundSystem,
-                 std::vector<Button*> buttons);
+    Menu * getMenu(Camera* camera,
+                   Input* input,
+                   SoundSystem* soundSystem,
+                   std::vector<Button*> buttons);
 };
 
 
