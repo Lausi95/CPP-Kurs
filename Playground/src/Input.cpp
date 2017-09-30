@@ -2,6 +2,7 @@
 
 void updateKeyStatus(SDL_Event &event, SDL_Keycode keyCode, bool &b) {
     if (event.key.keysym.sym == keyCode) {
+
         if (event.type == SDL_KEYDOWN) b = true;
         if (event.type == SDL_KEYUP)   b = false;
     }
@@ -24,7 +25,6 @@ bool Input::quitTriggered() {
 void Input::update() {
 
     while (SDL_PollEvent(&_event)) {
-        //unblock();
         handleQuitEvent();
         updateKeyStatus(_event, SDLK_s, _sIsDown);
         updateKeyStatus(_event, SDLK_w, _wIsDown);

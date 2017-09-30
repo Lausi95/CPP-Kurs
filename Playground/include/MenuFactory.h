@@ -27,9 +27,11 @@ class Menu : public World {
     //needs to be unsigned to see if we have got back to last button if < 0
     long _hoveredButtonIndex;
 
+    bool wPressed, sPressed, spacePressed;
+
 private:
     int _updateCalls = 0;
-    const int UPDATE_CALLS_THRESHOLD = 20;
+    const int UPDATE_CALLS_THRESHOLD = 30;
 
     int _resetCount;
     const int RESET_UPDATE_CALLS_THRESHOLD = (int) 1.5 * UPDATE_CALLS_THRESHOLD;
@@ -68,15 +70,19 @@ public:
 
         if (_input->isSpaceDown()) {
 
-            if (buttonUpdate())  {
+            if (!spacePressed) {
+                spacePressed = true;
+
                 currentButton->_onclick();
                 return;
             }
         }
+        else { spacePressed = false; }
 
         if (_input->isWDown()) {
 
-            if (buttonUpdate())  {
+            if (!wPressed) {
+                wPressed = true;
 
                 _buttons.at(_hoveredButtonIndex)->setHovered(false);
 
@@ -88,10 +94,12 @@ public:
                 updateHoveredButton();
             }
         }
+        else { wPressed = false; }
 
         if (_input->isSDown()) {
 
-            if (buttonUpdate())  {
+            if (!sPressed) {
+                sPressed = true;
 
                 _buttons.at(_hoveredButtonIndex)->setHovered(false);
 
@@ -103,23 +111,13 @@ public:
                 updateHoveredButton();
             }
         }
+        else { sPressed = false; }
 
     }
 
     void updateHoveredButton() {
         _highlightedButton = _buttons.at(_hoveredButtonIndex);
         _highlightedButton->setHovered(true);
-    }
-
-    bool buttonUpdate() {
-        //block inputs for a certain amount of update calls
-        _updateCalls++;
-        if (_updateCalls < UPDATE_CALLS_THRESHOLD) {
-            return false;
-        }
-
-        _updateCalls = 0;
-        return true;
     }
 };
 

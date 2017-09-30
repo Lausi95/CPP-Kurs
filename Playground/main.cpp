@@ -141,7 +141,7 @@ int main() {
     soundSystem.startMusic("assets/music/Spectra.mp3");
 
     Menu* menu = getMenuWorld();
-    currentWorld = menu;w
+    currentWorld = menu;
 
     do {
         input.update();
