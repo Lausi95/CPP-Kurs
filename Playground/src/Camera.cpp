@@ -3,6 +3,7 @@
 bool sdlInitialized = false;
 
 Camera::Camera(int width, int height, const char* title) {
+
     if (!sdlInitialized) {
         SDL_Init(SDL_INIT_VIDEO);
         sdlInitialized = true;

@@ -7,6 +7,7 @@
 #include <MenuFactory.h>
 #include <iostream>
 #include <GlobalSettings.h>
+#include <SDL2/SDL_ttf.h>
 
 Worlds currentWorld = WORLD_MENU;
 

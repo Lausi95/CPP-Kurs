@@ -12,7 +12,6 @@
 
 const int BUTTON_WIDTH = 200;
 const int BUTTON_HEIGHT = 50;
-
 const int BUTTON_COUNT = 3;
 const int VERTICAL_MARGIN = 100;
 
