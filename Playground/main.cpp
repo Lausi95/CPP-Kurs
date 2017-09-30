@@ -2,7 +2,6 @@
 #include <Input.h>
 #include <entities/SimpleEntity.h>
 #include <entities/Player.h>
-#include <state/Worlds.h>
 #include <SoundSystem.h>
 #include <MenuFactory.h>
 #include <GlobalSettings.h>
@@ -80,6 +79,28 @@ public:
 
 Level* getLevel1(int skin) {
 
+    vector<char*> images {
+            "assets/images/objects/bed.png",
+            "assets/images/objects/bookshelf.png",
+            "assets/images/objects/cupboard_big.png",
+            "assets/images/objects/cupboard_small.png"
+    };
+
+    int randomIndex1 = rand() % 4;
+    int randomIndex2 = rand() % 4;
+
+    Texture* texture1 = new Texture(images.at(randomIndex1));
+    Tile* tile1 = new Tile(texture1, 0, 0, 32, 32);
+    SimpleEntity* entity1 = new SimpleEntity(tile1, WINDOW_WIDTH - 532, WINDOW_HEIGHT - 32);
+
+    Texture* texture2 = new Texture(images.at(randomIndex2));
+    Tile* tile2 = new Tile(texture2, 0, 0, 32, 32);
+    SimpleEntity* entity2 = new SimpleEntity(tile2, WINDOW_WIDTH - 232, WINDOW_HEIGHT - 32);
+
+    Texture* doorTexture = new Texture("assets/images/objects/door_open.png");
+    Tile* doorTile = new Tile(doorTexture, 0, 0, 32, 32);
+    SimpleEntity* doorEntity = new SimpleEntity(doorTile, WINDOW_WIDTH - 32, WINDOW_HEIGHT - 32);
+
     Texture* playerLeftTexture = NULL;
     Texture* playerRightTexture = NULL;
 
@@ -103,7 +124,7 @@ Level* getLevel1(int skin) {
     std::array<Tile*, 2> playerTiles {playerRightTile, playerLeftTile};
     Player* player = new Player(playerTiles, 0, 0, 32, 32);
 
-    std::vector<Entity*> e {skyEntity, player};
+    std::vector<Entity*> e {skyEntity, doorEntity, entity1, entity2, player};
     Level* level = new Level(&camera, e, player, skyEntity, &input, &soundSystem);
 
     return level;
@@ -160,6 +181,8 @@ Menu * getMenuWorld() {
 }
 
 int main() {
+
+    srand (time(NULL));
 
     soundSystem.init();
     soundSystem.startMusic("assets/music/Spectra.mp3");
