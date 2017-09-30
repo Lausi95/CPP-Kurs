@@ -67,7 +67,10 @@ public:
         if (_input->isSpaceDown()) {
 
             _buttons.at(_hoveredButtonIndex);
-            //_callbackChangeWorld(WORLD_LEVEL_1);
+
+            if (_hoveredButtonIndex == 0) {
+                _callbackChangeWorld(WORLD_LEVEL_1);
+            }
         }
 
         if (_input->isWDown()) {
