@@ -13,6 +13,8 @@ class Input {
     bool _sIsDown;
     bool _spaceIsDown;
 
+    bool _inputBlocked = false;
+
     void handleQuitEvent();
 
 public:

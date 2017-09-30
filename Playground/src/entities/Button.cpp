@@ -1,11 +1,12 @@
 #include <entities/Button.h>
 
-Button::Button(char* text, int width, int height, float x, float y) : Entity(x, y, width, height) {
+Button::Button(char* text, void (*onclick)(void), int width, int height, float x, float y) : Entity(x, y, width, height) {
 
     _width = width;
     _height = height;
 
     _text = text;
+    _onclick = onclick;
 
     TTF_Init();
 

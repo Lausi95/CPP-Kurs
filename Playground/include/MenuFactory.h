@@ -20,7 +20,6 @@ class Menu : public World {
 
     Entity* _background;
     Input*  _input;
-    void (*_callbackChangeWorld)(Worlds);
 
     std::vector<Button*> _buttons;
     Button* _highlightedButton;
@@ -30,20 +29,21 @@ class Menu : public World {
 
 private:
     int _updateCalls = 0;
-    const int UPDATE_CALLS_THRESHOLD = 25;
+    const int UPDATE_CALLS_THRESHOLD = 20;
+
+    int _resetCount;
+    const int RESET_UPDATE_CALLS_THRESHOLD = (int) 1.5 * UPDATE_CALLS_THRESHOLD;
 
 public:
     Menu(Camera* camera,
          std::vector<Entity*>& entities,
          std::vector<Button*>& buttons,
          Input* input,
-         SoundSystem* soundSystem,
-         void (*callbackChangeWorld)(Worlds))
+         SoundSystem* soundSystem)
             : World(camera, entities) {
 
         _background = entities.front();
         _input = input;
-        _callbackChangeWorld = callbackChangeWorld;
 
         _buttons = buttons;
         _highlightedButton = buttons.front();
@@ -58,12 +58,19 @@ public:
 
     void update(float dt) override {
 
+        _resetCount++;
+        if(_resetCount >= RESET_UPDATE_CALLS_THRESHOLD) {
+            _updateCalls = 0;
+            _resetCount = 0;
+        }
+
+        Button* currentButton = _buttons.at(_hoveredButtonIndex);
+
         if (_input->isSpaceDown()) {
 
-            _buttons.at(_hoveredButtonIndex);
-
-            if (_hoveredButtonIndex == 0) {
-                _callbackChangeWorld(WORLD_LEVEL_1);
+            if (buttonUpdate())  {
+                currentButton->_onclick();
+                return;
             }
         }
 
@@ -105,7 +112,7 @@ public:
     }
 
     bool buttonUpdate() {
-
+        //block inputs for a certain amount of update calls
         _updateCalls++;
         if (_updateCalls < UPDATE_CALLS_THRESHOLD) {
             return false;
@@ -123,7 +130,7 @@ public:
     Menu getMenu(Camera* camera,
                  Input* input,
                  SoundSystem* soundSystem,
-                 void (*callbackChangeWorld)(Worlds));
+                 std::vector<Button*> buttons);
 };
 
 

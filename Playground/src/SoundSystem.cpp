@@ -25,6 +25,8 @@ bool SoundSystem::init() {
 
     Mix_AllocateChannels(500);
 
+    setVolume(MIX_MAX_VOLUME);
+
     _initialized = true;
 }
 
@@ -47,12 +49,60 @@ void SoundSystem::cleanUp() {
 }
 
 
+void SoundSystem::setVolume(int volume) {
+
+    _volumeBeforeMuted = volume;
+
+    //volume for effects
+    Mix_Volume(-1, volume);
+
+    //volumne for music
+    Mix_VolumeMusic(volume);
+
+    if (volume > 0) {
+        _muted = false;
+    }
+    else if (volume == 0) {
+        _muted = true;
+    }
+}
+
+
 void SoundSystem::reset() {
 
     if (! _initialized) return;
 
     cleanUp();
     init();
+}
+
+
+bool SoundSystem::isMuted() {
+    return _muted;
+}
+
+
+void SoundSystem::mute(bool mute) {
+
+    if (! _initialized) return;
+
+    if(_volumeBeforeMuted != -1) {
+        if(mute) {
+            //dont set volume yet, just get the current volume
+            _volumeBeforeMuted = Mix_Volume(-1, -1);
+
+            //set volume of all channels to 0
+            Mix_Volume(-1, 0);
+
+            Mix_VolumeMusic(0);
+            _muted = true;
+        }
+        else {
+            Mix_Volume(-1, _volumeBeforeMuted);
+            Mix_VolumeMusic(_volumeBeforeMuted);
+            _muted = false;
+        }
+    }
 }
 
 

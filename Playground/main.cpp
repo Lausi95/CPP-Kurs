@@ -5,9 +5,7 @@
 #include <state/Worlds.h>
 #include <SoundSystem.h>
 #include <MenuFactory.h>
-#include <iostream>
 #include <GlobalSettings.h>
-#include <SDL2/SDL_ttf.h>
 
 Worlds currentWorld = WORLD_MENU;
 
@@ -86,13 +84,44 @@ Player player(playerTiles, 0, 0, 32, 32);
 std::vector<Entity*> e {&skyEntity, &player};
 Level world(&camera, e, &player, &skyEntity, &input, &soundSystem);
 
+void onClickStart() {
+    changeWorld(WORLD_LEVEL_1);
+}
+
+void onClickSkin() {
+
+}
+
+void onClickMute() {
+
+    //toggle mute state
+    soundSystem.mute(! soundSystem.isMuted());
+}
+
+Menu getMenuWorld() {
+
+    int x = (WINDOW_WIDTH / 2) - (BUTTON_WIDTH / 2);
+    int y = (WINDOW_HEIGHT - (2 * VERTICAL_MARGIN)) / BUTTON_COUNT;
+    Button* startButton = new Button("Start", &onClickStart, BUTTON_WIDTH, BUTTON_HEIGHT, x, y*1);
+    Button* changeSkinButton = new Button("Change Skin", &onClickSkin, BUTTON_WIDTH, BUTTON_HEIGHT, x, y*2);
+    Button* muteButton = new Button("Mute", &onClickMute, BUTTON_WIDTH, BUTTON_HEIGHT, x, y*3);
+
+    std::vector<Button*> buttons {
+            startButton, changeSkinButton, muteButton
+    };
+
+    MenuFactory* menuFactory = new MenuFactory();
+    Menu menu = menuFactory->getMenu(&camera, &input, &soundSystem, buttons);
+
+    return menu;
+}
+
 int main() {
 
     soundSystem.init();
     soundSystem.startMusic("assets/music/Spectra.mp3");
 
-    MenuFactory* menuFactory = new MenuFactory();
-    Menu menu = menuFactory->getMenu(&camera, &input, &soundSystem, &changeWorld);
+    Menu menu = getMenuWorld();
 
     World* worlds[] {
         &menu,

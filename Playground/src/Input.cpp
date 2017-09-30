@@ -22,7 +22,9 @@ bool Input::quitTriggered() {
 }
 
 void Input::update() {
+
     while (SDL_PollEvent(&_event)) {
+        //unblock();
         handleQuitEvent();
         updateKeyStatus(_event, SDLK_s, _sIsDown);
         updateKeyStatus(_event, SDLK_w, _wIsDown);

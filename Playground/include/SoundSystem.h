@@ -8,6 +8,7 @@
 using namespace std;
 
 enum Codec {MP3};
+const int VOLUME = 20;
 
 class SoundSystem {
 
@@ -18,6 +19,9 @@ private:
     int _initFlags;
     bool _initialized = false;
 
+    int _volumeBeforeMuted = -1;
+    bool _muted;
+
 public:
     explicit SoundSystem(Codec codec);
     ~SoundSystem() {
@@ -27,6 +31,10 @@ public:
     void cleanUp();
     bool init();
     void reset();
+
+    void setVolume(int volume);
+    bool isMuted();
+    void mute(bool mute);
 
     /* FOR MUSIC */
     void startMusic(char* file);

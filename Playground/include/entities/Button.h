@@ -14,7 +14,7 @@ class Button : public Entity {
 
 public:
 
-    Button(char* text, int width, int height, float x, float y);
+    Button(char* text, void (*onclick)(void), int width, int height, float x, float y);
 
     Tile* getTile() override {
         return _tile;
@@ -24,7 +24,7 @@ public:
 
     void setHovered(bool hovered);
 
-
+    void (*_onclick)(void);
 };
 
 #endif //PLAYGROUND_BUTTON_H
