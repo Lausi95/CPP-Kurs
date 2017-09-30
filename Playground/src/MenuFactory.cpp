@@ -13,6 +13,10 @@ Button startButton("Start", BUTTON_WIDTH, BUTTON_HEIGHT, x, y*1);
 Button changeSkinButton("Change Skin", BUTTON_WIDTH, BUTTON_HEIGHT, x, y*2);
 Button muteButton("Mute", BUTTON_WIDTH, BUTTON_HEIGHT, x, y*3);
 
+std::vector<Button*> buttons {
+        &startButton, &changeSkinButton, &muteButton
+};
+
 std::vector<Entity*> entities {
         &wallpaperEntity,
         &startButton, &changeSkinButton, &muteButton
@@ -23,7 +27,5 @@ Menu MenuFactory::getMenu(Camera* camera,
                           SoundSystem* soundSystem,
                           void (*callbackChangeWorld)(Worlds)) {
 
-    startButton.highlight();
-
-    return Menu(camera, entities, input, soundSystem, callbackChangeWorld);
+    return Menu(camera, entities, buttons, input, soundSystem, callbackChangeWorld);
 }

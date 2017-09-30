@@ -10,6 +10,8 @@ class Button : public Entity {
     Tile* _tile;
     char* _text;
 
+    int _width, _height;
+
 public:
 
     Button(char* text, int width, int height, float x, float y);
@@ -20,7 +22,7 @@ public:
 
     void renderText(char* text);
 
-    void highlight();
+    void setHovered(bool hovered);
 
 
 };

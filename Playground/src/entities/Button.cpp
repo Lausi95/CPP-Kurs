@@ -2,14 +2,14 @@
 
 Button::Button(char* text, int width, int height, float x, float y) : Entity(x, y, width, height) {
 
-    Texture* buttonTexture = new Texture("assets/images/tiles/button_default.png");
-    Tile* buttonTile = new Tile(buttonTexture, 0, 0, width, height);
+    _width = width;
+    _height = height;
 
-    _tile = buttonTile;
     _text = text;
 
     TTF_Init();
-    renderText(_text);
+
+    setHovered(false);
 }
 
 
@@ -41,10 +41,19 @@ void Button::renderText(char *text) {
     TTF_CloseFont(font);
 }
 
-void Button::highlight() {
+void Button::setHovered(bool hovered) {
 
-    Texture* buttonTexture = new Texture("assets/images/tiles/button_highlighted.png");
-    Tile* buttonTile = new Tile(buttonTexture, 0, 0, getTile()->getWidth(), getTile()->getHeight());
+    Texture* buttonTexture;
+    Tile* buttonTile;
+
+    if (hovered) {
+        buttonTexture = new Texture("assets/images/tiles/button_hovered.png");
+        buttonTile = new Tile(buttonTexture, 0, 0, _width, _height);
+    }
+    else {
+        buttonTexture = new Texture("assets/images/tiles/button_default.png");
+        buttonTile = new Tile(buttonTexture, 0, 0, _width, _height);
+    }
 
     _tile = buttonTile;
 
